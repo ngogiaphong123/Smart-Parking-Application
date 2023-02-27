@@ -2,24 +2,24 @@ package com.example.server.auth;
 
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
+import com.example.server.exception.BadRequestException;
+import com.example.server.exception.NotFoundException;
 import com.example.server.jwtUtils.JwtService;
 import com.example.server.user.Role;
 import com.example.server.user.User;
 import com.example.server.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +31,10 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final Cloudinary cloudinary;
     private final Logger logger = org.slf4j.LoggerFactory.getLogger(AuthService.class);
-    public AuthResponse register(RegisterForm request) throws IOException {
+    public RegisterResponse register(RegisterDTO request) throws IOException {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new BadRequestException("Email already exists");
+        }
         Map<String, Object> params = new HashMap<>();
         params.put("folder", "SmartParkingApp");
         params.put("resource_type", "auto");
@@ -44,15 +47,18 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
                 .role(Role.USER)
+                .avatarUrl(avatarUrl)
                 .build();
         userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder()
-                .accessToken(jwtToken)
+        user.setPassword(null);
+        return RegisterResponse.builder()
+                .data(user)
+                .status(HttpStatus.SC_OK)
+                .message("Register successfully")
                 .build();
     }
 
-    public AuthResponse login(LoginForm request) {
+    public LoginResponse login(LoginDTO request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -60,9 +66,11 @@ public class AuthService {
                 )
         );
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalStateException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
         String jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder()
+        return LoginResponse.builder()
+                .status(HttpStatus.SC_OK)
+                .message("Login successfully")
                 .accessToken(jwtToken)
                 .build();
     }

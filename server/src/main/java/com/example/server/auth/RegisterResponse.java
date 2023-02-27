@@ -1,5 +1,6 @@
 package com.example.server.auth;
 
+import com.example.server.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginForm {
-    private String email;
-    private String password;
+public class RegisterResponse {
+    private Integer status;
+    private String message;
+    private User data;
 }
