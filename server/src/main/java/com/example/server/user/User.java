@@ -1,5 +1,7 @@
 package com.example.server.user;
 
+import com.example.server.vehicles.Vehicle;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -20,13 +24,16 @@ import java.util.Collections;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String UserId;
+    private String userId;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private String phone;
     private String avatarUrl;
+    @JsonIgnore
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<Vehicle> vehicles = new HashSet<>();
     @Enumerated(EnumType.STRING)
     private Role role;
     @Override

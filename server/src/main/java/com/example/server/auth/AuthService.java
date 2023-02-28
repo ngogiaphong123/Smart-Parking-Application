@@ -4,19 +4,22 @@ package com.example.server.auth;
 import com.cloudinary.Cloudinary;
 import com.example.server.exception.BadRequestException;
 import com.example.server.exception.NotFoundException;
+import com.example.server.exception.UnauthorizedException;
 import com.example.server.jwtUtils.JwtService;
 import com.example.server.user.Role;
 import com.example.server.user.User;
 import com.example.server.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.http.HttpStatus;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,14 +49,14 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
-                .role(Role.USER)
+                .role(Role.CUSTOMER)
                 .avatarUrl(avatarUrl)
                 .build();
         userRepository.save(user);
         user.setPassword(null);
         return RegisterResponse.builder()
                 .data(user)
-                .status(HttpStatus.SC_OK)
+                .status(HttpStatus.OK.value())
                 .message("Register successfully")
                 .build();
     }
@@ -69,9 +72,33 @@ public class AuthService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
         String jwtToken = jwtService.generateToken(user);
         return LoginResponse.builder()
-                .status(HttpStatus.SC_OK)
+                .status(HttpStatus.OK.value())
                 .message("Login successfully")
                 .accessToken(jwtToken)
+                .build();
+    }
+
+    public RegisterResponse getMe() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            User user = (User) authentication.getPrincipal();
+            user.setPassword(null);
+            return RegisterResponse.builder()
+                    .data(user)
+                    .status(HttpStatus.OK.value())
+                    .message("Get me successfully")
+                    .build();
+        } else {
+            throw new UnauthorizedException("Unauthorized");
+        }
+    }
+
+    public LoginResponse logout() {
+        SecurityContextHolder.clearContext();
+        return LoginResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("Logout successfully")
+                .accessToken(null)
                 .build();
     }
 }
