@@ -1,4 +1,5 @@
 package com.example.server.api;
+import com.example.server.api.recordData.IsLightOn;
 import com.example.server.api.recordData.TemperatureApiRecord;
 import com.example.server.sensor.service.TemperatureRecordService;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -34,16 +36,26 @@ public class AdafruitRetrofitClientAPI {
         return getRetrofitInstance().create(AdafruitApiService.class);
     }
 
-    @Scheduled(fixedRate = 2000)
-    public void getData() {
+//    @Scheduled(fixedRate = 2000)
+//    public void getData() {
+//        try {
+//            Call<Set<TemperatureApiRecord>> call = getAdafruitApi().getTemperature(10);
+//            Set<TemperatureApiRecord> temperatureApiRecordData = call.execute().body();
+//            if(temperatureApiRecordData != null) {
+//                temperatureApiRecordData.forEach(temperatureRecordService::saveTemperatureRecordToDatabase);
+//            }
+//        } catch (Exception e) {
+//            logger.error("Error: {}", e.getMessage());
+//        }
+//    }
+    public boolean postData(IsLightOn value) {
         try {
-            Call<Set<TemperatureApiRecord>> call = getAdafruitApi().getTemperature(10);
-            Set<TemperatureApiRecord> temperatureApiRecordData = call.execute().body();
-            if(temperatureApiRecordData != null) {
-                temperatureApiRecordData.forEach(temperatureRecordService::saveTemperatureRecordToDatabase);
-            }
+            Call<Void> call = getAdafruitApi().postToFeed(value);
+            Response<Void> response = call.execute();
+            return response.isSuccessful();
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
+            return false;
         }
     }
 }
