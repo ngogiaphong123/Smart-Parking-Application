@@ -13,7 +13,7 @@ function StateNotification() {
                 </div>
                 <div className="text-blue-500 text-super-small font-semibold">Success!</div>
             </div>
-            <p className="text-super-small p-4 font-regular text-blue-500">This is a state notification</p>
+            <p className="text-super-small p-4 font-normal text-blue-500">This is a state notification</p>
         </div>
 
     </>);

@@ -14,6 +14,14 @@ import Background from './components/LoginBackground/LoginBackground';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
 import DashboardToggle from './components/DashboardToggle/DashboardToggle';
+import CustomerDetail from './components/CustomerDetail/CustomerDetail';
+import TransportDetail from './components/TransportDetail/TransportDetail';
+import CustomerVehicleCard from './components/CustomerVehicleCard/CustomerVehicleCard';
+import CustomerCard from './components/CustomerCard/CustomerCard';
+import TransportCard from './components/TransportCard/TransportCard';
+import CustomerAnalytic from './components/CustomerAnalytic/CustomerAnalytic';
+import TransportAnalytic from './components/TransportAnalytic/TransportAnalytic';
+import OrderDetail from './components/OrderDetail/OrderDetail';
 
 function App() {
   const menuRef = useRef<any>(null);
@@ -28,6 +36,7 @@ function App() {
       {/* padding for Header 16 */}
       <div className="padding h-16 w-full bg-transparent"></div>
       {/* Start coding body here */}
+        <OrderDetail/>
       {/* <SignupPage/> */}
       {/* <LoginPage/> */}
     </div>

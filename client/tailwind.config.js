@@ -2,7 +2,8 @@
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./node_modules/flowbite/**/*.js"
+    "./node_modules/flowbite/**/*.js",
+    "./node_modules/tailwind-datepicker-react/dist/**/*.js"
   ],
   theme: {
     extend: {
@@ -13,6 +14,7 @@ module.exports = {
         'gray': "#ccc"
       },
       backgroundColor:{
+        "mainColor":"F3F6FF",
         "tempToggleSwitchColor":"#7A40F2",
         "tempToggleDashboardColor":"#7A40F2",
         'logInBackground':'#F3F6FF',
@@ -40,6 +42,9 @@ module.exports = {
       },
       ringColor:{
         
+      },
+      flexGrow:{
+        2:'2'
       }
     },
   },
