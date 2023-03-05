@@ -14,6 +14,7 @@ import Background from './components/LoginBackground/LoginBackground';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
 import DashboardToggle from './components/DashboardToggle/DashboardToggle';
+import CustomerDetail from './components/CustomerDetail/CustomerDetail';
 
 function App() {
   const menuRef = useRef<any>(null);
@@ -28,6 +29,7 @@ function App() {
       {/* padding for Header 16 */}
       <div className="padding h-16 w-full bg-transparent"></div>
       {/* Start coding body here */}
+      <SignUpForm/>
       {/* <SignupPage/> */}
       {/* <LoginPage/> */}
     </div>
