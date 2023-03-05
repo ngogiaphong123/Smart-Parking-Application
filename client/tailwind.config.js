@@ -2,6 +2,7 @@
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/flowbite/**/*.js"
   ],
   theme: {
     extend: {
@@ -12,6 +13,8 @@ module.exports = {
         'gray': "#ccc"
       },
       backgroundColor:{
+        "tempToggleSwitchColor":"#7A40F2",
+        "tempToggleDashboardColor":"#7A40F2",
         'logInBackground':'#F3F6FF',
         'gray': "#f5f5f5",
         'gray-hover': "#e5e5e5",
@@ -34,8 +37,13 @@ module.exports = {
       },
       screens: {
         'mobile': '440px',
+      },
+      ringColor:{
+        
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+  ],
 }
