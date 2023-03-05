@@ -14,6 +14,7 @@ module.exports = {
         'gray': "#ccc"
       },
       backgroundColor:{
+        "mainColor":"F3F6FF",
         "tempToggleSwitchColor":"#7A40F2",
         "tempToggleDashboardColor":"#7A40F2",
         'logInBackground':'#F3F6FF',
