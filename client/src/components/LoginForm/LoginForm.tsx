@@ -4,7 +4,7 @@ import google from '../../assets/icon/google.png'
 
 function LoginForm() {
     return (<>
-        <div className="rounded-2xl w-72 min-h-96 bg-white drop-shadow-md flex flex-col px-4 py-6 opacity-[.82]">
+        <div className="rounded-2xl w-72 min-h-96 bg-white drop-shadow-md flex flex-col px-4 py-6 bg-opacity-[.82]">
             <div className="w-full h-10 p-4">
                 <p className="font-semibold text-lg">
                     Sign in
