@@ -24,67 +24,67 @@ function SignUpForm() {
             <div className="w-full mt-4 min-h-fit gap-4 flex">
                 <div className="flex-1 min-h-fit ">
                     <div>
-                    <label htmlFor="firstName" className="text-super-small font-semibold text-gray-400">First Name: </label>
-                    <input type="text" id="firstName" placeholder="First Name" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
-                    <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
+                        <label htmlFor="firstName" className="text-super-small font-semibold text-gray-400">First Name: </label>
+                        <input type="text" id="firstName" placeholder="First Name" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                        <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
                     </div>
                     <div>
-                    <label htmlFor="Email" className="text-super-small font-semibold text-gray-400">Email: </label>
-                    <input type="text" id="Email" placeholder="Email" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
-                    <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
-                    </div>
-
-                    <div>
-                    <label htmlFor="Gender" className="text-super-small font-semibold text-gray-400">Gender: </label>
-                    {/* select gender */}   
-                    <select name="gender" id="gender" className="w-full h-6 text-super-small border-1 border-gray focus:outline-none focus:ring-1 focus:ring-blue-400 rounded-sm">
-                        <option value="Male" className="text-sm h-6" >Male</option>
-                        <option value="Female" className="text-sm h-6" >Female</option>
-                    </select>
-                    <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
-
+                        <label htmlFor="Email" className="text-super-small font-semibold text-gray-400">Email: </label>
+                        <input type="text" id="Email" placeholder="Email" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                        <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
                     </div>
 
                     <div>
-                    <label htmlFor="Password" className="text-super-small font-semibold text-gray-400">Password: </label>
-                    <input type="password" id="Password" placeholder="8+ Characters" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
-                    <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
+                        <label htmlFor="Gender" className="text-super-small font-semibold text-gray-400">Gender: </label>
+                        {/* select gender */}
+                        <select name="gender" id="gender" className="w-full h-6 text-super-small border-1 border-gray focus:outline-none focus:ring-1 focus:ring-blue-400 rounded-sm">
+                            <option value="Male" className="text-sm h-6" >Male</option>
+                            <option value="Female" className="text-sm h-6" >Female</option>
+                        </select>
+                        <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
 
                     </div>
-                    
+
                     <div>
-                    <label htmlFor="Confirm Password" className="text-super-small font-semibold text-gray-400">Confirm Password: </label>
-                    <input type="password" id="Confirm Password" placeholder="Confirm Password" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
-                    <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
+                        <label htmlFor="Password" className="text-super-small font-semibold text-gray-400">Password: </label>
+                        <input type="password" id="Password" placeholder="8+ Characters" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                        <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
 
                     </div>
-                
+
+                    <div>
+                        <label htmlFor="Confirm Password" className="text-super-small font-semibold text-gray-400">Confirm Password: </label>
+                        <input type="password" id="Confirm Password" placeholder="Confirm Password" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                        <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
+
+                    </div>
+
                 </div>
                 <div className="flex-1 nin-h-full ">
                     <div>
-                    <label htmlFor="lastName" className="text-super-small font-semibold text-gray-400">Last Name: </label>
-                    <input type="text" id="lastName" placeholder="Last Name" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
-                    <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
+                        <label htmlFor="lastName" className="text-super-small font-semibold text-gray-400">Last Name: </label>
+                        <input type="text" id="lastName" placeholder="Last Name" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                        <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
 
                     </div>
 
                     <div>
-                    <label htmlFor="Phone" className="text-super-small font-semibold text-gray-400">Phone: </label>
-                    <input type="text" id="Phone" placeholder="Phone" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
-                    <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
+                        <label htmlFor="Phone" className="text-super-small font-semibold text-gray-400">Phone: </label>
+                        <input type="text" id="Phone" placeholder="Phone" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                        <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
 
                     </div>
                 </div>
             </div>
             <div className="w-full mt-4 flex gap-4">
-                <div>
-                <input type="checkbox" id="checkbox" value="true" name="checkbox" className="" />
+                <div className="flex items-center mb-4 gap-4">
+                    <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                    <label htmlFor="checkbox" id="checkbox" className="flex-1 inline-block text-super-small leading-4 text-gray-400 font-thin">Creating an account means you’re okay with our <p className="text-blue-400 inline">Terms of Service</p>
+                        , <p className="text-blue-400 inline">Privacy Policy</p>,
+                        and our default <p className="text-blue-400 inline">Notification Settings</p>.
+                    </label>
                 </div>
-                <label htmlFor="checkbox" id="checkbox" className="flex-1 inline-block text-super-small leading-4 text-gray-400 font-thin">Creating an account means you’re okay with our <p className="text-blue-400 inline">Terms of Service</p>
-                , <p className="text-blue-400 inline">Privacy Policy</p>, 
-                and our default <p className="text-blue-400 inline">Notification Settings</p>.
-                </label>
-                
+
             </div>
             <span className=" text-ant text-red-400 font-regular ">Error this thing must be right</span>
 
@@ -93,8 +93,8 @@ function SignUpForm() {
                     Create Account
                 </button>
                 <div>
-                    <p className="text-gray-400 text-super-small inline">Already a member? 
-                    <p className="hover:text-blue-500 cursor-pointer text-super-small inline text-blue-400"> Sign in</p>
+                    <p className="text-gray-400 text-super-small inline">Already a member?
+                        <p className="hover:text-blue-500 cursor-pointer text-super-small inline text-blue-400"> Sign in</p>
                     </p>
                 </div>
             </div>

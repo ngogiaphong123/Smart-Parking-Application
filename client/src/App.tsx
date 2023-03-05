@@ -7,12 +7,13 @@ import SignUpForm from './components/SignUpForm/SignUpForm';
 import StateNotification from './components/StateNotification/StateNotification';
 import Sidebar from './components/Sidebar/Sidebar';
 import ParkingSlotCard from './components/ParkingSlotCard/ParkingSlotCard';
-import TemperatureCard from './components/TemperatureCard/TemperatureCard';
+import TemperatureCard from './components/TemperatureChart/TemperatureChart';
 import CalendarForApp from './components/CalendarForApp/CalendarForApp';
 import {AnimatePresence} from 'framer-motion';
 import Background from './components/LoginBackground/LoginBackground';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
+import DashboardToggle from './components/DashboardToggle/DashboardToggle';
 
 function App() {
   const menuRef = useRef<any>(null);

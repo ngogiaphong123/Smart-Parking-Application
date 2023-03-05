@@ -5,7 +5,7 @@ import HighchartsReact from 'highcharts-react-official';
 import moment from 'moment';
 import 'highcharts/css/highcharts.css';
 
-function TemperatureCard() {
+function TemperatureChart() {
     const [temperatureData, setTemperatureData] = useState([
         {
             time: '2022-02-27T00:00:00Z',
@@ -62,4 +62,4 @@ function TemperatureCard() {
     </>);
 }
 
-export default memo(TemperatureCard);
+export default memo(TemperatureChart);
