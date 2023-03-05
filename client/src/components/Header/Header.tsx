@@ -2,6 +2,7 @@ import {memo} from 'react'
 import HeaderUser from '../HeaderUser/HeaderUser';
 
 function Header({ handleMenuOnClick, isMenuOpen }: {handleMenuOnClick: any, isMenuOpen:boolean }) {
+    console.log("Header re-render ne")
     return (<>
         <div className="fixed top-0 left-0 right-0 header w-full px-8 h-16 bg-white flex justify-between items-center drop-shadow">
             <div className="logo text-2xl sm:text-4xl inline">Parking<p className="inline font-semibold">Auto</p>.com</div>
@@ -19,4 +20,4 @@ function Header({ handleMenuOnClick, isMenuOpen }: {handleMenuOnClick: any, isMe
     </>);
 }
 
-export default Header;
+export default memo(Header);

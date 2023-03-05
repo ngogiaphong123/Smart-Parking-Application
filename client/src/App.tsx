@@ -7,6 +7,12 @@ import SignUpForm from './components/SignUpForm/SignUpForm';
 import StateNotification from './components/StateNotification/StateNotification';
 import Sidebar from './components/Sidebar/Sidebar';
 import ParkingSlotCard from './components/ParkingSlotCard/ParkingSlotCard';
+import TemperatureCard from './components/TemperatureCard/TemperatureCard';
+import CalendarForApp from './components/CalendarForApp/CalendarForApp';
+import {AnimatePresence} from 'framer-motion';
+import Background from './components/LoginBackground/LoginBackground';
+import LoginPage from './pages/LoginPage/LoginPage';
+import SignupPage from './pages/SignupPage/SignupPage';
 
 function App() {
   const menuRef = useRef<any>(null);
@@ -21,11 +27,8 @@ function App() {
       {/* padding for Header 16 */}
       <div className="padding h-16 w-full bg-transparent"></div>
       {/* Start coding body here */}
-      <ParkingSlotCard/>
-      {/* <div classNameName="container mx-auto h-full bg-sky-200">
-
-        </div> */}
-      {/* <ParkingSlotCards/> */}
+      {/* <SignupPage/> */}
+      {/* <LoginPage/> */}
     </div>
   );
 }

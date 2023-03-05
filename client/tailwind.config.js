@@ -12,6 +12,7 @@ module.exports = {
         'gray': "#ccc"
       },
       backgroundColor:{
+        'logInBackground':'#F3F6FF',
         'gray': "#f5f5f5",
         'gray-hover': "#e5e5e5",
       },
@@ -24,6 +25,7 @@ module.exports = {
         'sidebarChild':'#087592'
       },
       fontSize:{
+        'ant':'10px',
         'super-small' : '12px',
         'big-size': '1.6rem'
       },
