@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import google from '../../assets/icon/google.png'
-import analytic from '../../assets/icon/analytic.svg'
+import dashboard from '../../assets/icon/dashboard.svg'
 
 function CustomerAnalytic() {
     return ( <>
@@ -17,7 +17,7 @@ function CustomerAnalytic() {
             </div>
             <div className="h-full my-auto flex items-center gap-2">
                 <div className="cursor-pointer hover:bg-[#2FB1CA] transition duration-100 ease-in-out flex justify-center items-center rounded-md w-6 h-6 bg-[#81D0DF]">
-                    <img src={analytic} alt="" className="w-4 h-4 " />
+                    <img src={dashboard} alt="" className="w-4 h-4 " />
 
                 </div>
             </div>

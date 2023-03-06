@@ -1,15 +1,13 @@
 import { memo } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
 
-function SidebarChild() {
-    
+function SidebarChild({ icon, iconOff, content }: { icon: any, iconOff:any, content:string }) {
+
     return (<>
-        <div className="transition cursor-pointer duration-200 ease-in-out m-3 group w-36 h-10 p-4 rounded-xl flex justify-between items-center hover:bg-gradient-sidebarChild">
-            <FontAwesomeIcon icon={faCheck as IconProp} className='w-4 h-4 text-sidebarChild group-hover:text-white' />
-            <p className="text-gray-500 group-hover:text-white font-normal text-sm ">SidebarChild</p>
+        <div className="gap-2 transition cursor-pointer duration-200 ease-in-out m-3 group min-w-0 h-10 p-4 rounded-xl flex justify-between items-center hover:bg-gradient-sidebarChild">
+            <img src={iconOff} className="w-4 h-4 text-black group-hover:hidden" />
+            <img src={icon} className="w-4 h-4 bg-transparent text-black group-hover:block hidden" />
+            <p className="text-gray-500 group-hover:text-white font-normal text-sm ">{content}</p>
         </div>
     </>);
 }
