@@ -39,7 +39,7 @@ function SignUpForm() {
                                 setName(e.target.value)
                             }} value={name} type="text" id="floating_outlined1" className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
                             <label htmlFor="floating_outlined1" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                                Name:{name}</label>
+                                Name: {name}</label>
                         </div>
                         <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
                     </div>
@@ -47,58 +47,31 @@ function SignUpForm() {
                         {/* <label htmlFor="Email" className="text-super-small font-semibold text-gray-400">Email: </label>
                         <input type="text" id="Email" placeholder="Email" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" /> */}
                         <div className="relative w-full">
-                                    <input onChange={(e) => {
-                                        setEmail(e.target.value)
-                                    }} type="text" id="floating_outlined3" value={email} className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                                    <label htmlFor="floating_outlined3" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                                        Email:{email}</label>
-                                </div>
+                            <input onChange={(e) => {
+                                setEmail(e.target.value)
+                            }} type="text" id="floating_outlined3" value={email} className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                            <label htmlFor="floating_outlined3" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                                Email: {email}</label>
+                        </div>
                         <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
                     </div>
+
 
                     <div>
                         <label htmlFor="Gender" className="text-super-small font-semibold text-gray-400">Gender: </label>
                         {/* select gender */}
-                        <select onChange={(e)=>{setGender(e.target.value)}} name="gender" id="gender"  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option value="Male" className="text-sm h-6" 
-                            selected={gender==="Male"}
+                        <select onChange={(e) => { setGender(e.target.value) }} name="gender" id="gender" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option value="Male" className="text-sm h-6"
+                                selected={gender === "Male"}
                             >Male</option>
-                            <option value="Female" className="text-sm h-6" selected={gender==="Female"} >Female</option>
+                            <option value="Female" className="text-sm h-6" selected={gender === "Female"} >Female</option>
                         </select>
                         <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
 
                     </div>
 
-                    <div>
-                        {/* <label htmlFor="Password" className="text-super-small font-semibold text-gray-400">Password: </label>
-                        <input type="password" id="Password" placeholder="8+ Characters" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" /> */}
-                        <div className="relative w-full">
-                                    <input onChange={(e) => {
-                                        setPassword(e.target.value)
-                                    }} type="password" id="password" value={password} className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                                    <label htmlFor="password" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                                        Password:</label>
-                                </div>
-                        <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
-
-                    </div>
-
-                    <div>
-                        {/* <label htmlFor="Confirm Password" className="text-super-small font-semibold text-gray-400">Confirm Password: </label>
-                        <input type="password" id="Confirm Password" placeholder="Confirm Password" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" /> */}
-                        <div className="relative w-full">
-                                    <input onChange={(e) => {
-                                        setConfirmPassword(e.target.value)
-                                    }} type="password" id="confirmPassword" value={confirmPassword} className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                                    <label htmlFor="confirmPassword" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                                    ConfirmPassword:</label>
-                                </div>
-                        <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
-
-                    </div>
-
                 </div>
-                <div className="flex-1 nin-h-full ">
+                <div className="flex-1 min-h-fit ">
                     {/* <div>
                         <label htmlFor="lastName" className="text-super-small font-semibold text-gray-400">Last Name: </label>
                         <input type="text" id="lastName" placeholder="Last Name" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
@@ -110,15 +83,44 @@ function SignUpForm() {
                         {/* <label htmlFor="Phone" className="text-super-small font-semibold text-gray-400">Phone: </label>
                         <input type="text" id="Phone" placeholder="Phone" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" /> */}
                         <div className="relative w-full">
-                                    <input onChange={(e) => {
-                                        setPhone(e.target.value)
-                                    }} type="text" id="floating_outlined4" value={phone} className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                                    <label htmlFor="floating_outlined4" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                                        Phone:{phone}</label>
-                                </div>
+                            <input onChange={(e) => {
+                                setPhone(e.target.value)
+                            }} type="text" id="floating_outlined4" value={phone} className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                            <label htmlFor="floating_outlined4" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                                Phone: {phone}</label>
+                        </div>
                         <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
 
                     </div>
+                    
+                    <div>
+                        {/* <label htmlFor="Password" className="text-super-small font-semibold text-gray-400">Password: </label>
+                        <input type="password" id="Password" placeholder="8+ Characters" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" /> */}
+                        <div className="relative w-full">
+                            <input onChange={(e) => {
+                                setPassword(e.target.value)
+                            }} type="password" id="password" value={password} className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                            <label htmlFor="password" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                                Password:</label>
+                        </div>
+                        <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
+
+                    </div>
+
+                    <div>
+                        {/* <label htmlFor="Confirm Password" className="text-super-small font-semibold text-gray-400">Confirm Password: </label>
+                        <input type="password" id="Confirm Password" placeholder="Confirm Password" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" /> */}
+                        <div className="relative w-full">
+                            <input onChange={(e) => {
+                                setConfirmPassword(e.target.value)
+                            }} type="password" id="confirmPassword" value={confirmPassword} className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                            <label htmlFor="confirmPassword" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                                ConfirmPassword:</label>
+                        </div>
+                        <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
+
+                    </div>
+                    
                 </div>
             </div>
             <div className="w-full mt-4 flex gap-4">

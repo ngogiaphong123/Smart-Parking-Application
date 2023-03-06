@@ -1,11 +1,13 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import fb from '../../assets/icon/fb.png'
 import google from '../../assets/icon/google.png'
 
 function LoginForm() {
+    const [name, setName] = useState("")
+    const [password, setPassword] = useState("")
     return (<>
-        <div className="rounded-2xl w-72 min-h-96 bg-white drop-shadow-md flex flex-col px-4 py-6 bg-opacity-[.82]">
-            <div className="w-full h-10 p-4">
+        <div className="rounded-2xl w-72 min-h-96 bg-white drop-shadow-md flex flex-col px-4 py-6">
+            <div className="w-full h-10 px-4">
                 <p className="font-semibold text-lg">
                     Sign in
                 </p>
@@ -20,9 +22,25 @@ function LoginForm() {
                     </div>
                 </div>
             </div>
-            <div className="w-full  flex flex-col items-center">
-                <input type="text" placeholder="Email" className="m-2 p-2 placeholder:text-sm max-w-36 rounded-xl border-1 border-gray focus:outline-none focus:ring focus:ring-blue-400" />
-                <input type="password" placeholder="Password" className="m-2 p-2 placeholder:text-sm max-w-36 rounded-xl border-1 border-gray focus:outline-none focus:ring focus:ring-blue-400 " />
+            <div className="w-full gap-2 flex flex-col items-center">
+                <div className="relative w-full">
+                    <input onChange={(e) => {
+                        setName(e.target.value)
+                    }} value={name} type="text" id="floating_outlined1" className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                    <label htmlFor="floating_outlined1" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                        Name: {name}</label>
+                </div>
+                <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
+
+                <div className="relative w-full">
+                    <input onChange={(e) => {
+                        setPassword(e.target.value)
+                    }} type="password" id="password" value={password} className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                    <label htmlFor="password" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                        Password:</label>
+                </div>
+                <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
+
             </div>
             <p className="w-full px-4 pb-8 font-semibold text-sm">
                 Forgot password?
@@ -32,7 +50,7 @@ function LoginForm() {
             </div>
             <div className="w-full p-2 flex text-sm">
                 <p className="">
-                    New to ParkingAuto? 
+                    New to ParkingAuto?
                 </p>
                 <p className="pl-2 font-semibold">Sign Up</p>
             </div>
