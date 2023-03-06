@@ -3,7 +3,7 @@ import { memo, useState, useEffect, forwardRef, useImperativeHandle, useCallback
 import HeaderUser from '../HeaderUser/HeaderUser';
 import Sidebar from '../SidebarAdmin/SidebarAdmin';
 import {motion} from 'framer-motion'
-const MenuBar = forwardRef((props, ref) => {
+const MenuBar = forwardRef(({role}:{role:string}, ref) => {
     const menuRef = useRef<any>(null);
     // for checking responsive
     const [checkLgScreen, setCheckLgScreen] = useState(() => {
@@ -86,7 +86,7 @@ const MenuBar = forwardRef((props, ref) => {
                         </button>
                     </div>
                     <div className="w-full h-16 flex justify-center items-center border-b-1 border-gray">
-                        <HeaderUser isMenuOpen={isMenuOpen} />
+                        <HeaderUser role={role} isMenuOpen={isMenuOpen} />
                     </div>
                     <div className="w-full flex justify-center">
                     <Sidebar/>

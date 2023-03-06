@@ -20,6 +20,8 @@ module.exports = {
         'logInBackground':'#F3F6FF',
         'gray': "#f5f5f5",
         'gray-hover': "#e5e5e5",
+        "blue-inPage":"#81D0DF",
+        "blue-inPage-hover":"#49B8CD"
       },
       backgroundImage: {
         'gradient-sidebarChild':"linear-gradient(90deg, #087592 43.19%, #2393B0 100%, #2393B0 100%)",
@@ -27,7 +29,8 @@ module.exports = {
       }
       ,
       textColor:{
-        'sidebarChild':'#087592'
+        'sidebarChild':'#087592',
+        "title-inPage":"#087592"
       },
       fontSize:{
         'ant':'10px',

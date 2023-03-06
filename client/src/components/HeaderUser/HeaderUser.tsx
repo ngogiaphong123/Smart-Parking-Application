@@ -5,7 +5,7 @@ import { faChevronDown, faBell } from '@fortawesome/free-solid-svg-icons'
 import andy from './phong.jpg'
 import clsx from 'clsx';
 
-function HeaderUser({ isMenuOpen }: { isMenuOpen: boolean }) {
+function HeaderUser({ role, isMenuOpen }: { role:string, isMenuOpen: boolean }) {
     const [isAvatarClickedOutside, setIsAvatarClickedOutside] = useState(true)
     const myRef = useRef<any>(null);
     const handleAvatarClickOutside = (e:any) => {
@@ -27,7 +27,7 @@ function HeaderUser({ isMenuOpen }: { isMenuOpen: boolean }) {
                 <img src={andy} className="w-10 h-10" />
                 <div className="flex w-full items-center justify-center px-4">
                     <div className="flex flex-col items-center">
-                        <p className="semibold text-gray-600" style={{ fontSize: 12 }}>Administrator</p>
+                        <p className="semibold text-gray-600" style={{ fontSize: 12 }}>{role==="admin"?"Administrator":"User"}</p>
                         <p style={{ fontSize: 12, color: "#bdbdbd" }}>ID: 12356</p>
                     </div>
                     {
