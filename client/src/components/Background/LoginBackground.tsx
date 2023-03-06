@@ -21,6 +21,10 @@ function Background({children}:{children?:any}) {
                 repeatType: 'reverse',
                 ease: 'easeInOut',
             }}
+            exit={{
+                x:'calc(100vw - 150px)',
+                y:'-150px',
+            }}
             src={object2} alt="" className="absolute" />
             <motion.img
             // bottom left
@@ -37,6 +41,10 @@ function Background({children}:{children?:any}) {
                 repeat: Infinity,
                 repeatType: 'reverse',
                 ease: 'easeInOut',
+            }}
+            exit={{
+                x:-20,
+                y:'calc(100vh - 350px)',
             }}
              src={object1} alt="" className="absolute" />
              {children}

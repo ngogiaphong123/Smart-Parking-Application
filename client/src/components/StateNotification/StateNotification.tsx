@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
-
+import {motion} from 'framer-motion'
 
 function StateNotification() {
     return (<>

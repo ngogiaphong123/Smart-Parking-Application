@@ -7,6 +7,7 @@ import 'swiper/css';
 import "swiper/css/pagination";
 import { Pagination } from "swiper";
 import CustomerVehicleCard from '../../components/CustomerVehicleCard/CustomerVehicleCard';
+import {motion} from 'framer-motion'
 
 function HomeAndParkingAdmin() {
     const swiperRef = useRef<any>(null)
@@ -36,17 +37,20 @@ function HomeAndParkingAdmin() {
         setCurrentIndex(newIndex);
       }
     const [swiperRes, setSwiperRes] = useState(() => {
-        if (window.innerWidth < 990) {
-            return 2
+        if (window.innerWidth < 700) {
+            return (1);
         }
-        else return 3;
+        else if (window.innerWidth < 1150) {
+            return (2)
+        }
+        else return (3);
     })
     useEffect(() => {
         function handleSwiperRes() {
             if (window.innerWidth < 700) {
                 setSwiperRes(1);
             }
-            else if (window.innerWidth < 990) {
+            else if (window.innerWidth < 1150) {
                 setSwiperRes(2)
             }
             else setSwiperRes(3);
@@ -58,7 +62,24 @@ function HomeAndParkingAdmin() {
     }, [])
 
     return (<>
-        <div className="w-full h-full p-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden">
+        <motion.div 
+            initial={{
+                opacity:0,
+                y:"10%"
+            }}
+            animate={{
+                opacity:1,
+                y:0
+            }}
+            exit={{
+                opacity:0,
+                y:"10%"
+            }}
+            transition={{
+                duration:1
+            }}
+
+        className="w-full h-full p-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden">
             <div className="w-full h-8 flex justify-between items-center " >
                 <span className="text-md text-title-inPage font-semibold capitalize">
                     car parking
@@ -120,13 +141,15 @@ function HomeAndParkingAdmin() {
                     Current parking slots
                 </span>
             </div>
-            <div className="w-1/2 min-h-0 flex flex-col gap-2 max-h-[400px] overflow-auto p-4">
+            <div className="w-full lg:w-1/2 min-h-0 flex flex-col gap-2 max-h-[400px] overflow-auto p-4">
+                <CustomerVehicleCard type="un paid"/>
+                <CustomerVehicleCard type="un paid"/>
                 <CustomerVehicleCard type="un paid"/>
                 <CustomerVehicleCard type="un paid"/>
                 <CustomerVehicleCard type="un paid"/>
                 <CustomerVehicleCard type="un paid"/>
             </div>
-        </div>
+        </motion.div>
     </>);
 }
 

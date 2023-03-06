@@ -2,7 +2,6 @@ import {memo} from 'react'
 import object1 from '../../assets/background/object1.png'
 import object2 from '../../assets/background/object2.png'
 import {motion} from 'framer-motion'
-import LoginForm from '../LoginForm/LoginForm';
 function LoginBackground({children}:{children?:any}) {
     return ( <>
         <div className="w-screen h-screen fixed top-0 left-0 right-0 bottom-0 z-0 bg-logInBackground ">

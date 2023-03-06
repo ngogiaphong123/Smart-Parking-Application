@@ -1,13 +1,25 @@
 import { memo } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom';
+import clsx from 'clsx'
 
-
-function SidebarChild({ icon, iconOff, content }: { icon: any, iconOff:any, content:string }) {
-
+function SidebarChild({ onNavigationTo, icon, iconOff, content }: {onNavigationTo:any, icon: any, iconOff:any, content:string }) {
+    const navigate = useNavigate()
+    const location = useLocation()
     return (<>
-        <div className="gap-2 transition cursor-pointer duration-200 ease-in-out m-3 group min-w-0 h-10 p-4 rounded-xl flex justify-between items-center hover:bg-gradient-sidebarChild">
-            <img src={iconOff} className="w-4 h-4 text-black group-hover:hidden" />
-            <img src={icon} className="w-4 h-4 bg-transparent text-black group-hover:block hidden" />
-            <p className="text-gray-500 group-hover:text-white font-normal text-sm ">{content}</p>
+        <div onClick={()=>{navigate(`${onNavigationTo}`)}} className={clsx("gap-2 transition duration-200 ease-in-out hover:bg-gradient-sidebarChild cursor-pointer  m-3 group min-w-0 h-10 p-4 rounded-xl flex justify-between items-center", {
+            "bg-gradient-sidebarChild": location.pathname === onNavigationTo
+        })}>
+            <img src={iconOff} className={clsx("w-4 h-4 text-black group-hover:hidden",{
+                "hidden": location.pathname === onNavigationTo,
+                "block": location.pathname !== onNavigationTo
+            })} />
+            <img src={icon} className={clsx("w-4 h-4 bg-transparent text-black group-hover:block",{
+                "block": location.pathname === onNavigationTo,
+                "hidden": location.pathname !== onNavigationTo
+            })} />
+            <p className={clsx("text-gray-500 group-hover:text-white font-normal text-sm ",{
+                "text-white": location.pathname === onNavigationTo
+            })}>{content}</p>
         </div>
     </>);
 }
