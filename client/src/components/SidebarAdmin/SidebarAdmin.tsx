@@ -18,13 +18,13 @@ import SidebarChild from '../SidebarChild/SidebarChild';
 function SidebarAdmin() {
     return ( <>
         <div className="w-72 mt-8 p-4 min-h-20 rounded-xl bg-gradient-sidebar flex flex-col items-center">
-            <SidebarChild content="Car Parking" icon={tagUser} iconOff={tagUserOff}/>
-            <SidebarChild content="Payments History" icon={payment} iconOff={paymentOff}/>
-            <SidebarChild content="Customers" icon={customer} iconOff={customerOff}/>
-            <SidebarChild content="Analytics" icon={analytic} iconOff={analyticOff}/>
-            <SidebarChild content="Dashboard" icon={dashboard} iconOff={dashboardOff}/>
-            <SidebarChild content="AI Support" icon={chat} iconOff={chatOff}/>
-            <SidebarChild content="Settings" icon={settings} iconOff={settingsOff}/>
+            <SidebarChild onNavigationTo={"/admin"} content="Car Parking" icon={tagUser} iconOff={tagUserOff}/>
+            <SidebarChild onNavigationTo={"/admin/dashboard"} content="Dashboard" icon={dashboard} iconOff={dashboardOff}/>
+            {/* <SidebarChild onNavigationTo={""} content="Payments History" icon={payment} iconOff={paymentOff}/>
+            <SidebarChild onNavigationTo={""} content="Customers" icon={customer} iconOff={customerOff}/>
+            <SidebarChild onNavigationTo={""} content="Analytics" icon={analytic} iconOff={analyticOff}/>
+            <SidebarChild onNavigationTo={""} content="AI Support" icon={chat} iconOff={chatOff}/>
+            <SidebarChild onNavigationTo={""} content="Settings" icon={settings} iconOff={settingsOff}/> */}
         </div>
     </> );
 }

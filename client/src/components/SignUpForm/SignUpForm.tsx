@@ -1,4 +1,6 @@
 import { memo, useState } from 'react'
+import { motion } from 'framer-motion'
+import {useNavigate} from 'react-router-dom'
 
 function SignUpForm() {
     const [name, setName] = useState<string>('')
@@ -8,9 +10,26 @@ function SignUpForm() {
     const [gender, setGender] = useState<string>('Female')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [isPasswordMatch, setIsPasswordMatch] = useState<boolean>(false)
+    const navigate = useNavigate()
 
     return (<>
-        <div className="w-96 p-4 pb-6 min-h-96 bg-white drop-shadow-md flex flex-col rounded-xl ">
+        <motion.div
+            initial={{
+                opacity: 0,
+                y: "100%"
+            }}
+            animate={{
+                opacity: 1,
+                y: 0
+            }}
+            exit={{
+                opacity: 0,
+                y: "100%"
+            }}
+            transition={{
+                duration: 1
+            }}
+            className="w-96 p-4 pb-6 min-h-96 bg-white drop-shadow-md flex flex-col rounded-xl ">
             <p className="text-lg font-semibold text-gray-500">Sign Up</p>
             <div className="relative w-full py-4 flex gap-4 border-b-1 border-gray items-center">
                 <div className="bg-red-400 cursor-pointer hover:bg-red-500 flex-1 h-8 rounded-sm  text-center ">
@@ -92,7 +111,7 @@ function SignUpForm() {
                         <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
 
                     </div>
-                    
+
                     <div>
                         {/* <label htmlFor="Password" className="text-super-small font-semibold text-gray-400">Password: </label>
                         <input type="password" id="Password" placeholder="8+ Characters" className="w-full h-6 px-2 text-super-small rounded-sm border-1 border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400" /> */}
@@ -120,7 +139,7 @@ function SignUpForm() {
                         <span className=" text-ant text-red-400 font-normal ">Error this thing must be right</span>
 
                     </div>
-                    
+
                 </div>
             </div>
             <div className="w-full mt-4 flex gap-4">
@@ -141,11 +160,11 @@ function SignUpForm() {
                 </button>
                 <div>
                     <p className="text-gray-400 text-super-small inline">Already a member?
-                        <p className="hover:text-blue-500 cursor-pointer text-super-small inline text-blue-400"> Sign in</p>
+                        <p onClick={()=>{navigate('/login')}} className="hover:text-blue-500 cursor-pointer text-super-small inline text-blue-400"> Sign in</p>
                     </p>
                 </div>
             </div>
-        </div>
+        </motion.div>
     </>);
 }
 

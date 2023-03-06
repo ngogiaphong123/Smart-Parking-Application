@@ -74,7 +74,7 @@ const MenuBar = forwardRef(({role}:{role:string}, ref) => {
                 x:`calc(100% - ${menuRef.current.offsetWidth}px)`
                 
             }:{}}
-            className="fixed transition w-full overflow-y-auto sm:ring-1 sm:ring-gray-900/10 mobile:max-w-[400px] transform ease-in-out duration-300  right-0 bg-white h-screen z-10 drop-shadow flex flex-col justify-between"
+            className="fixed transition w-full overflow-y-auto sm:ring-1 sm:ring-gray-900/10 mobile:max-w-[400px] transform ease-in-out duration-300  right-0 bg-white h-screen z-20 drop-shadow flex flex-col justify-between"
                 >
                 <div className="flex flex-col">
                     <div className="w-full p-4 h-12 flex justify-between items-center border-b-1 border-gray">
@@ -93,7 +93,7 @@ const MenuBar = forwardRef(({role}:{role:string}, ref) => {
                     </div>
                 </div>
                 <div className="w-full flex h-50 justify-center">
-                    <button className="z-2 transition duration-200 ease-in-out rounded-xl bg-red-400 hover:bg-red-500 p-4 w-36 h-2/3 flex justify-center items-center">
+                    <button className="z-20 transition duration-200 ease-in-out rounded-xl bg-red-400 hover:bg-red-500 p-4 w-36 h-2/3 flex justify-center items-center">
                         <p className="text-white semibold font-size-big-size">Log out</p>
                     </button>
                 </div>

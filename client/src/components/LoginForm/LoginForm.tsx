@@ -1,12 +1,31 @@
 import { memo, useState } from 'react'
 import fb from '../../assets/icon/fb.png'
 import google from '../../assets/icon/google.png'
+import {motion} from 'framer-motion'
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
     const [name, setName] = useState("")
     const [password, setPassword] = useState("")
+    const navigate = useNavigate()
     return (<>
-        <div className="rounded-2xl w-72 min-h-96 bg-white drop-shadow-md flex flex-col px-4 py-6">
+        <motion.div 
+        initial={{
+            opacity:0,
+            y:"100%"
+        }}
+        animate={{
+            opacity:1,
+            y:0
+        }}
+        exit={{
+            opacity:0,
+            y:"100%"
+        }}
+        transition={{
+            duration:1
+        }}
+        className="rounded-2xl w-72 min-h-96 bg-white drop-shadow-md flex flex-col px-4 py-6">
             <div className="w-full h-10 px-4">
                 <p className="font-semibold text-lg">
                     Sign in
@@ -14,7 +33,7 @@ function LoginForm() {
             </div>
             <div className="w-full p-8 pb-4 flex justify-center">
                 <div className="w-20 flex justify-around">
-                    <div className=":bg-gray-hover cursor-pointer w-8 h-8 border-1 border-black rounded-lg flex justify-center items-center">
+                    <div className="hover:bg-gray-hover cursor-pointer w-8 h-8 border-1 border-black rounded-lg flex justify-center items-center">
                         <img src={google} className="w-4 h-4" />
                     </div>
                     <div className="hover:bg-gray-hover cursor-pointer w-8 h-8 border-1 border-black rounded-lg flex justify-center items-center">
@@ -45,16 +64,16 @@ function LoginForm() {
             <p className="w-full px-4 pb-8 font-semibold text-sm">
                 Forgot password?
             </p>
-            <div className="rounded-md w-full py-1 bg-blue-500">
+            <button onClick={()=>{navigate('/signup')}} className="rounded-md w-full py-1 bg-blue-500 hover:bg-blue-600">
                 <p className="text-center text-white font-semibold text-md">Sign in</p>
-            </div>
+            </button>
             <div className="w-full p-2 flex text-sm">
                 <p className="">
                     New to ParkingAuto?
                 </p>
                 <p className="pl-2 font-semibold">Sign Up</p>
             </div>
-        </div>
+        </motion.div>
     </>);
 }
 
