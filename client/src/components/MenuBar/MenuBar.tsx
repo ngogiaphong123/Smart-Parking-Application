@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { memo, useState, useEffect, forwardRef, useImperativeHandle, useCallback, useRef } from 'react'
 import HeaderUser from '../HeaderUser/HeaderUser';
-import Sidebar from '../Sidebar/Sidebar';
+import Sidebar from '../SidebarAdmin/SidebarAdmin';
 import {motion} from 'framer-motion'
 const MenuBar = forwardRef((props, ref) => {
     const menuRef = useRef<any>(null);

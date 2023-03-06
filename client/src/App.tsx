@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Header from './components/Header/Header';
 import LoginForm from './components/LoginForm/LoginForm';
 import MenuBar from './components/MenuBar/MenuBar';
 import clsx from 'clsx';
 import SignUpForm from './components/SignUpForm/SignUpForm';
 import StateNotification from './components/StateNotification/StateNotification';
-import Sidebar from './components/Sidebar/Sidebar';
+import Sidebar from './components/SidebarAdmin/SidebarAdmin';
 import ParkingSlotCard from './components/ParkingSlotCard/ParkingSlotCard';
 import TemperatureCard from './components/TemperatureChart/TemperatureChart';
 import CalendarForApp from './components/CalendarForApp/CalendarForApp';
@@ -22,12 +22,14 @@ import TransportCard from './components/TransportCard/TransportCard';
 import CustomerAnalytic from './components/CustomerAnalytic/CustomerAnalytic';
 import TransportAnalytic from './components/TransportAnalytic/TransportAnalytic';
 import OrderDetail from './components/OrderDetail/OrderDetail';
+import SidebarAdmin from './components/SidebarAdmin/SidebarAdmin';
+import SidebarCustomer from './components/SidebarCustomer/SidebarCustomer';
 
 function App() {
   const menuRef = useRef<any>(null);
-  function handleMenuOnClick() {
+  const handleMenuOnClick = useCallback(() => {
     menuRef.current.handleMenuOnClick();
-  }
+  },[])
   return (
     <div className="w-full bg-sky-200 h-screen flex flex-col overflow-x-hidden">
       
@@ -36,7 +38,8 @@ function App() {
       {/* padding for Header 16 */}
       <div className="padding h-16 w-full bg-transparent"></div>
       {/* Start coding body here */}
-        <OrderDetail/>
+      <SidebarCustomer/>
+        {/* <OrderDetail/> */}
       {/* <SignupPage/> */}
       {/* <LoginPage/> */}
     </div>
