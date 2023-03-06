@@ -67,6 +67,9 @@ function LoginForm() {
             <button onClick={()=>{navigate('/signup')}} className="rounded-md w-full py-1 bg-blue-500 hover:bg-blue-600">
                 <p className="text-center text-white font-semibold text-md">Sign in</p>
             </button>
+            <button onClick={()=>{navigate('/admin')}} className="mt-2 rounded-md w-full py-1 bg-blue-500 hover:bg-blue-600">
+                <p className="text-center text-white font-semibold text-md">Try as admin</p>
+            </button>
             <div className="w-full p-2 flex text-sm">
                 <p className="">
                     New to ParkingAuto?

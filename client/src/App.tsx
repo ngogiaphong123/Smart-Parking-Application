@@ -15,18 +15,19 @@ function App() {
     <div className="w-full bg-sky-200 h-screen flex flex-col overflow-x-hidden">
       <AnimatePresence mode="wait">
         <Routes key={location.pathname} location={location}>
+          <Route path="/" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/admin/" element={
             <GeneralPageAdmin>
               <HomeAndParkingAdmin />
             </GeneralPageAdmin>
-          }/>
+          } />
           <Route path="/admin/dashboard" element={
             <GeneralPageAdmin>
               <DashboardAdmin />
             </GeneralPageAdmin>
-          }/>
+          } />
 
           {/* testing route */}
           <Route path="/testing" element={<Testing />} />
