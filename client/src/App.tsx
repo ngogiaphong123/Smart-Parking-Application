@@ -8,6 +8,7 @@ import { AnimatePresence } from 'framer-motion';
 import Testing from './components/Testing/Testing';
 import Testing2 from './components/Testing2/Testing2';
 import DashboardAdmin from './pages/DashboardAdmin/DashboardAdmin';
+import TestGraph from './components/TestGraph/TestGraph';
 
 function App() {
   const location = useLocation()
@@ -30,7 +31,7 @@ function App() {
           } />
 
           {/* testing route */}
-          <Route path="/testing" element={<Testing />} />
+          <Route path="/testing" element={<TestGraph/>} />
         </Routes>
       </AnimatePresence>
       {/* <OrderDetail/> */}
