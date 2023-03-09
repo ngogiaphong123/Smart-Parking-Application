@@ -23,6 +23,8 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
+                .requestMatchers("/sensors/**")
+                .permitAll()
                 .requestMatchers("/auth/**")
                 .permitAll()
                 .anyRequest()

@@ -1,7 +1,6 @@
 package com.example.server.api;
-import com.example.server.api.recordData.IsLightOn;
-import com.example.server.api.recordData.TemperatureApiRecord;
-import com.example.server.sensor.service.TemperatureRecordService;
+import com.example.server.api.recordData.ApiRecord;
+import com.example.server.sensor.service.LightRecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -17,7 +16,7 @@ import java.util.Set;
 @Slf4j
 @RequiredArgsConstructor
 public class AdafruitRetrofitClientAPI {
-    private final TemperatureRecordService temperatureRecordService;
+    private final LightRecordService lightRecordService;
     private static final String BASE_URL = "https://io.adafruit.com/api/v2/";
 
     private static Retrofit retrofit = null;
@@ -36,26 +35,4 @@ public class AdafruitRetrofitClientAPI {
         return getRetrofitInstance().create(AdafruitApiService.class);
     }
 
-//    @Scheduled(fixedRate = 2000)
-//    public void getData() {
-//        try {
-//            Call<Set<TemperatureApiRecord>> call = getAdafruitApi().getTemperature(10);
-//            Set<TemperatureApiRecord> temperatureApiRecordData = call.execute().body();
-//            if(temperatureApiRecordData != null) {
-//                temperatureApiRecordData.forEach(temperatureRecordService::saveTemperatureRecordToDatabase);
-//            }
-//        } catch (Exception e) {
-//            logger.error("Error: {}", e.getMessage());
-//        }
-//    }
-    public boolean postData(IsLightOn value) {
-        try {
-            Call<Void> call = getAdafruitApi().postToFeed(value);
-            Response<Void> response = call.execute();
-            return response.isSuccessful();
-        } catch (Exception e) {
-            logger.error("Error: {}", e.getMessage());
-            return false;
-        }
-    }
 }

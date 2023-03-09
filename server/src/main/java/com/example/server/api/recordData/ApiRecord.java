@@ -13,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TemperatureApiRecord {
+public class ApiRecord {
     private String id;
     private String value;
     private String feed_id;
