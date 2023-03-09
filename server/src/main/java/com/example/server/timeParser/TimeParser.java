@@ -1,7 +1,9 @@
 package com.example.server.timeParser;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class TimeParser {
@@ -16,7 +18,10 @@ public class TimeParser {
     }
 
     public LocalDateTime parse(String timeString) {
-        // to zone 7
-        return LocalDateTime.parse(timeString, formatter).plusHours(7);
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId vnZone = ZoneId.of("Asia/Ho_Chi_Minh");
+        ZonedDateTime utcTime = ZonedDateTime.of(LocalDateTime.parse(timeString, formatter), utcZone);
+        ZonedDateTime vnTime = utcTime.withZoneSameInstant(vnZone);
+        return vnTime.toLocalDateTime();
     }
 }

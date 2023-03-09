@@ -1,6 +1,5 @@
 package com.example.server.sensor.repository;
 
-import com.example.server.sensor.model.BaseSensorRecord;
 import com.example.server.sensor.model.LightRecord;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Repository;
