@@ -1,20 +1,15 @@
 package com.example.server.auth;
 
-import com.example.server.api.AdafruitApiService;
-import com.example.server.api.AdafruitRetrofitClientAPI;
-import com.example.server.api.recordData.IsLightOn;
-import com.example.server.api.recordData.TemperatureApiRecord;
+import com.example.server.sensor.model.LightRecord;
+import com.example.server.sensor.service.LightRecordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -37,13 +32,5 @@ public class AuthController {
     @GetMapping("/logout")
     public ResponseEntity<LoginResponse> logout() {
         return ResponseEntity.ok(authService.logout());
-    }
-    @GetMapping("/test")
-    public ResponseEntity<?> test() throws IOException {
-        IsLightOn isLightOn = new IsLightOn();
-        isLightOn.setValue("0eree");
-        Call<Void> call = AdafruitRetrofitClientAPI.getAdafruitApi().postToFeed(isLightOn);
-        Response<Void> response = call.execute();
-        return ResponseEntity.ok(response.isSuccessful());
     }
 }

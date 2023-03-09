@@ -1,6 +1,7 @@
 package com.example.server.timeParser;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 public class TimeParser {
@@ -15,6 +16,7 @@ public class TimeParser {
     }
 
     public LocalDateTime parse(String timeString) {
-        return LocalDateTime.parse(timeString, formatter);
+        // to zone 7
+        return LocalDateTime.parse(timeString, formatter).plusHours(7);
     }
 }
