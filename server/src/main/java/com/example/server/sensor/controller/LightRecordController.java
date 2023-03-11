@@ -22,24 +22,8 @@ public class LightRecordController {
         Integer limit = dataDTO.getLimit();
         return ResponseEntity.ok(SensorResponse.builder()
                 .status(200)
-                .message("Success")
+                .message("Get light data")
                 .data(lightRecordService.getLightRecord(page, limit))
-                .build());
-    }
-    @GetMapping("/isLightOn")
-    public ResponseEntity<SensorResponse> isLightOn() {
-        return ResponseEntity.ok(SensorResponse.builder()
-                .status(200)
-                .message("Success")
-                .data(lightRecordService.isLightOn())
-                .build());
-    }
-    @PostMapping("/turnOnOffLight")
-    public ResponseEntity<SensorResponse> turnOnOffLight(@RequestBody PostToButtonFeedDTO body) {
-        return ResponseEntity.ok(SensorResponse.builder()
-                .status(200)
-                .message("Success")
-                .data(lightRecordService.turnOnOffLight(body.getValue()))
                 .build());
     }
 }

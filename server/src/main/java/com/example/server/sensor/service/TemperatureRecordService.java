@@ -29,7 +29,7 @@ public class TemperatureRecordService {
             LocalDateTime timestamp = timeParser.parse(temperatureRecord.getCreated_at());
             TemperatureRecord record = TemperatureRecord.builder()
                     .recordID(temperatureRecord.getId())
-                    .unit("lux")
+                    .unit("C")
                     .timestamp(timestamp)
                     .temperature(Double.parseDouble(temperatureRecord.getValue()))
                     .build();
@@ -41,11 +41,10 @@ public class TemperatureRecordService {
     @Scheduled(fixedRate = 2000)
     public void getTemperatureFromAdafruit() {
         try {
-            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getTempRecord(1);
+            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit("cambien2",10);
             Set<ApiRecord> temperatureApiRecordData = call.execute().body();
             if(temperatureApiRecordData != null) {
-                ApiRecord temperatureRecord = temperatureApiRecordData.iterator().next();
-                saveTemperatureRecord(temperatureRecord);
+                temperatureApiRecordData.forEach(this::saveTemperatureRecord);
             }
         } catch (Exception e) {
             throw new BadRequestException("Error: " + e.getMessage());
