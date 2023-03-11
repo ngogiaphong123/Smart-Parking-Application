@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/sensors/temperature")
 @RequiredArgsConstructor
 public class TemperatureRecordController {
-    TemperatureRecordService temperatureRecordService;
+    private final TemperatureRecordService temperatureRecordService;
     @GetMapping("")
     public ResponseEntity<SensorResponse> getTemperature(@RequestBody @Valid GetSensorDataDTO dataDTO) {
         Integer page = dataDTO.getPage();
