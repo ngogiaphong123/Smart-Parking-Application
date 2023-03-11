@@ -19,8 +19,4 @@ import java.util.List;
 @Component
 public class TemperatureRecord extends BaseSensorRecord {
     private double temperature;
-    public TemperatureRecord(String recordID, String unit, LocalDateTime timestamp, double temperature) {
-        super(recordID, unit,timestamp);
-        this.temperature = temperature;
-    }
 }
