@@ -50,39 +50,16 @@ public class LightRecordService {
             throw new BadRequestException("Error: " + e.getMessage());
         }
     }
-    public boolean isLightOn() {
-        try {
-            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getLightButtonRecord(1);
-            Set<ApiRecord> buttonApiRecordData = call.execute().body();
-            if(buttonApiRecordData != null) {
-                ApiRecord buttonRecord = buttonApiRecordData.iterator().next();
-                return buttonRecord.getValue().equals("1");
-            }
-            return false;
-        } catch (Exception e) {
-            throw new BadRequestException("Error: " + e.getMessage());
-        }
-    }
     @Scheduled(fixedRate = 2000)
     public void getLightRecordFromAdafruit() {
         try {
-            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getLightRecord(10);
-            Set<ApiRecord> temperatureApiRecordData = call.execute().body();
-            if(temperatureApiRecordData != null) {
-                temperatureApiRecordData.forEach(this::saveLightRecord);
+            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit("cambien1",10);
+            Set<ApiRecord> lightApiRecordData = call.execute().body();
+            if(lightApiRecordData != null) {
+                lightApiRecordData.forEach(this::saveLightRecord);
             }
         } catch (Exception e) {
             throw new NotFoundException("Error: " + e.getMessage());
-        }
-    }
-    public Boolean turnOnOffLight(String value) {
-        PostToButtonFeed postToLightButton = new PostToButtonFeed(value);
-        try {
-            Call<Void> call = AdafruitRetrofitClientAPI.getAdafruitApi().turnOnOffLight(postToLightButton);
-            Response<Void> response = call.execute();
-            return response.isSuccessful();
-        } catch (Exception e) {
-            throw new BadRequestException("Error: " + e.getMessage());
         }
     }
 }

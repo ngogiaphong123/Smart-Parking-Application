@@ -22,7 +22,7 @@ public class TemperatureRecordController {
         Integer limit = dataDTO.getLimit();
         return ResponseEntity.ok(SensorResponse.builder()
                 .status(200)
-                .message("Success")
+                .message("Get temperature data")
                 .data(temperatureRecordService.getTemperatureRecord(page, limit))
                 .build());
     }
