@@ -1,14 +1,14 @@
+
 package com.example.server.sensor.controller;
 
-import com.example.server.sensor.model.GetSensorDataDTO;
 import com.example.server.sensor.model.SensorResponse;
 import com.example.server.sensor.service.TemperatureRecordService;
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TemperatureRecordController {
     private final TemperatureRecordService temperatureRecordService;
+
     @GetMapping("")
-    public ResponseEntity<SensorResponse> getTemperature(@RequestBody @Valid GetSensorDataDTO dataDTO) {
-        Integer page = dataDTO.getPage();
-        Integer limit = dataDTO.getLimit();
+    public ResponseEntity<SensorResponse> getTemperature(
+            @NotNull @RequestParam("page") Integer page,
+            @NotNull @RequestParam("limit") Integer limit
+    ) {
         return ResponseEntity.ok(SensorResponse.builder()
                 .status(200)
                 .message("Get temperature data")
