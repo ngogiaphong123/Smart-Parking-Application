@@ -26,6 +26,7 @@ import java.util.Set;
 @Slf4j
 public class LightRecordService {
     private final LightRecordRepository lightRecordRepository;
+    static String feedKey = "cambien2";
 
     public void saveLightRecord(ApiRecord lightRecord) {
         try {
@@ -53,7 +54,7 @@ public class LightRecordService {
     @Scheduled(fixedRate = 2000)
     public void getLightRecordFromAdafruit() {
         try {
-            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit("cambien1",10);
+            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit(feedKey,10);
             Set<ApiRecord> lightApiRecordData = call.execute().body();
             if(lightApiRecordData != null) {
                 lightApiRecordData.forEach(this::saveLightRecord);

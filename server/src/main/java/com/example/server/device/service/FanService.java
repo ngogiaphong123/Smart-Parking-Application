@@ -3,8 +3,8 @@ package com.example.server.device.service;
 import com.example.server.api.AdafruitRetrofitClientAPI;
 import com.example.server.api.recordData.ApiRecord;
 import com.example.server.api.recordData.PostToButtonFeed;
-import com.example.server.device.model.LightBulkDevice;
-import com.example.server.device.repository.LightBulkDeviceRepository;
+import com.example.server.device.model.FanDevice;
+import com.example.server.device.repository.FanDeviceRepository;
 import com.example.server.exception.BadRequestException;
 import com.example.server.timeParser.TimeParser;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +18,11 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class LightBulkService {
-    private final LightBulkDeviceRepository lightBulkRepository;
-    static String feedKey = "nutnhan2";
+public class FanService {
+    private final FanDeviceRepository fanDeviceRepository;
+    static String feedKey = "nutnhan1";
 
-    public String turnOnOffLightBulk(String value) {
+    public String turnOnOffFan(String value) {
         PostToButtonFeed postToButton = new PostToButtonFeed(value);
         try {
             Call<ApiRecord> call = AdafruitRetrofitClientAPI.getAdafruitApi().postToAdafruitFeed(feedKey, postToButton);
@@ -30,7 +30,7 @@ public class LightBulkService {
             if (response.isSuccessful()) {
                 ApiRecord apiRecord = response.body();
                 if (apiRecord != null) {
-                    saveLightBulkRecord(apiRecord);
+                    saveFanRecord(apiRecord);
                     return apiRecord.getValue();
                 }
             }
@@ -43,9 +43,9 @@ public class LightBulkService {
 
     public String getDeviceStatus() {
         try {
-            LightBulkDevice lightBulkDevice = lightBulkRepository.findTopByOrderByTimestampDesc();
-            if (lightBulkDevice != null) {
-                return lightBulkDevice.getStatus();
+            FanDevice fanDevice = fanDeviceRepository.findTopByOrderByTimestampDesc();
+            if (fanDevice != null) {
+                return fanDevice.getStatus();
             }
             return "Null";
         } catch (Exception e) {
@@ -53,16 +53,16 @@ public class LightBulkService {
         }
     }
 
-    public void saveLightBulkRecord(ApiRecord apiRecord) {
+    public void saveFanRecord(ApiRecord apiRecord) {
         try {
             TimeParser timeParser = TimeParser.getInstance();
             LocalDateTime timestamp = timeParser.parse(apiRecord.getCreated_at());
-            LightBulkDevice record = LightBulkDevice.builder()
+            FanDevice record = FanDevice.builder()
                     .deviceID(apiRecord.getId())
                     .status(apiRecord.getValue())
                     .timestamp(timestamp)
                     .build();
-            lightBulkRepository.save(record);
+            fanDeviceRepository.save(record);
         } catch (Exception e) {
             throw new BadRequestException("Error: " + e.getMessage());
         }
@@ -73,13 +73,11 @@ public class LightBulkService {
             Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit(feedKey, 10);
             Set<ApiRecord> deviceStatus = call.execute().body();
             if (deviceStatus != null) {
-                deviceStatus.forEach(this::saveLightBulkRecord);
+                deviceStatus.forEach(this::saveFanRecord);
             }
         }
         catch (Exception e) {
             throw new BadRequestException("Error: " + e.getMessage());
         }
     }
-
-
 }

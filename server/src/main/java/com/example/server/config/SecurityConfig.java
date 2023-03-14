@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/auth/**")
                 .permitAll()
-                .requestMatchers("/buttons/**")
+                .requestMatchers("/devices/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
