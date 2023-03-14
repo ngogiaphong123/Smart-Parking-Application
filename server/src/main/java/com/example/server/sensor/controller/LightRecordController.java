@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class LightRecordController {
     private final LightRecordService lightRecordService;
-
     @GetMapping("")
     public ResponseEntity<SensorResponse> getLight(
             @NotNull @RequestParam("page") Integer page,
