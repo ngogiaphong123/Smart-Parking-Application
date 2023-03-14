@@ -1,7 +1,6 @@
 package com.example.server.sensor.controller;
 
 import com.example.server.sensor.model.GetSensorDataDTO;
-import com.example.server.sensor.model.PostToButtonFeedDTO;
 import com.example.server.sensor.model.SensorResponse;
 import com.example.server.sensor.service.LightRecordService;
 import jakarta.validation.Valid;
