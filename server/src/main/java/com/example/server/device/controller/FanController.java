@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RequiredArgsConstructor
 @RequestMapping("/devices/fan")
 @RestController
@@ -15,7 +17,7 @@ public class FanController {
     private final FanService fanDeviceService;
 
     @PostMapping("/manage")
-    public ResponseEntity<SensorResponse> manageFan(@RequestBody @Valid ManageDeviceDTO dataDTO) {
+    public ResponseEntity<SensorResponse> manageFan(@RequestBody @Valid ManageDeviceDTO dataDTO) throws IOException {
         String value = dataDTO.getValue();
         return ResponseEntity.ok(SensorResponse.builder()
                 .status(200)
@@ -23,6 +25,7 @@ public class FanController {
                 .data(fanDeviceService.turnOnOffFan(value))
                 .build());
     }
+
     @GetMapping("/status")
     public ResponseEntity<SensorResponse> getDeviceStatus() {
         return ResponseEntity.ok(SensorResponse.builder()
