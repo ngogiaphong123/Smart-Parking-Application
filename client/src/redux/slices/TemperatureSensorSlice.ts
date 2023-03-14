@@ -62,12 +62,10 @@ const TemperatureSensorSlice = createSlice({
 // }
 // )
 
-export const getRecord = createAsyncThunk('getRecord', async () => {
+export const getTemperatureRecord = createAsyncThunk('getTemperatureRecord', async () => {
     try {
-        const {data} = await axios.post(`${serverUrl}/sensors/temperature`,{
-            page : 0,
-            limit : 10
-        })
+        const {page, limit} = {page:1, limit:10}
+        const {data} = await axios.get(`${serverUrl}/sensors/temperature?page=${page}&limit=${limit}`)
         if(data.status === "200") {
             return {message:data.message, "data":data.data};
         }

@@ -10,16 +10,20 @@ import Testing2 from './components/Testing2/Testing2';
 import DashboardAdmin from './pages/DashboardAdmin/DashboardAdmin';
 import TestGraph from './components/TestGraph/TestGraph';
 import {useDispatch, useSelector} from 'react-redux'
-import {getRecord} from './redux/slices/LightSensorSlice'
+import {getLightRecord} from './redux/slices/LightSensorSlice'
 import {LightSensorSlice} from './redux/selectors'
 import { useEffect } from 'react';
+import { getFanStatus } from './redux/slices/FanDeviceSlice';
 
 function App() {
   const location = useLocation()
   const dispatch = useDispatch<any>()
     const lightSensor = useSelector(LightSensorSlice)
     useEffect(()=>{
-        dispatch(getRecord()).then((res:any)=>{
+        dispatch(getLightRecord()).then((res:any)=>{
+            console.log(res)
+        })
+        dispatch(getFanStatus()).then((res:any)=>{
             console.log(res)
         })
     },[])
