@@ -3,7 +3,6 @@ package com.example.server.sensor.service;
 import com.example.server.api.AdafruitRetrofitClientAPI;
 import com.example.server.api.recordData.ApiRecord;
 import com.example.server.exception.BadRequestException;
-import com.example.server.sensor.model.LightRecord;
 import com.example.server.sensor.model.TemperatureRecord;
 import com.example.server.sensor.repository.TemperatureRecordRepository;
 import com.example.server.timeParser.TimeParser;
@@ -25,7 +24,6 @@ public class TemperatureRecordService {
     static String feedKey = "cambien1";
 
     public void saveTemperatureRecord(ApiRecord temperatureRecord) {
-        try {
             TimeParser timeParser = TimeParser.getInstance();
             LocalDateTime timestamp = timeParser.parse(temperatureRecord.getCreated_at());
             TemperatureRecord record = TemperatureRecord.builder()
@@ -35,9 +33,6 @@ public class TemperatureRecordService {
                     .temperature(Double.parseDouble(temperatureRecord.getValue()))
                     .build();
             temperatureRecordRepository.save(record);
-        } catch (Exception e) {
-            throw new BadRequestException("Error: " + e.getMessage());
-        }
     }
     @Scheduled(fixedRate = 2000)
     public void getTemperatureFromAdafruit() {
@@ -53,11 +48,7 @@ public class TemperatureRecordService {
     }
 
     public List<TemperatureRecord> getTemperatureRecord(Integer page, Integer limit) {
-        try {
             Page<TemperatureRecord> records = temperatureRecordRepository.findAllByOrderByTimestampDesc(PageRequest.of(page, limit));
             return records.getContent();
-        } catch (Exception e) {
-            throw new BadRequestException("Error: " + e.getMessage());
-        }
     }
 }

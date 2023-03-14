@@ -6,13 +6,17 @@ import com.example.server.api.recordData.PostToButtonFeed;
 import com.example.server.device.model.FanDevice;
 import com.example.server.device.repository.FanDeviceRepository;
 import com.example.server.exception.BadRequestException;
+import com.example.server.exception.NotFoundException;
 import com.example.server.timeParser.TimeParser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.ErrorResponse;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -22,9 +26,8 @@ public class FanService {
     private final FanDeviceRepository fanDeviceRepository;
     static String feedKey = "nutnhan1";
 
-    public String turnOnOffFan(String value) {
+    public String turnOnOffFan(String value) throws IOException {
         PostToButtonFeed postToButton = new PostToButtonFeed(value);
-        try {
             Call<ApiRecord> call = AdafruitRetrofitClientAPI.getAdafruitApi().postToAdafruitFeed(feedKey, postToButton);
             Response<ApiRecord> response = call.execute();
             if (response.isSuccessful()) {
@@ -34,23 +37,15 @@ public class FanService {
                     return apiRecord.getValue();
                 }
             }
-            return "Cannot connect to Adafruit's feed";
-        }
-        catch (Exception e) {
-            throw new BadRequestException("Error: " + e.getMessage());
-        }
+            throw new BadRequestException("Cannot connect to Adafruit's feed");
     }
 
     public String getDeviceStatus() {
-        try {
             FanDevice fanDevice = fanDeviceRepository.findTopByOrderByTimestampDesc();
             if (fanDevice != null) {
                 return fanDevice.getStatus();
             }
-            return "Null";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+            throw new NotFoundException("No record found");
     }
 
     public void saveFanRecord(ApiRecord apiRecord) {

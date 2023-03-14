@@ -6,6 +6,7 @@ import com.example.server.api.recordData.PostToButtonFeed;
 import com.example.server.device.model.LightBulkDevice;
 import com.example.server.device.repository.LightBulkDeviceRepository;
 import com.example.server.exception.BadRequestException;
+import com.example.server.exception.NotFoundException;
 import com.example.server.timeParser.TimeParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -22,9 +24,8 @@ public class LightBulkService {
     private final LightBulkDeviceRepository lightBulkRepository;
     static String feedKey = "nutnhan2";
 
-    public String turnOnOffLightBulk(String value) {
+    public String turnOnOffLightBulk(String value) throws IOException {
         PostToButtonFeed postToButton = new PostToButtonFeed(value);
-        try {
             Call<ApiRecord> call = AdafruitRetrofitClientAPI.getAdafruitApi().postToAdafruitFeed(feedKey, postToButton);
             Response<ApiRecord> response = call.execute();
             if (response.isSuccessful()) {
@@ -34,23 +35,15 @@ public class LightBulkService {
                     return apiRecord.getValue();
                 }
             }
-            return "Cannot connect to Adafruit's feed";
-        }
-        catch (Exception e) {
-            throw new BadRequestException("Error: " + e.getMessage());
-        }
+            throw new BadRequestException("Cannot connect to Adafruit's feed");
     }
 
     public String getDeviceStatus() {
-        try {
-            LightBulkDevice lightBulkDevice = lightBulkRepository.findTopByOrderByTimestampDesc();
-            if (lightBulkDevice != null) {
-                return lightBulkDevice.getStatus();
-            }
-            return "Null";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        LightBulkDevice lightBulkDevice = lightBulkRepository.findTopByOrderByTimestampDesc();
+        if (lightBulkDevice != null) {
+            return lightBulkDevice.getStatus();
         }
+        throw new NotFoundException("No record found");
     }
 
     public void saveLightBulkRecord(ApiRecord apiRecord) {
