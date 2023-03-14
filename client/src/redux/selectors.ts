@@ -1,0 +1,1 @@
+export const UserStore = (state:any) => state.user
