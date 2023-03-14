@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class LightRecordController {
     private final LightRecordService lightRecordService;
-    @GetMapping("")
+    @PostMapping("")
     public ResponseEntity<SensorResponse> getLight(@RequestBody @Valid GetSensorDataDTO dataDTO) {
         Integer page = dataDTO.getPage();
         Integer limit = dataDTO.getLimit();
