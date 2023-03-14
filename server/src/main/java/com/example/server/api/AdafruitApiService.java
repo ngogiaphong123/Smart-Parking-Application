@@ -15,7 +15,7 @@ public interface AdafruitApiService {
     );
     @Headers("X-AIO-Key:aio_bSSt82h4fqXHx2pw1u6dUYaRoibl")
     @POST("phatnguyen1604/feeds/{feedKey}/data")
-    Call<Void> postToAdafruitFeed(
+    Call<ApiRecord> postToAdafruitFeed(
             @Path("feedKey") String feedKey,
             @Body PostToButtonFeed data
     );

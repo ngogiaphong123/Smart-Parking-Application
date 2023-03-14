@@ -22,6 +22,7 @@ import java.util.Set;
 @Service
 public class TemperatureRecordService {
     private final TemperatureRecordRepository temperatureRecordRepository;
+    static String feedKey = "cambien1";
 
     public void saveTemperatureRecord(ApiRecord temperatureRecord) {
         try {
@@ -41,7 +42,7 @@ public class TemperatureRecordService {
     @Scheduled(fixedRate = 2000)
     public void getTemperatureFromAdafruit() {
         try {
-            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit("cambien2",10);
+            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit(feedKey,10);
             Set<ApiRecord> temperatureApiRecordData = call.execute().body();
             if(temperatureApiRecordData != null) {
                 temperatureApiRecordData.forEach(this::saveTemperatureRecord);
