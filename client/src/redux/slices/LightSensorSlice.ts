@@ -62,12 +62,10 @@ const LightSensorSlice = createSlice({
 // }
 // )
 
-export const getRecord = createAsyncThunk('getRecord', async () => {
+export const getLightRecord = createAsyncThunk('getLightRecord', async () => {
     try {
-        const {data} = await axios.post(`${serverUrl}/sensors/light`,{
-            page : 0,
-            limit : 10
-        })
+        const {page, limit} = {page:0, limit:10}
+        const {data} = await axios.get(`${serverUrl}/sensors/light?page=${page}&limit=${limit}`)
         if(data.status === "200") {
             return {message:data.message, "data":data.data};
         }
