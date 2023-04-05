@@ -1,0 +1,8 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mongodb"
+    url      = "mongodb+srv://ngogiaphong123:iFbH3FWO56yctbol@database.lo3ixqr.mongodb.net/database?retryWrites=true&w=majority"
+}
