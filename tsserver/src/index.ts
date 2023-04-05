@@ -3,6 +3,8 @@ import cors from 'cors';
 import ExpressError from './utils/expressError';
 import { StatusCodes } from 'http-status-codes';
 import log from './utils/logger';
+import deserializeUser from './middlewares/deserializeUser';
+import userRouter from './modules/user/user.route';
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }  
@@ -16,10 +18,11 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(deserializeUser);
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
+app.use('/auth', userRouter)
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
     return next(new ExpressError('Not Found', StatusCodes.NOT_FOUND))
 })

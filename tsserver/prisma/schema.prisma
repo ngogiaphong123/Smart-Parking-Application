@@ -4,5 +4,18 @@ generator client {
 
 datasource db {
     provider = "mongodb"
-    url      = "mongodb+srv://ngogiaphong123:iFbH3FWO56yctbol@database.lo3ixqr.mongodb.net/database?retryWrites=true&w=majority"
+    url      = env("DATABASE_URL")
+}
+model User {
+    accountId   String @id @default(auto()) @map("_id") @db.ObjectId
+    email       String @unique
+    password    String
+    firstName   String
+    lastName    String
+    avatarUrl   String
+    avatarFileName String
+    role        String
+    phone       String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
