@@ -8,6 +8,7 @@ import userRouter from './modules/user/user.route';
 import http from "http";
 import configureSocket from "./socket";
 import { temperatureCalling } from './utils/adafruitApi';
+import sensorRouter from './modules/sensor/sensor.route';
 
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 app.use('/auth', userRouter)
+app.use('/sensors',sensorRouter)
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
     return next(new ExpressError('Not Found', StatusCodes.NOT_FOUND))
 })

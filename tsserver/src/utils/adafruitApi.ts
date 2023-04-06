@@ -1,11 +1,14 @@
 import Temperature from "../modules/sensor/temperature/temperature.schema";
 import { getTemperatureFromAdafruitService, saveTemperatureService } from "../modules/sensor/temperature/temperature.service";
-import moment from "moment-timezone";
+
 export const temperatureCalling = () => {
     setInterval(async () => {
-        const data = await getTemperatureFromAdafruitService();
-        data.created_at = moment(data.created_at).tz("Asia/Ho_Chi_Minh").format();
-        const temp = new Temperature(data.id, "C", data.created_at, data.value)
-        await saveTemperatureService(temp);
+        const limit = 1;
+        const data = await getTemperatureFromAdafruitService(limit);
+        data.forEach(async (element : any) => {
+            // to change timezone to GMT+7
+            const temp = new Temperature(element.id, "C", element.created_at, element.value)
+            await saveTemperatureService(temp);
+        });
     },2000);
 }

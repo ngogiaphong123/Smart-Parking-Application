@@ -2,19 +2,21 @@ import { io } from "../../..";
 import prisma from "../../../utils/prisma";
 import Temperature from "./temperature.schema";
 import axios from 'axios';
+
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 export const getTemperatureService = async ({page,limit} : {
-    page : number,
-    limit : number
+    page : string,
+    limit : string
 }) => {
-    console.log(page, limit)
+    const pageInt = parseInt(page);
+    const limitInt = parseInt(limit);
     const temperature = await prisma.temperatureSensor.findMany({
-        skip : (page - 1) * limit,
-        take : limit,
+        skip : pageInt * limitInt,
+        take : limitInt,
         orderBy : {
-            createdAt : 'desc'
+            timestamp : 'desc'
         }
     });
     return temperature;
@@ -38,11 +40,11 @@ export const saveTemperatureService = async (temperature : Temperature) => {
             temperature : temperature.temperature
         }
     })
-    io.emit("temperatureData", newTemperature);
+    io.emit("temperatureChannel", newTemperature);
     return newTemperature;
 }
 
-export const getTemperatureFromAdafruitService = async () => {
+export const getTemperatureFromAdafruitService = async (limit : number) => {
     const AIO_USERNAME = process.env.ADAFRUIT_IO_USERNAME || '';
     const AIO_KEY = process.env.ADAFRUIT_IO_KEY || '';
     const feedName = "cambiennhiet"
@@ -53,9 +55,9 @@ export const getTemperatureFromAdafruitService = async () => {
             'Content-Type': 'application/json'
         },
         params : {
-            limit : 1
+            limit : limit
         }
     };
     const {data} = await axios.get(url, config);
-    return data[0];
+    return data;
 }

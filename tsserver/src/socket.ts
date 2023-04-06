@@ -1,5 +1,4 @@
 import { Server } from "socket.io";
-import { getTemperatureService } from "./modules/sensor/temperature/temperature.service";
 
 export default function configureSocket(server: any) {
   const io = new Server(server, {
