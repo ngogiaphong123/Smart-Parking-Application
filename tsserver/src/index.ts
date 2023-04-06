@@ -5,11 +5,17 @@ import { StatusCodes } from 'http-status-codes';
 import log from './utils/logger';
 import deserializeUser from './middlewares/deserializeUser';
 import userRouter from './modules/user/user.route';
+import http from "http";
+import configureSocket from "./socket";
+import { temperatureCalling } from './utils/adafruitApi';
+
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }  
 
 const app = express();
+const server = http.createServer(app);
+
 const port = process.env.PORT || 3000;
 app.use(cors({
     origin: '*',
@@ -30,6 +36,8 @@ app.use((err: ExpressError, req: Request, res: Response, next: NextFunction) => 
     const { status = 500, message = 'Something went wrong' } = err;
     res.status(status).send(message)
 })
-app.listen(port, () => {
+export const io = configureSocket(server);
+server.listen(port, () => {
     log.info(`Server is running on port ${port}`)
+    temperatureCalling();
 });
