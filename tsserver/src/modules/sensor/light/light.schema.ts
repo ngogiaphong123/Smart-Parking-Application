@@ -11,7 +11,7 @@ export default class Light {
     public timestamp: Date;
     public lux: string;
 
-constructor(_id: string, unit: string, timestamp: Date, lux: string) {
+    constructor(_id: string, unit: string, timestamp: Date, lux: string) {
         this._id = _id;
         this.unit = unit;
         this.timestamp = timestamp;
