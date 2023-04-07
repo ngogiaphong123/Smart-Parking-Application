@@ -24,7 +24,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class FanService {
     private final FanDeviceRepository fanDeviceRepository;
-    static String feedKey = "nutnhan1";
+    static String feedKey = "nutquat";
 
     public String turnOnOffFan(String value) throws IOException {
         PostToButtonFeed postToButton = new PostToButtonFeed(value);

@@ -1,18 +1,19 @@
 import { memo, useState, useEffect } from 'react'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import 'highcharts/css/highcharts.css';
 import { useDispatch } from 'react-redux'
-import { getTemperatureRecord } from '../../redux/slices/TemperatureSensorSlice'
+import { getLightRecord } from '../../redux/slices/LightSensorSlice'
 
 
-function TemperatureChart({ tempToggleRef }: { tempToggleRef: any }) {
+function LightChart() {
     const dispatch = useDispatch<any>();
-    const [temperatureData, setTemperatureData] = useState([
+    const [lightData, setLightData] = useState([
         // Add more temperature data points here
     ]);
     useEffect(() => {
-        const handleTemperature = setInterval(() => {
-            dispatch(getTemperatureRecord({ page: 0, limit: 10 }))
+        const handleLight = setInterval(() => {
+
+            dispatch(getLightRecord({ page: 0, limit: 10 }))
                 .then((res: any) => {
                     // reverse res.payload.data
                     let dataTest = JSON.parse(JSON.stringify(res.payload.data));
@@ -26,30 +27,30 @@ function TemperatureChart({ tempToggleRef }: { tempToggleRef: any }) {
                         let pos = date.lastIndexOf('/');
                         date = date.substring(0, pos);
                         let formattedString = date + ' ' + time;
-                        return { time: formattedString, temperature: item.temperature }
+                        return { time: formattedString, light: item.light }
                     })
-                    setTemperatureData(data)
+                    setLightData(data)
                 })
-        }, 5000)
+        }, 1000)
+
         return () => {
-            clearInterval(handleTemperature)
+            clearInterval(handleLight)
         }
     }, []);
     return (
         <>
-            <ResponsiveContainer width="100%" aspect={2} min-width="300px" min-height="200px">
-                <LineChart width={600} height={300} data={temperatureData} min-width="300px" min-height="200px">
+            <ResponsiveContainer width="100%" aspect={3} min-width="300px" min-height="200px">
+                <LineChart width={600} height={300} data={lightData} min-width="300px" min-height="200px">
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="time">
-                    </XAxis>
-                    <YAxis domain={[30, 40]}/>
+                    <XAxis dataKey="time" />
+                    <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="temperature" stroke="red" />
+                    <Line type="monotone" dataKey="light" stroke="orange" />
                 </LineChart>
             </ResponsiveContainer>
         </>
     )
 }
 
-export default memo(TemperatureChart);
+export default memo(LightChart);

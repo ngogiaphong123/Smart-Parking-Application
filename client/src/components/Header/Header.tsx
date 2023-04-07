@@ -1,9 +1,11 @@
 import {memo} from 'react'
+import {useNavigate} from "react-router-dom"
 import HeaderUser from '../HeaderUser/HeaderUser';
 
 function Header({role, handleMenuOnClick, isMenuOpen }: {role:string, handleMenuOnClick: any, isMenuOpen:boolean }) {
+    const navigate = useNavigate();
     return (<>
-        <div className="z-10 fixed top-0 left-0 right-0 header w-full px-8 h-16 bg-white flex justify-between items-center drop-shadow">
+        <div onClick={()=>{navigate('/')}} className="cursor-pointer z-10 fixed top-0 left-0 right-0 header w-full px-8 h-16 bg-white flex justify-between items-center drop-shadow">
             <div className="logo text-2xl sm:text-4xl inline">Parking<p className="inline font-semibold">Auto</p>.com</div>
             <div className="hidden md:block">
             <HeaderUser role={role} isMenuOpen={isMenuOpen}/>

@@ -9,14 +9,42 @@ import light from '../../assets/icon/light.svg'
 import music_off from '../../assets/icon/music_off.svg'
 import music from '../../assets/icon/music.svg'
 import clsx from 'clsx'
+import {useDispatch, useSelector} from 'react-redux'
+import { FanDeviceStore } from '../../redux/selectors'
+import { getFanStatus, manageFan } from '../../redux/slices/FanDeviceSlice'
 
 const DashboardToggle = forwardRef(({kind}:{kind:string},ref) => {
+    const dispatch = useDispatch<any>();
+    const fanStore = useSelector(FanDeviceStore)
+    useEffect(()=>{
+        const checkStatusFan = setInterval(()=>{
+            if(kind==="temperature")
+                dispatch(getFanStatus())
+                .then((res:any)=>{
+                    if(res.payload.data==='0')
+                    {
+                        setIsOn(false)
+                    }
+                    else{
+                        setIsOn(true)
+                    }
+                })
+        },2000)
+        return ()=>clearInterval(checkStatusFan)
+    },[])
+
     const [isOn, setIsOn] = useState(false);
-    const handleToggleTempOn = () => {
-        setIsOn(true)
-    }
-    const handleToggleTempOff = () => {
-        setIsOn(false)
+    const handleToggle = () => {
+        if(!isOn)
+        dispatch(manageFan({value:"1"}))
+            .then(()=>{
+                setIsOn(true)
+            })
+        else
+        dispatch(manageFan({value:"0"}))
+            .then(()=>{
+                setIsOn(false)
+            })
     }
     const handleGetState = () => {
         return isOn
@@ -36,8 +64,7 @@ const DashboardToggle = forwardRef(({kind}:{kind:string},ref) => {
     },[isOn])
 
     useImperativeHandle(ref, () => ({
-        handleToggleTempOn,
-        handleToggleTempOff,
+        handleToggle,
         handleGetState
     }));
 
@@ -54,7 +81,7 @@ const DashboardToggle = forwardRef(({kind}:{kind:string},ref) => {
                     "text-gray-500": !isOn
                 })}>{isOn?"ON":"OFF"}</span>
                 <label  className="relative inline-flex items-center cursor-pointer ">
-                    <input onClick={()=>{setIsOn(prev=>!prev)}} type="checkbox" value="" className="sr-only peer" checked={isOn} />
+                    <input onClick={handleToggle} type="checkbox" value="" className="sr-only peer" checked={isOn} />
                     <div className={clsx("w-9 h-5 transition duration-200 ease-in-out border-1 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px]  after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 ", {
                         "peer-checked:bg-white": isOn,
                         "peer-checked:bg-[#F5F5F5]": !isOn,

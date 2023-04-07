@@ -37,7 +37,7 @@ public class TemperatureRecordService {
     @Scheduled(fixedRate = 2000)
     public void getTemperatureFromAdafruit() {
         try {
-            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit(feedKey,3);
+            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit(feedKey,10);
             Set<ApiRecord> temperatureApiRecordData = call.execute().body();
             if(temperatureApiRecordData != null) {
                 temperatureApiRecordData.forEach(this::saveTemperatureRecord);

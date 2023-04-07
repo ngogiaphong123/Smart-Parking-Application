@@ -22,7 +22,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class LightBulkService {
     private final LightBulkDeviceRepository lightBulkRepository;
-    static String feedKey = "nutnhan2";
+    static String feedKey = "nutdenL";
 
     public String turnOnOffLightBulk(String value) throws IOException {
         PostToButtonFeed postToButton = new PostToButtonFeed(value);
