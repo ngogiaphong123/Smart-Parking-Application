@@ -32,14 +32,21 @@ export const saveFanService = async (fan : Fan) => {
     if(checkDuplicate) {
         return checkDuplicate;
     }
-    const newFan = await prisma.fanDevice.create({
-        data : {
+    const newFan = await prisma.fanDevice.upsert({
+        where : {
+            recordId : fan._id
+        },
+        create : {
             recordId : fan._id,
+            timestamp : fan.timestamp,
+            status : fan.status
+        },
+        update : {
             timestamp : fan.timestamp,
             status : fan.status
         }
     })
-    io.emit("fan-channel", newFan);
+    io.emit("fan-channel", [newFan]);
     return newFan;
 }
 

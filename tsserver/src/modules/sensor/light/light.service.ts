@@ -32,15 +32,23 @@ export const saveLightService = async (light : Light) => {
     if(checkDuplicate) {
         return checkDuplicate;
     }
-    const newLight = await prisma.lightSensor.create({
-        data : {
+    const newLight = await prisma.lightSensor.upsert({
+        where : {
+            recordId : light._id
+        },
+        create : {
             recordId : light._id,
             unit : light.unit,
             timestamp : light.timestamp,
             lux : light.lux
+        },
+        update : {
+            timestamp : light.timestamp,
+            unit : light.unit,
+            lux : light.lux
         }
     })
-    io.emit("light-channel", newLight);
+    io.emit("light-channel", [newLight]);
     return newLight;
 }
 
