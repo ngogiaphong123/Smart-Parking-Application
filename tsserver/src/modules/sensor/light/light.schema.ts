@@ -1,4 +1,4 @@
-export default class Temperature {
+export default class Light {
     // recordId    String @id @map("_id") @db.ObjectId
     // unit        String
     // timestamp   DateTime
@@ -9,12 +9,12 @@ export default class Temperature {
     public _id: string;
     public unit: string;
     public timestamp: Date;
-    public temperature: string;
+    public lux: string;
 
-    constructor(_id: string, unit: string, timestamp: Date, temperature: string) {
+constructor(_id: string, unit: string, timestamp: Date, lux: string) {
         this._id = _id;
         this.unit = unit;
         this.timestamp = timestamp;
-        this.temperature = temperature;
+        this.lux = lux;
     }
 }

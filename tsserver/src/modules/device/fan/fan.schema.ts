@@ -1,4 +1,4 @@
-export default class Temperature {
+export default class Fan {
     // recordId    String @id @map("_id") @db.ObjectId
     // unit        String
     // timestamp   DateTime
@@ -7,14 +7,12 @@ export default class Temperature {
     // temperature Float
     
     public _id: string;
-    public unit: string;
     public timestamp: Date;
-    public temperature: string;
+    public status: string;
 
-    constructor(_id: string, unit: string, timestamp: Date, temperature: string) {
+    constructor(_id: string, timestamp: Date, status: string) {
         this._id = _id;
-        this.unit = unit;
         this.timestamp = timestamp;
-        this.temperature = temperature;
+        this.status = status;
     }
 }

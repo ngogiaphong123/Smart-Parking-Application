@@ -7,7 +7,7 @@ import deserializeUser from './middlewares/deserializeUser';
 import userRouter from './modules/user/user.route';
 import http from "http";
 import configureSocket from "./socket";
-import { temperatureCalling } from './utils/adafruitApi';
+import { fanCalling, lightCalling, temperatureCalling } from './utils/adafruitApi';
 import sensorRouter from './modules/sensor/sensor.route';
 
 if(process.env.NODE_ENV !== 'production') {
@@ -42,4 +42,6 @@ export const io = configureSocket(server);
 server.listen(port, () => {
     log.info(`Server is running on port ${port}`)
     temperatureCalling();
+    // lightCalling();
+    // fanCalling();
 });
