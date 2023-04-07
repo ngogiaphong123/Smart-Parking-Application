@@ -1,7 +1,8 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 
 import axios from 'axios'
-const serverUrl = "http://localhost:8080"
+import serverUrl from '../urls/urls'
+
 const LightSensorSlice = createSlice({
     name:"LightSensorSlice",
     initialState:{

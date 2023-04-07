@@ -62,7 +62,7 @@ function DashboardAdmin() {
             </div>
             
             <div className="w-full flex justify-between items-center my-8 pr-14" >
-                <LightChart/>
+                {/* <LightChart/> */}
             </div>
         </motion.div>
     </>);

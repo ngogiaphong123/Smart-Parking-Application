@@ -1,7 +1,8 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 
 import axios from 'axios'
-const serverUrl = "http://localhost:8080"
+import serverUrl from '../urls/urls'
+
 const TemperatureSensorSlice = createSlice({
     name:"TemperatureSensorSlice",
     initialState:{
@@ -76,4 +77,6 @@ export const getTemperatureRecord = createAsyncThunk('getTemperatureRecord', asy
     }
 })
 
-export default TemperatureSensorSlice
+// name of link for socket
+export const temperatureChannelLinkName = "temperature-channel" 
+export default TemperatureSensorSlice   
