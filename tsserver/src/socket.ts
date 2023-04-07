@@ -12,6 +12,7 @@ export default function configureSocket(server: any) {
 
   io.on("connection", (socket) => {
     console.log("A user connected");
+    socket.emit("connected", "connected")
     socket.on("temperature-channel",async (data) => {
         const {page, limit} = data;
         const result = await getTemperatureService({page, limit});
@@ -38,7 +39,7 @@ export default function configureSocket(server: any) {
         socket.emit("fan-status", result);
     })
     socket.on("disconnect", () => {
-      console.log("user disconnected");
+        console.log("user disconnected");
     });
   });
   return io;
