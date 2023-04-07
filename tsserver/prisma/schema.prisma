@@ -18,6 +18,7 @@ model User {
     phone       String
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
+    vehicles   Vehicle[]
 }
 model TemperatureSensor {
     recordId    String @id @map("_id")
@@ -41,4 +42,41 @@ model FanDevice {
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
     status      String
+}
+model Vehicle {
+    vehicleId   String @id @map("_id") @default(auto()) @db.ObjectId
+    timestamp   DateTime
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    user        User @relation(fields: [ownerId], references: [accountId])
+    ownerId     String @db.ObjectId
+    RFID        RFID?
+    logs        Logs[]
+}
+model ParkingLot {
+    parkingSlotId   String @id @map("_id") @default(auto()) @db.ObjectId
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
+    status          String // Incoming, Occupied, Not Occupied
+    pricePerHour    String
+    logs            Logs[]
+}
+model Logs {
+    logId       String @id @map("_id") @default(auto()) @db.ObjectId
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    timeIn      DateTime
+    timeOut     DateTime
+    price       String 
+    parkingLot  ParkingLot @relation(fields: [parkingSlotId], references: [parkingSlotId])
+    parkingSlotId String @db.ObjectId
+    vehicle     Vehicle @relation(fields: [vehicleId], references: [vehicleId])
+    vehicleId   String @db.ObjectId
+}
+model RFID {
+    RFID        String @id @map("_id")
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    vehicle     Vehicle @relation(fields: [vehicleId], references: [vehicleId])
+    vehicleId   String @db.ObjectId @unique
 }
