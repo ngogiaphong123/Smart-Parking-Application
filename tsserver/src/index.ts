@@ -43,5 +43,5 @@ server.listen(port, () => {
     log.info(`Server is running on port ${port}`)
     temperatureCalling();
     lightCalling();
-    fanCalling();
+    // fanCalling();
 });
