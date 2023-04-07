@@ -46,7 +46,7 @@ export const saveFanService = async (fan : Fan) => {
             status : fan.status
         }
     })
-    io.emit("fan-channel", [newFan]);
+    io.emit("fan-control", [newFan]);
     return newFan;
 }
 
