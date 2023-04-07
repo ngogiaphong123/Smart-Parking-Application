@@ -77,4 +77,6 @@ export const getTemperatureRecord = createAsyncThunk('getTemperatureRecord', asy
     }
 })
 
+// name of link for socket
+export const temperatureChannelLinkName = "temperature-channel" 
 export default TemperatureSensorSlice   

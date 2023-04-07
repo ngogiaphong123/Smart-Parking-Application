@@ -101,4 +101,10 @@ export const getFanStatus = createAsyncThunk('getFanStatus', async () => {
         return {message:error.response.data.message, "data":error.response.data.data};
     }
 })
+
+// fan socket link name for first get fan status
+export const fanSocketStatus = "fan-status"
+// fan socket link name for control fan status
+export const fanSocketControl = "fan-control"
+
 export default FanDeviceSlice

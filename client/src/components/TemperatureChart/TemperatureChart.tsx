@@ -1,66 +1,67 @@
-import { memo, useState, useEffect } from 'react'
+import { memo, useState, useEffect, SetStateAction } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts';
 import 'highcharts/css/highcharts.css';
 import { useDispatch } from 'react-redux'
-import { getTemperatureRecord } from '../../redux/slices/TemperatureSensorSlice'
-import {io} from 'socket.io-client'
-import serverUrl from '../../redux/urls/urls'
-const socket = io(serverUrl)
-
+import { SocketStore } from '../../redux/selectors'
+import { useSelector } from 'react-redux'
+import {temperatureChannelLinkName} from '../../redux/slices/TemperatureSensorSlice'
+type mainData = [{
+    createdAt: string,
+    temperature: number,
+    updatedAt: string,
+    recordId: string,
+    unit: string,
+    timestamp: string,
+}]
+type smallData = {
+    createdAt: string,
+    temperature: number,
+    updatedAt: string,
+    recordId: string,
+    unit: string,
+    timestamp: string,
+}
 
 function TemperatureChart({ tempToggleRef }: { tempToggleRef: any }) {
     const dispatch = useDispatch<any>();
-    const [temperatureData, setTemperatureData] = useState([
-        // Add more temperature data points here
-    ]);
+    const socket = useSelector(SocketStore).socket;
+    const [temperatureData, setTemperatureData] = useState<any>([]);
+    const [receiveData, setReceiveData] = useState<any>(false);
     useEffect(() => {
-        socket.on("temperature-channel",(res:[{
-            createdAt: string,
-            temperature: number,
-            updatedAt: string,
-            recordId: string,
-            unit: string,
-            timestamp: string,
-        }])=>{
-                res.reverse();
-        //             // loading timestamp and temperature from the response to temperatureData
-        //             const data = dataTest.map((item: any) => {
-        //                 let datetimeString = item.timestamp;
-        //                 let parts = datetimeString.split('T');
-        //                 let date = parts[0].split('-').reverse().join('/');
-        //                 let time = parts[1];
-        //                 let pos = date.lastIndexOf('/');
-        //                 date = date.substring(0, pos);
-        //                 let formattedString = date + ' ' + time;
-        //                 return { time: formattedString, temperature: item.temperature }
-        })
-        const page:number = 0;
-        const limit:number = 10
+        socket.on(temperatureChannelLinkName, (res: mainData) => {
+            res.reverse();
+            const data = res.map((item: smallData) => {
+                const originalDateStr = item.timestamp;
+                const originalDate = new Date(originalDateStr);
+                const newDate = new Date(originalDate);
+                newDate.setHours(newDate.getHours() + 7);
+                const newDateStr = newDate.toISOString();
 
-        // const handleTemperature = setInterval(() => {
-        //     dispatch(getTemperatureRecord({ page: 0, limit: 10 }))
-        //         .then((res: any) => {
-        //             // reverse res.payload.data
-        //             let dataTest = JSON.parse(JSON.stringify(res.payload.data));
-        //             dataTest.reverse();
-        //             // loading timestamp and temperature from the response to temperatureData
-        //             const data = dataTest.map((item: any) => {
-        //                 let datetimeString = item.timestamp;
-        //                 let parts = datetimeString.split('T');
-        //                 let date = parts[0].split('-').reverse().join('/');
-        //                 let time = parts[1];
-        //                 let pos = date.lastIndexOf('/');
-        //                 date = date.substring(0, pos);
-        //                 let formattedString = date + ' ' + time;
-        //                 return { time: formattedString, temperature: item.temperature }
-        //             })
-        //             setTemperatureData(data)
-        //         })
-        // }, 5000)
-        // return () => {
-        //     clearInterval(handleTemperature)
-        // }
-    }, []);
+                let datetimeString = newDateStr;
+                let parts = datetimeString.split('T');
+                let date = parts[0].split('-').reverse().join('/');
+                let time = parts[1];
+                time = time.substring(0, time.length - 5);
+                let pos = date.lastIndexOf('/');
+                date = date.substring(0, pos);
+                let formattedString = date + ' ' + time;
+                return { time: formattedString, temperature: item.temperature }
+            })
+            const newData = [...temperatureData, ...data]
+            if(newData.length>10)
+            {
+                newData.shift();
+            }
+            setTemperatureData(newData)
+            setReceiveData((prev:boolean)=>!prev)
+        })
+        return () => {
+            socket.off(temperatureChannelLinkName)
+        }
+    }, [receiveData]);
+    useEffect(()=>{
+        socket.emit(temperatureChannelLinkName, { page: 0, limit: 10 })
+    },[])
     return (
         <>
             <ResponsiveContainer width="100%" aspect={2} min-width="300px" min-height="200px">
@@ -68,7 +69,7 @@ function TemperatureChart({ tempToggleRef }: { tempToggleRef: any }) {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="time">
                     </XAxis>
-                    <YAxis domain={[30, 40]}/>
+                    <YAxis domain={[30, 40]} />
                     <Tooltip />
                     <Legend />
                     <Line type="monotone" dataKey="temperature" stroke="red" />
