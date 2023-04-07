@@ -46,7 +46,6 @@ export const saveFanService = async (fan : Fan) => {
             status : fan.status
         }
     })
-    io.emit("fan-control", [newFan]);
     return newFan;
 }
 
@@ -82,5 +81,6 @@ export const updateFanStatusToAdafruitService = async (status : string) => {
     const {data} = await axios.post(url, {
         value : status
     }, config);
-    return data;
+    const result = await saveFanService(new Fan(data.id, new Date(data.created_at), data.value));
+    return result;
 }
