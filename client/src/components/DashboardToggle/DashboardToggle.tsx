@@ -39,7 +39,6 @@ const DashboardToggle = forwardRef(({ kind }: { kind: string }, ref) => {
     useEffect(() => {
         if (kind === "temperature") {
             socket.on(fanSocketControl, (res: any) => {
-                console.log(res)
                 if (res[0].value === "0") {
                     setIsOn(false)
                 }
