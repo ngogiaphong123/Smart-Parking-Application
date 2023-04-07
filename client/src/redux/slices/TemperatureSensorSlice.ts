@@ -11,17 +11,15 @@ const TemperatureSensorSlice = createSlice({
     reducers:{
     },
     extraReducers(builder) {
-        // builder
-        // .addCase(checkMe.pending, (state,action) => {
-        //     state.loading = true
-        // })
-        // .addCase(checkMe.fulfilled, (state,action) => {
-        //     state.loading = false
-        //     const {status, data} = action.payload
-        //     if(status==="error")
-        //     state.data = false
-        // })
-
+        builder
+        .addCase(getTemperatureRecord.pending, (state,action) => {
+            state.loading = true
+        })
+        .addCase(getTemperatureRecord.fulfilled, (state,action) => {
+            state.loading = false
+            const {data} = action.payload
+            state.data = data
+        })
     }
 })
 
@@ -62,9 +60,9 @@ const TemperatureSensorSlice = createSlice({
 // }
 // )
 
-export const getTemperatureRecord = createAsyncThunk('getTemperatureRecord', async () => {
+export const getTemperatureRecord = createAsyncThunk('getTemperatureRecord', async (input:any) => {
     try {
-        const {page, limit} = {page:1, limit:10}
+        const {page, limit} = input
         const {data} = await axios.get(`${serverUrl}/sensors/temperature?page=${page}&limit=${limit}`)
         if(data.status === "200") {
             return {message:data.message, "data":data.data};

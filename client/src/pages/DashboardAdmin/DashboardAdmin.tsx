@@ -2,6 +2,7 @@ import { memo, useRef } from 'react'
 import { motion } from 'framer-motion'
 import DashboardToggle from '../../components/DashboardToggle/DashboardToggle';
 import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
+import LightChart from '../../components/LightChart/LightChart';
 
 function DashboardAdmin() {
     const tempToggleRef = useRef<any>(null) 
@@ -23,7 +24,7 @@ function DashboardAdmin() {
                 duration: 1
             }}
 
-            className="w-full h-full p-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden">
+            className="w-full h-full p-4 mb-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden">
             <div className="w-full h-8 flex justify-between items-center " >
                 <span className="text-md text-title-inPage font-semibold capitalize">
                     car parking's dashboard
@@ -53,6 +54,15 @@ function DashboardAdmin() {
             </div>
             <div className="w-full flex justify-between items-center my-8 pr-14" >
                 <TemperatureChart tempToggleRef={tempToggleRef}/>
+            </div>
+            <div className="w-full flex justify-between items-center " >
+                <span className="text-md text-title-inPage font-semibold capitalize">
+                Car Parking Light
+                </span>
+            </div>
+            
+            <div className="w-full flex justify-between items-center my-8 pr-14" >
+                <LightChart/>
             </div>
         </motion.div>
     </>);

@@ -10,7 +10,7 @@ const store = configureStore({
         user:UserSlice.reducer,
         lightSensor : LightSensorSlice.reducer,
         temperatureSensor : TemperatureSensorSlice.reducer,
-        FanDevice : FanDeviceSlice.reducer
+        fanDevice : FanDeviceSlice.reducer
     }
 })
 

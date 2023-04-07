@@ -11,16 +11,24 @@ const FanDeviceSlice = createSlice({
     reducers:{
     },
     extraReducers(builder) {
-        // builder
-        // .addCase(checkMe.pending, (state,action) => {
-        //     state.loading = true
-        // })
-        // .addCase(checkMe.fulfilled, (state,action) => {
-        //     state.loading = false
-        //     const {status, data} = action.payload
-        //     if(status==="error")
-        //     state.data = false
-        // })
+        builder
+        .addCase(getFanStatus.pending, (state,action) => {
+            state.loading = true
+        })
+        .addCase(getFanStatus.fulfilled, (state,action) => {
+            state.loading = false
+            const {data} = action.payload
+            state.data = data
+        })
+        
+        .addCase(manageFan.pending, (state,action) => {
+            state.loading = true
+        })
+        .addCase(manageFan.fulfilled, (state,action) => {
+            state.loading = false
+            const {data} = action.payload
+            state.data = data
+        })
 
     }
 })
@@ -62,10 +70,11 @@ const FanDeviceSlice = createSlice({
 // }
 // )
 
-export const manageFan = createAsyncThunk('manageFan', async () => {
+export const manageFan = createAsyncThunk('manageFan', async (input:any) => {
     try {
+        const {value}=input
         const {data} = await axios.post(`${serverUrl}/devices/fan/manage`,{
-            value : "1"
+            value : value
         })
         if(data.status === "200") {
             return {message:data.message, "data":data.data};

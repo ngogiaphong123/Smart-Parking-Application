@@ -45,7 +45,7 @@ public class LightRecordService {
     @Scheduled(fixedRate = 2000)
     public void getLightRecordFromAdafruit() {
         try {
-            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit(feedKey, 3);
+            Call<Set<ApiRecord>> call = AdafruitRetrofitClientAPI.getAdafruitApi().getRecordFromAdafruit(feedKey, 10);
             Set<ApiRecord> lightApiRecordData = call.execute().body();
             if (lightApiRecordData != null) {
                 lightApiRecordData.forEach(this::saveLightRecord);

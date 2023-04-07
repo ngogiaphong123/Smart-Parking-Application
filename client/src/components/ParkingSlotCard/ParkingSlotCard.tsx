@@ -23,7 +23,7 @@ function ParkingSlotCard() {
                         </div>
                     </div>
                     <div className="w-full h-full group-hover:flex hidden flex-col justify-around ">
-                        <img id="userImage" className=" w-2/5 rounded-full  mx-auto mt-5 " src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t1.6435-1/180867081_2919616028282594_3665352780591598452_n.jpg?stp=cp0_dst-jpg_p80x80&_nc_cat=101&ccb=1-7&_nc_sid=7206a8&_nc_ohc=RifZ0L5V1XQAX89LSSU&_nc_ht=scontent.fsgn2-4.fna&oh=00_AfAi8mPcXo6B9rQkGDiknXR0VZdM_yz8vxDE0gb_Y1mcXQ&oe=642579C1"/>
+                        <img id="userImage" className=" w-2/5 rounded-full  mx-auto mt-5 " src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t1.6435-1/180867081_2919616028282594_3665352780591598452_n.jpg?stp=dst-jpg_s480x480&_nc_cat=101&ccb=1-7&_nc_sid=7206a8&_nc_ohc=rjcfB6pjMsgAX9tTFoA&_nc_ht=scontent.fsgn2-4.fna&oh=00_AfBsx5K4hFgEfdOC5w_sAYjSmnbVvuAm5-Kgy9VzZzKySg&oe=644F7181"/>
                         <h4 className="font-semibold text-center text-white">Tri Van</h4>
                         <div className="bg-sky-50 rounded-full w-36 mx-auto">
                             <h4 className="text-blue-300 text-center">Xe Lamboghini</h4>

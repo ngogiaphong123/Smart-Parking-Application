@@ -7,35 +7,35 @@ import 'swiper/css';
 import "swiper/css/pagination";
 import { Pagination } from "swiper";
 import CustomerVehicleCard from '../../components/CustomerVehicleCard/CustomerVehicleCard';
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 
 function HomeAndParkingAdmin() {
     const swiperRef = useRef<any>(null)
     const [currentIndex, setCurrentIndex] = useState(0);
-    const handleIncreaseIndex = useCallback(()=>{
-        setCurrentIndex((prev)=>{
-            if(prev<5) {
-                swiperRef.current?.swiper?.slideTo(prev+1);
-                return prev+1
+    const handleIncreaseIndex = useCallback(() => {
+        setCurrentIndex((prev) => {
+            if (prev < 5) {
+                swiperRef.current?.swiper?.slideTo(prev + 1);
+                return prev + 1
             }
             else return prev
         })
-        
-    },[])
-    const handleDecreaseIndex = useCallback(()=>{
-        setCurrentIndex((prev)=>{
-            if(prev>0) {
-                swiperRef.current?.swiper?.slideTo(prev-1);
-                return prev-1;
+
+    }, [])
+    const handleDecreaseIndex = useCallback(() => {
+        setCurrentIndex((prev) => {
+            if (prev > 0) {
+                swiperRef.current?.swiper?.slideTo(prev - 1);
+                return prev - 1;
             }
             else return 0
         })
     }
-    ,[])
-    const handleSlideChange = (swiper:any) => {
+        , [])
+    const handleSlideChange = (swiper: any) => {
         const newIndex = swiper.activeIndex;
         setCurrentIndex(newIndex);
-      }
+    }
     const [swiperRes, setSwiperRes] = useState(() => {
         if (window.innerWidth < 700) {
             return (1);
@@ -62,24 +62,24 @@ function HomeAndParkingAdmin() {
     }, [])
 
     return (<>
-        <motion.div 
+        <motion.div
             initial={{
-                opacity:0,
-                y:"10%"
+                opacity: 0,
+                y: "10%"
             }}
             animate={{
-                opacity:1,
-                y:0
+                opacity: 1,
+                y: 0
             }}
             exit={{
-                opacity:0,
-                y:"10%"
+                opacity: 0,
+                y: "10%"
             }}
             transition={{
-                duration:1
+                duration: 1
             }}
 
-        className="w-full h-full p-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden">
+            className="w-full h-full p-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden">
             <div className="w-full h-8 flex justify-between items-center " >
                 <span className="text-md text-title-inPage font-semibold capitalize">
                     car parking
@@ -98,7 +98,7 @@ function HomeAndParkingAdmin() {
                     <span className="text-sm text-gray-500 font-bold capitalize">
                         Order: 1-6
                     </span>
-                    <ArrowsLR handleIncreaseIndex={handleIncreaseIndex} handleDecreaseIndex = {handleDecreaseIndex} />
+                    <ArrowsLR handleIncreaseIndex={handleIncreaseIndex} handleDecreaseIndex={handleDecreaseIndex} />
                 </div>
             </div>
             <Swiper
@@ -106,7 +106,6 @@ function HomeAndParkingAdmin() {
                 slidesPerView={swiperRes}
                 initialSlide={currentIndex}
                 // current slide
-                spaceBetween={30}
                 pagination={{
                     clickable: true,
                 }}
@@ -142,12 +141,12 @@ function HomeAndParkingAdmin() {
                 </span>
             </div>
             <div className="w-full lg:w-1/2 min-h-0 flex flex-col gap-2 max-h-[400px] overflow-auto p-4">
-                <CustomerVehicleCard type="un paid"/>
-                <CustomerVehicleCard type="un paid"/>
-                <CustomerVehicleCard type="un paid"/>
-                <CustomerVehicleCard type="un paid"/>
-                <CustomerVehicleCard type="un paid"/>
-                <CustomerVehicleCard type="un paid"/>
+                <CustomerVehicleCard type="un paid" />
+                <CustomerVehicleCard type="un paid" />
+                <CustomerVehicleCard type="un paid" />
+                <CustomerVehicleCard type="un paid" />
+                <CustomerVehicleCard type="un paid" />
+                <CustomerVehicleCard type="un paid" />
             </div>
         </motion.div>
     </>);
