@@ -17,20 +17,20 @@ const DashboardToggle = forwardRef(({kind}:{kind:string},ref) => {
     const dispatch = useDispatch<any>();
     const fanStore = useSelector(FanDeviceStore)
     useEffect(()=>{
-        const checkStatusFan = setInterval(()=>{
-            if(kind==="temperature")
-                dispatch(getFanStatus())
-                .then((res:any)=>{
-                    if(res.payload.data==='0')
-                    {
-                        setIsOn(false)
-                    }
-                    else{
-                        setIsOn(true)
-                    }
-                })
-        },2000)
-        return ()=>clearInterval(checkStatusFan)
+        // const checkStatusFan = setInterval(()=>{
+        //     if(kind==="temperature")
+        //         dispatch(getFanStatus())
+        //         .then((res:any)=>{
+        //             if(res.payload.data==='0')
+        //             {
+        //                 setIsOn(false)
+        //             }
+        //             else{
+        //                 setIsOn(true)
+        //             }
+        //         })
+        // },2000)
+        // return ()=>clearInterval(checkStatusFan)
     },[])
 
     const [isOn, setIsOn] = useState(false);

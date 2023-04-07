@@ -7,6 +7,10 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import { AnimatePresence } from 'framer-motion';
 import DashboardAdmin from './pages/DashboardAdmin/DashboardAdmin';
 import TestGraph from './components/TestGraph/TestGraph';
+import { io } from 'socket.io-client';
+import serverUrl from './redux/urls/urls';
+
+const socket = io(serverUrl)
 
 function App() {
   const location = useLocation()
