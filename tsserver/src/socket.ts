@@ -31,7 +31,7 @@ export default function configureSocket(server: any) {
     socket.on("fan-control", async (data) => {
         const {value} = data;
         const result = await updateFanStatusToAdafruitService(value);
-        socket.emit("fan-control", result);
+        socket.emit("fan-control", [result]);
     });
     socket.on("fan-status", async (data) => {
         const {page, limit} = data;
