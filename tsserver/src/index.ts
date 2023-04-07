@@ -42,6 +42,6 @@ export const io = configureSocket(server);
 server.listen(port, () => {
     log.info(`Server is running on port ${port}`)
     temperatureCalling();
-    // lightCalling();
-    // fanCalling();
+    lightCalling();
+    fanCalling();
 });

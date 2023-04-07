@@ -19,6 +19,7 @@ export default function configureSocket(server: any) {
     })
     socket.on("light-channel",async (data) => {
         const {page, limit} = data;
+        console.log(data)
         const result = await getLightService({page, limit});
         socket.emit("light-channel", result);
     })

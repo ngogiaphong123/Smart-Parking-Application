@@ -46,7 +46,7 @@ export const saveFanService = async (fan : Fan) => {
 export const getFanStatusFromAdafruitService = async (limit : number) => {
     const AIO_USERNAME = process.env.ADAFRUIT_IO_USERNAME || '';
     const AIO_KEY = process.env.ADAFRUIT_IO_KEY || '';
-    const feedName = "nutquat"
+    const feedName = "fan"
     const url = `https://io.adafruit.com/api/v2/${AIO_USERNAME}/feeds/${feedName}/data`;
     const config = {
         headers: {
@@ -64,7 +64,7 @@ export const getFanStatusFromAdafruitService = async (limit : number) => {
 export const updateFanStatusToAdafruitService = async (status : string) => {
     const AIO_USERNAME = process.env.ADAFRUIT_IO_USERNAME || '';
     const AIO_KEY = process.env.ADAFRUIT_IO_KEY || '';
-    const feedName = "cambiennhiet"
+    const feedName = "fan"
     const url = `https://io.adafruit.com/api/v2/${AIO_USERNAME}/feeds/${feedName}/data`;
     const config = {
         headers: {
