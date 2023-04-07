@@ -9,11 +9,23 @@ import DashboardAdmin from './pages/DashboardAdmin/DashboardAdmin';
 import TestGraph from './components/TestGraph/TestGraph';
 import { io } from 'socket.io-client';
 import serverUrl from './redux/urls/urls';
+import { useEffect, useState } from 'react';
 
 const socket = io(serverUrl)
 
 function App() {
+  const [isConnected, setIsConnected] = useState(false)
   const location = useLocation()
+  useEffect(()=>{
+    socket.on('connected',()=>{
+      setIsConnected(true)
+    })
+    socket.on('disconnected',()=>{
+      setIsConnected(false)
+    })
+    if(isConnected)
+    socket.emit("temperature-channel",{page:10,limit:10})
+  },[isConnected])
   return (
     <div className="w-full bg-sky-200 h-screen flex flex-col overflow-x-hidden">
       <AnimatePresence mode="wait">

@@ -36,7 +36,6 @@ function TemperatureChart({ tempToggleRef }: { tempToggleRef: any }) {
         })
         const page:number = 0;
         const limit:number = 10
-        socket.emit("temperature-channel",{page,limit})
 
         // const handleTemperature = setInterval(() => {
         //     dispatch(getTemperatureRecord({ page: 0, limit: 10 }))
