@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import { getFanService, updateFanStatusToAdafruitService } from "./modules/device/fan/fan.service";
-import { getTemperatureService } from "./modules/sensor/temperature/temperature.service";
+import { getTemperatureService, updateTemperatureToAdafruitService } from "./modules/sensor/temperature/temperature.service";
 import { getLightService } from "./modules/sensor/light/light.service";
 
 export default function configureSocket(server: any) {
@@ -17,9 +17,13 @@ export default function configureSocket(server: any) {
         const result = await getTemperatureService({page, limit});
         socket.emit("temperature-channel", result);
     })
+    socket.on("temperature-control", async (data) => {
+        const {value} = data;
+        const result = await updateTemperatureToAdafruitService(value);
+        socket.emit("temperature-control", result);
+    });
     socket.on("light-channel",async (data) => {
         const {page, limit} = data;
-        console.log(data)
         const result = await getLightService({page, limit});
         socket.emit("light-channel", result);
     })

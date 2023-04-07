@@ -32,15 +32,23 @@ export const saveTemperatureService = async (temperature : Temperature) => {
     if(checkDuplicate) {
         return checkDuplicate;
     }
-    const newTemperature = await prisma.temperatureSensor.create({
-        data : {
+    const newTemperature = await prisma.temperatureSensor.upsert({
+        where : {
+            recordId : temperature._id
+        },
+        create : {
             recordId : temperature._id,
             unit : temperature.unit,
             timestamp : temperature.timestamp,
             temperature : temperature.temperature
+        },
+        update : {
+            timestamp : temperature.timestamp,
+            unit : temperature.unit,
+            temperature : temperature.temperature
         }
     })
-    io.emit("temperature-channel", newTemperature);
+    io.emit("temperature-channel", [newTemperature]);
     return newTemperature;
 }
 
@@ -59,5 +67,22 @@ export const getTemperatureFromAdafruitService = async (limit : number) => {
         }
     };
     const {data} = await axios.get(url, config);
+    return data;
+}
+
+export const updateTemperatureToAdafruitService = async (value : number) => {
+    const AIO_USERNAME = process.env.ADAFRUIT_IO_USERNAME || '';
+    const AIO_KEY = process.env.ADAFRUIT_IO_KEY || '';
+    const feedName = "cambiennhiet"
+    const url = `https://io.adafruit.com/api/v2/${AIO_USERNAME}/feeds/${feedName}/data`;
+    const config = {
+        headers: {
+            'X-AIO-Key': AIO_KEY,
+            'Content-Type': 'application/json'
+        }
+    };
+    const {data} = await axios.post(url, {
+        value : value
+    }, config);
     return data;
 }
