@@ -8,7 +8,9 @@ import userRouter from './modules/user/user.route';
 import http from "http";
 import configureSocket from "./socket";
 import { fanCalling, lightCalling, temperatureCalling } from './utils/adafruitApi';
-import sensorRouter from './modules/sensor/sensor.route';
+import rfidRouter from './modules/rfid/rfid.route';
+import vehicleRouter from './modules/vehicle/vehicle.route';
+import parkingSlotRouter from './modules/parkingSlot/parkingSlot.route';
 
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -30,7 +32,9 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 app.use('/auth', userRouter)
-app.use('/sensors',sensorRouter)
+app.use('/vehicles', vehicleRouter)
+app.use('/rfid', rfidRouter)
+app.use('/parkingSlot', parkingSlotRouter)
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
     return next(new ExpressError('Not Found', StatusCodes.NOT_FOUND))
 })
