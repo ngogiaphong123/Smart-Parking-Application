@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import DashboardToggle from '../../components/DashboardToggle/DashboardToggle';
 import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 import LightChart from '../../components/LightChart/LightChart';
+import { pageMotionTime } from '../../configs';
 
 function DashboardAdmin() {
     const tempToggleRef = useRef<any>(null) 
@@ -21,7 +22,7 @@ function DashboardAdmin() {
                 y: "10%"
             }}
             transition={{
-                duration: 1
+                duration: pageMotionTime
             }}
 
             className="w-full h-full p-4 mb-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden">

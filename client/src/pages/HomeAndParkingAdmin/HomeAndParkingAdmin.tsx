@@ -8,6 +8,7 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper";
 import CustomerVehicleCard from '../../components/CustomerVehicleCard/CustomerVehicleCard';
 import { motion } from 'framer-motion'
+import {pageMotionTime} from '../../configs'
 
 function HomeAndParkingAdmin() {
     const swiperRef = useRef<any>(null)
@@ -76,7 +77,7 @@ function HomeAndParkingAdmin() {
                 y: "10%"
             }}
             transition={{
-                duration: 1
+                duration: pageMotionTime
             }}
 
             className="w-full h-full p-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden">

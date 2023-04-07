@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import { AnimatePresence } from 'framer-motion';
 import DashboardAdmin from './pages/DashboardAdmin/DashboardAdmin';
 import TestGraph from './components/TestGraph/TestGraph';
+import PaymentHistory from './pages/PaymentHistory/PaymentHistory';
 
 function App() {
   const location = useLocation()
@@ -25,6 +26,11 @@ function App() {
           <Route path="/admin/dashboard" element={
             <GeneralPageAdmin>
               <DashboardAdmin />
+            </GeneralPageAdmin>
+          } />
+          <Route path="/admin/paymenthistory" element={
+            <GeneralPageAdmin>
+              <PaymentHistory />
             </GeneralPageAdmin>
           } />
 
