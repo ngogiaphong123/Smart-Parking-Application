@@ -27,3 +27,18 @@ model TemperatureSensor {
     updatedAt   DateTime @updatedAt
     temperature String
 }
+model LightSensor {
+    recordId    String @id @map("_id")
+    unit        String
+    timestamp   DateTime
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    lux         String
+}
+model FanDevice {
+    recordId    String @id @map("_id")
+    timestamp   DateTime
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    status      String
+}
