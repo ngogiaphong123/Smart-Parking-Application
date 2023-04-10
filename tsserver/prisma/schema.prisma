@@ -43,16 +43,23 @@ model FanDevice {
     updatedAt   DateTime @updatedAt
     status      String
 }
+model ServoDevice {
+    recordId    String @id @map("_id")
+    timestamp   DateTime
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    status      String
+}
 model Vehicle {
     vehicleId   String @id @map("_id") @default(auto()) @db.ObjectId
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
-    user        User @relation(fields: [ownerId], references: [accountId])
+    user        User @relation(fields: [ownerId], references: [accountId], onDelete: Cascade)
     ownerId     String @db.ObjectId
     logs        Logs[]
-    rfid        Rfid @relation(fields: [rfidNumber], references: [number])
+    rfid        Rfid @relation(fields: [rfidNumber], references: [number], onDelete: Cascade)
     rfidNumber  String @unique
-    genre      String
+    genre       String
     numberPlate String
     model       String
 }
@@ -60,21 +67,23 @@ model ParkingSlot {
     parkingSlotId   String @id @map("_id") @default(auto()) @db.ObjectId
     createdAt       DateTime @default(now())
     updatedAt       DateTime @updatedAt
-    status          String // Incoming, Occupied, Not Occupied
+    status          String // reserved, occupied, available
+    reservedBy      String?
     pricePerHour    String
     logs            Logs[]
 }
 model Logs {
-    logId       String @id @map("_id") @default(auto()) @db.ObjectId
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    timeIn      DateTime
-    timeOut     DateTime
-    price       String 
-    ParkingSlot  ParkingSlot @relation(fields: [parkingSlotId], references: [parkingSlotId])
-    parkingSlotId String @db.ObjectId
-    vehicle     Vehicle @relation(fields: [vehicleId], references: [vehicleId])
-    vehicleId   String @db.ObjectId
+    logId           String @id @map("_id") @default(auto()) @db.ObjectId
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
+    timeIn          DateTime @default(now())
+    timeOut         DateTime?
+    price           String?
+    state           String @default("IN")
+    ParkingSlot     ParkingSlot @relation(fields: [parkingSlotId], references: [parkingSlotId])
+    parkingSlotId   String @db.ObjectId
+    vehicle         Vehicle @relation(fields: [vehicleId], references: [vehicleId])
+    vehicleId       String @db.ObjectId
 }
 model Rfid {
     number      String @id @map("_id")
