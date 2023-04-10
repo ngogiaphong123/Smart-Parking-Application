@@ -7,7 +7,7 @@ import deserializeUser from './middlewares/deserializeUser';
 import userRouter from './modules/user/user.route';
 import http from "http";
 import configureSocket from "./socket";
-import { fanCalling, lightCalling, temperatureCalling } from './utils/adafruitApi';
+import { fanCalling, lightCalling, rfidCalling, temperatureCalling } from './utils/adafruitApi';
 import rfidRouter from './modules/rfid/rfid.route';
 import vehicleRouter from './modules/vehicle/vehicle.route';
 import parkingSlotRouter from './modules/parkingSlot/parkingSlot.route';
@@ -47,5 +47,5 @@ server.listen(port, () => {
     log.info(`Server is running on port ${port}`)
     temperatureCalling();
     lightCalling();
-    // fanCalling();
+    rfidCalling();
 });

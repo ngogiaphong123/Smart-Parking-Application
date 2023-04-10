@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import { getFanService, updateFanStatusToAdafruitService } from "./modules/device/fan/fan.service";
 import { getTemperatureService, updateTemperatureToAdafruitService } from "./modules/sensor/temperature/temperature.service";
 import { getLightService } from "./modules/sensor/light/light.service";
+import { getParkingSlotService } from "./modules/parkingSlot/parkingSlot.service";
 
 export default function configureSocket(server: any) {
   const io = new Server(server, {
@@ -37,6 +38,11 @@ export default function configureSocket(server: any) {
         const {page, limit} = data;
         const result = await getFanService({page, limit});
         socket.emit("fan-status", result);
+    })
+    socket.on("parking-slot-channel",async (data) => {
+        const {page, limit} = data;
+        const result = await getParkingSlotService({page, limit});
+        socket.emit("parking-slot-channel", result);
     })
     socket.on("disconnect", () => {
         console.log("user disconnected");

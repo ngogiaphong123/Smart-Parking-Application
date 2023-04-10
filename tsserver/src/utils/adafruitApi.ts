@@ -1,5 +1,6 @@
 import Fan from "../modules/device/fan/fan.schema";
 import { getFanStatusFromAdafruitService, saveFanService } from "../modules/device/fan/fan.service";
+import { getRfidFromAdafruitService, verifyRfid } from "../modules/rfid/rfid.service";
 import Light from "../modules/sensor/light/light.schema";
 import { getLightFromAdafruitService, saveLightService } from "../modules/sensor/light/light.service";
 import Temperature from "../modules/sensor/temperature/temperature.schema";
@@ -37,5 +38,14 @@ export const fanCalling = () => {
             const temp = new Fan(element.id, element.created_at, element.value)
             await saveFanService(temp);
         });
+    },2000);
+}
+
+export const rfidCalling = () => {
+    setInterval(async () => {
+        const limit = 1;
+        const data = await getRfidFromAdafruitService(limit);
+        console.log(data[0].value)
+        console.log(verifyRfid(data[0].value));
     },2000);
 }
