@@ -19,6 +19,7 @@ model User {
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
     vehicles   Vehicle[]
+    reservations ParkingSlot[]
 }
 model TemperatureSensor {
     recordId    String @id @map("_id")
@@ -68,7 +69,8 @@ model ParkingSlot {
     createdAt       DateTime @default(now())
     updatedAt       DateTime @updatedAt
     status          String // reserved, occupied, available
-    reservedBy      String?
+    reservedBy      User? @relation(fields: [reservedById], references: [accountId])
+    reservedById    String? @db.ObjectId
     pricePerHour    String
     logs            Logs[]
 }

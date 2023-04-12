@@ -1,5 +1,6 @@
 import { io } from "../../..";
 import prisma from "../../../utils/prisma";
+import responseBody from "../../../utils/responseBody";
 import Light from "./light.schema";
 import axios from 'axios';
 
@@ -19,7 +20,7 @@ export const getLightService = async ({page,limit} : {
             timestamp : 'desc'
         }
     });
-    return light;
+    return new responseBody("Success", "Get light", light);
 }
   
 export const saveLightService = async (light : Light) => {
@@ -48,7 +49,7 @@ export const saveLightService = async (light : Light) => {
             lux : light.lux
         }
     })
-    io.emit("light-channel", [newLight]);
+    io.emit("light-channel", new responseBody("Success", "Save light", [newLight]));
     return newLight;
 }
 
