@@ -1,6 +1,7 @@
 import { ParkingSlotInput } from "./parkingSlot.schema";
 import prisma from "../../utils/prisma";
 import { io } from "../..";
+import responseBody from "../../utils/responseBody";
 export const createParkingSlotService = async (parkingSlot : ParkingSlotInput) => {
     const {pricePerHour} = parkingSlot;
     const newParkingSlot = await prisma.parkingSlot.create({
@@ -17,11 +18,25 @@ export const getParkingSlotService = async ({page, limit} :{
 }) => {
     const newPage = parseInt(page);
     const newLimit = parseInt(limit);
-    const parkingSlot = prisma.parkingSlot.findMany({
+    const parkingSlot = await prisma.parkingSlot.findMany({
         skip : newPage * newLimit,
         take : newLimit,
+        select : {
+            parkingSlotId : true,
+            status : true,
+            reservedById : true,
+            pricePerHour : true,
+            reservedBy : {
+                select : {
+                    accountId : true,
+                    firstName : true,
+                    lastName : true,
+                    email : true,
+                }
+            }
+        }
     });
-    return parkingSlot;
+    return new responseBody("Success", "Get parking slot success",parkingSlot);
 }
 export const reservedParkingSlotService = async (parkingSlotId : string, accountId : string) => {
     const parkingSlot = await prisma.parkingSlot.findFirst({
@@ -30,7 +45,19 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
         }
     });
     if (!parkingSlot) {
-        return "Parking slot not found";
+        const res = new responseBody("Error", "Parking slot not found",null);
+        io.emit("parking-slot-channel",res);
+        return;
+    }
+    // find vehicle
+    const vehicle = await prisma.vehicle.findFirst({
+        where : {
+            ownerId : accountId
+        }
+    });
+    if (!vehicle) {
+        const res = new responseBody("Error", "Vehicle not found",null);
+        return;
     }
     else {
         if (parkingSlot.status === "AVAILABLE") {
@@ -40,13 +67,31 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
                 },
                 data : {
                     status : "RESERVED",
-                    reservedBy : accountId
+                    reservedById : vehicle.ownerId
+                },
+                select : {
+                    parkingSlotId : true,
+                    status : true,
+                    reservedById : true,
+                    pricePerHour : true,
+                    reservedBy : {
+                        select : {
+                            accountId : true,
+                            firstName : true,
+                            lastName : true,
+                            email : true,
+                        }
+                    }
                 }
             })
+            const res = new responseBody("Success", "Reserved parking slot success",updatedParkingSlot);
+            io.emit("parking-slot-channel",res);
             return updatedParkingSlot;
         }
         else {
-            return "Parking slot is not available";
+            const res = new responseBody("Error", "Parking slot is not available",null);
+            io.emit("parking-slot-channel",res);
+            return;
         }
     }
 }

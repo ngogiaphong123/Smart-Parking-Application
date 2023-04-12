@@ -83,3 +83,19 @@ export const updateServoStatusToAdafruitService = async (status : string) => {
     const result = await saveServoService(new Servo(data.id, new Date(data.created_at), data.value));
     return result;
 }
+
+export const updatePriceToAdafruitService = async (status : string) => {
+    const AIO_USERNAME = process.env.ADAFRUIT_IO_USERNAME || '';
+    const AIO_KEY = process.env.ADAFRUIT_IO_KEY || '';
+    const feedName = "giatien"
+    const url = `https://io.adafruit.com/api/v2/${AIO_USERNAME}/feeds/${feedName}/data`;
+    const config = {
+        headers: {
+            'X-AIO-Key': AIO_KEY,
+            'Content-Type': 'application/json'
+        }
+    };
+    const {data} = await axios.post(url, {
+        value : status
+    }, config);
+}

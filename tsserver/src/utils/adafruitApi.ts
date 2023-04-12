@@ -1,3 +1,4 @@
+import { any } from "zod";
 import Fan from "../modules/device/fan/fan.schema";
 import { getFanStatusFromAdafruitService, saveFanService } from "../modules/device/fan/fan.service";
 import { getRfidFromAdafruitService, verifyRfid } from "../modules/rfid/rfid.service";
@@ -24,7 +25,7 @@ export const lightCalling = () => {
         const data = await getLightFromAdafruitService(limit);
         data.forEach(async (element : any) => {
             // to change timezone to GMT+7
-            const temp = new Light(element.id, "C", element.created_at, element.value)
+            const temp = new Light(element.id, "lux", element.created_at, element.value)
             await saveLightService(temp);
         });
     },2000);
@@ -42,10 +43,19 @@ export const fanCalling = () => {
 }
 
 export const rfidCalling = () => {
+    const prevData : any = [];
     setInterval(async () => {
         const limit = 1;
         const data = await getRfidFromAdafruitService(limit);
-        console.log(data[0].value)
-        console.log(verifyRfid(data[0].value));
+        // avoid duplicate data
+        if (prevData.length === 0) {
+            prevData.push(data[0]);
+        } else {
+            if (prevData[0].id !== data[0].id) {
+                prevData.pop();
+                prevData.push(data[0]);
+                await verifyRfid(data[0].value);
+            }
+        }
     },2000);
 }
