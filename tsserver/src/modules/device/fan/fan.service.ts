@@ -2,7 +2,7 @@ import { io } from "../../..";
 import prisma from "../../../utils/prisma";
 import axios from 'axios';
 import Fan from "./fan.schema";
-import responseBody from "../../../utils/responseBody";
+import ResponseBody from "../../../utils/responseBody";
 
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -20,7 +20,7 @@ export const getFanService = async ({page,limit} : {
             timestamp : 'desc'
         }
     });
-    return new responseBody("Success", "Get fan status", fan);
+    return new ResponseBody("Success", "Get fan status", fan);
 }
   
 export const saveFanService = async (fan : Fan) => {
@@ -83,5 +83,5 @@ export const updateFanStatusToAdafruitService = async (status : string) => {
         value : status
     }, config);
     const result = await saveFanService(new Fan(data.id, new Date(data.created_at), data.value));
-    return new responseBody("Success", "Update fan status to adafruit success", [result]);
+    return new ResponseBody("Success", "Update fan status to adafruit success", [result]);
 }

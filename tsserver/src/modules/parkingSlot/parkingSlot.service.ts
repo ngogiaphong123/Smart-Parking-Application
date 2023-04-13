@@ -1,7 +1,7 @@
 import { ParkingSlotInput } from "./parkingSlot.schema";
 import prisma from "../../utils/prisma";
 import { io } from "../..";
-import responseBody from "../../utils/responseBody";
+import ResponseBody from "../../utils/responseBody";
 export const createParkingSlotService = async (parkingSlot : ParkingSlotInput) => {
     const {pricePerHour} = parkingSlot;
     const newParkingSlot = await prisma.parkingSlot.create({
@@ -10,7 +10,7 @@ export const createParkingSlotService = async (parkingSlot : ParkingSlotInput) =
             pricePerHour,
         },
     })
-    return newParkingSlot;
+    return new ResponseBody("Success", "Create parking slot success", newParkingSlot);
 }
 export const getParkingSlotService = async ({page, limit} :{
     page : string,
@@ -36,7 +36,7 @@ export const getParkingSlotService = async ({page, limit} :{
             }
         }
     });
-    return new responseBody("Success", "Get parking slot success",parkingSlot);
+    return new ResponseBody("Success", "Get parking slot success",parkingSlot);
 }
 export const reservedParkingSlotService = async (parkingSlotId : string, accountId : string) => {
     const parkingSlot = await prisma.parkingSlot.findFirst({
@@ -45,9 +45,9 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
         }
     });
     if (!parkingSlot) {
-        const res = new responseBody("Error", "Parking slot not found",null);
+        const res = new ResponseBody("Error", "Parking slot not found",null);
         io.emit("parking-slot-channel",res);
-        return;
+        return res;
     }
     // find vehicle
     const vehicle = await prisma.vehicle.findFirst({
@@ -56,10 +56,23 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
         }
     });
     if (!vehicle) {
-        const res = new responseBody("Error", "Vehicle not found",null);
-        return;
+        const res = new ResponseBody("Error", "Vehicle not found",null);
+        io.emit("parking-slot-channel",res);
+        return res;
     }
     else {
+        // only 1 vehicle can be reserved
+        const checkReserved = await prisma.parkingSlot.findFirst({
+            where : {
+                reservedById : vehicle.ownerId,
+                status : "RESERVED"
+            }
+        });
+        if (checkReserved) {
+            const res = new ResponseBody("Error", "You already reserved a parking slot",null);
+            // io.emit("parking-slot-channel",res);
+            return res;
+        }
         if (parkingSlot.status === "AVAILABLE") {
             const updatedParkingSlot = await prisma.parkingSlot.update({
                 where : {
@@ -84,14 +97,14 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
                     }
                 }
             })
-            const res = new responseBody("Success", "Reserved parking slot success",updatedParkingSlot);
+            const res = new ResponseBody("Success", "Reserved parking slot success",updatedParkingSlot);
             io.emit("parking-slot-channel",res);
-            return updatedParkingSlot;
+            return res;
         }
         else {
-            const res = new responseBody("Error", "Parking slot is not available",null);
+            const res = new ResponseBody("Error", "Parking slot is not available", null);
             io.emit("parking-slot-channel",res);
-            return;
+            return res;
         }
     }
 }
