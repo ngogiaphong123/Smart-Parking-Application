@@ -1,6 +1,6 @@
 import {z} from 'zod';
-export const rfidList = z.object({
+export const rfidListSchema = z.object({
     list: z.array(z.string())
 });
 
-export type rfidListInput = z.infer<typeof rfidList>;
+export type rfidListInput = z.infer<typeof rfidListSchema>;

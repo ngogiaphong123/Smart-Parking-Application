@@ -2,14 +2,14 @@ import axios from "axios";
 import prisma from "../../utils/prisma";
 import { updatePriceToAdafruitService, updateServoStatusToAdafruitService } from "../device/servo/servo.service";
 import { io } from "../..";
-import responseBody from "../../utils/responseBody";
+import ResponseBody from "../../utils/responseBody";
 export const registerRfidService = async (rfid: string) => {
     const newRfid = await prisma.rfid.create({
         data: {
             number: rfid
         }
     })
-    return newRfid;
+    return new ResponseBody("Success", "Register rfid success", newRfid);
 }
 export const getRfidFromAdafruitService = async (limit: number) => {
     const AIO_USERNAME = process.env.ADAFRUIT_IO_USERNAME || '';
@@ -42,7 +42,7 @@ export const updateRfidToAdafruitService = async (status : string) => {
     const {data} = await axios.post(url, {
         value : status
     }, config);
-    return new responseBody("Success", "Update rfid to adafruit service success", data);
+    return new ResponseBody("Success", "Update rfid to adafruit service success", data);
 }
 export const verifyRfid = async (rfid: string) => {
     // if : in logs (status : in) => update status : out and count price
@@ -55,7 +55,7 @@ export const verifyRfid = async (rfid: string) => {
         }
     });
     if (!checkRfid) {
-        const res = new responseBody("Error", "Rfid not found",null);
+        const res = new ResponseBody("Error", "Rfid not found",null);
         io.emit("parking-slot-channel", res);
         return res;
     }
@@ -66,7 +66,7 @@ export const verifyRfid = async (rfid: string) => {
         }
     });
     if (!vehicle) {
-        const res = new responseBody("Error", "Vehicle not found",null);
+        const res = new ResponseBody("Error", "Vehicle not found",null);
         io.emit("parking-slot-channel", res);
         return res;
     }
@@ -86,7 +86,7 @@ export const verifyRfid = async (rfid: string) => {
             }
         })
         if(!slotPrice) {
-            const  res = new responseBody("Error", "Parking slot not found",null);
+            const  res = new ResponseBody("Error", "Parking slot not found",null);
             io.emit("parking-slot-channel", res);
             return res;
         }
@@ -131,11 +131,11 @@ export const verifyRfid = async (rfid: string) => {
             }
         });
         // update price to adafruit
-        const res = new responseBody("Success", "Check out success",updateParkingSlot);
+        const res = new ResponseBody("Success", "Check out success",updateParkingSlot);
         io.emit("parking-slot-channel",res);
         await updatePriceToAdafruitService(price.toString());
         await updateServoStatusToAdafruitService("1");
-        return updateLog;
+        return res;
     }
     else {
         // check reserved
@@ -177,10 +177,10 @@ export const verifyRfid = async (rfid: string) => {
                     }
                 }
             });
-            const res = new responseBody("Success", "Check in success",updateParkingSlot);
+            const res = new ResponseBody("Success", "Check in success",updateParkingSlot);
             io.emit("parking-slot-channel",res);
             await updateServoStatusToAdafruitService("1");
-            return newLog;
+            return res;
         }
         else {
             // create new log
@@ -223,10 +223,10 @@ export const verifyRfid = async (rfid: string) => {
                     }
                 }
             });
-            const res = new responseBody("Success", "Check in success",updateParkingSlot);
+            const res = new ResponseBody("Success", "Check in success",updateParkingSlot);
             io.emit("parking-slot-channel",res);
             await updateServoStatusToAdafruitService("1");
-            return newLog;
+            return res;
         }
     }
 }
