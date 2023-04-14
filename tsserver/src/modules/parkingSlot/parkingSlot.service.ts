@@ -38,12 +38,14 @@ export const getParkingSlotService = async ({page, limit} :{
     });
     return new ResponseBody("Success", "Get parking slot success",parkingSlot);
 }
-export const reservedParkingSlotService = async (parkingSlotId : string, accountId : string) => {
+export const reservedParkingSlotService = async (parkingSlotId : string, accountId : string, vehicleId  : string) => {
     const parkingSlot = await prisma.parkingSlot.findFirst({
         where : {
             parkingSlotId : parkingSlotId
         }
-    });
+    }).catch((err) => {
+        return null;
+    })
     if (!parkingSlot) {
         const res = new ResponseBody("Error", "Parking slot not found",null);
         io.emit("parking-slot-channel",res);
@@ -52,11 +54,14 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
     // find vehicle
     const vehicle = await prisma.vehicle.findFirst({
         where : {
-            ownerId : accountId
+            ownerId : accountId,
+            vehicleId : vehicleId
         }
-    });
+    }).catch((err) => {
+        return null;
+    })
     if (!vehicle) {
-        const res = new ResponseBody("Error", "Vehicle not found",null);
+        const res = new ResponseBody("Error", "Vehicle is not valid",null);
         io.emit("parking-slot-channel",res);
         return res;
     }
@@ -107,4 +112,27 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
             return res;
         }
     }
+}
+
+export const getParkingSlotByIdService = async (parkingSlotId : string) => {
+    const parkingSlot = await prisma.parkingSlot.findFirst({
+        where : {
+            parkingSlotId : parkingSlotId
+        },
+        select : {
+            parkingSlotId : true,
+            status : true,
+            reservedById : true,
+            pricePerHour : true,
+            reservedBy : {
+                select : {
+                    accountId : true,
+                    firstName : true,
+                    lastName : true,
+                    email : true,
+                }
+            }
+        }
+    })
+    return new ResponseBody("Success", "Get parking slot success",parkingSlot);
 }

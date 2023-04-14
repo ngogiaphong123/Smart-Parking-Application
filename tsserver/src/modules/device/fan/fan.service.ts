@@ -3,6 +3,7 @@ import prisma from "../../../utils/prisma";
 import axios from 'axios';
 import Fan from "./fan.schema";
 import ResponseBody from "../../../utils/responseBody";
+import log from "../../../utils/logger";
 
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -64,8 +65,13 @@ export const getFanStatusFromAdafruitService = async (limit : number) => {
             limit : limit
         }
     };
-    const {data} = await axios.get(url, config);
-    return data;
+    try {
+        const {data} = await axios.get(url, config);
+        return data;
+    }
+    catch(err) {
+        log.info(err)
+    }
 }
 
 export const updateFanStatusToAdafruitService = async (status : string) => {
@@ -79,9 +85,14 @@ export const updateFanStatusToAdafruitService = async (status : string) => {
             'Content-Type': 'application/json'
         }
     };
-    const {data} = await axios.post(url, {
-        value : status
-    }, config);
-    const result = await saveFanService(new Fan(data.id, new Date(data.created_at), data.value));
-    return new ResponseBody("Success", "Update fan status to adafruit success", [result]);
+    try {
+        const {data} = await axios.post(url, {
+            value : status
+        }, config);
+        const result = await saveFanService(new Fan(data.id, new Date(data.created_at), data.value));
+        return new ResponseBody("Success", "Update fan status to adafruit success", [result]);
+    }
+    catch(err) {
+        log.info(err)
+    }
 }
