@@ -4,7 +4,7 @@ import time
 import  sys
 from  Adafruit_IO import  MQTTClient
 
-AIO_FEED_IDs = ["giatien"]
+AIO_FEED_IDs = ["servo","giatien","fan"]
 AIO_USERNAME = "hibecung123"
 AIO_KEY = "aio_tpcq72RxcF1b29pHwhDCbg1q2p9Z"
 
@@ -21,7 +21,7 @@ def  disconnected(client):
     sys.exit (1)
 
 def  message(client , feed_id , payload):
-    ser.write((feed_id+ ":" + str(payload) + "#").encode())
+    ser.write(("!"+feed_id+ ":" + str(payload) + "#").encode())
     print("!"+feed_id+ ":" + str(payload) + "#")
 
 client = MQTTClient(AIO_USERNAME , AIO_KEY)
@@ -60,8 +60,8 @@ def processData(data):
     print(splitData)
     if splitData[0] == "T":
         client.publish("cambiennhiet", splitData[1])
-    if splitData[0] == "P":
-        client.publish("cambienhongngoai", splitData[1])
+    if splitData[0] == "L":
+        client.publish("cambienanhsang", splitData[1])
     if splitData[0] == "rfid":
         client.publish("thongbao", splitData[1])
 
@@ -79,11 +79,11 @@ def readSerial():
     rfidbytesToRead = rfid.inWaiting()
     if (bytesToRead > 0):
         global mess
-        mess = mess + ser.read(bytesToRead).decode("UTF-8")
+        mess =  ser.read(bytesToRead).decode("UTF-8")
         serial_parser(mess)
     if (rfidbytesToRead > 0):
         global rfidmess
-        rfidmess = rfidmess + rfid.read(rfidbytesToRead).decode("UTF-8")
+        rfidmess = rfid.read(rfidbytesToRead).decode("UTF-8")
         serial_parser(rfidmess)
 while True:
     readSerial()
