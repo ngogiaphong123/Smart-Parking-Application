@@ -11,9 +11,6 @@ import { fanCalling, lightCalling, rfidCalling, temperatureCalling } from './uti
 import rfidRouter from './modules/rfid/rfid.route';
 import vehicleRouter from './modules/vehicle/vehicle.route';
 import parkingSlotRouter from './modules/parkingSlot/parkingSlot.route';
-import customerRouter from './modules/customer/customer.route';
-import ResponseBody from './utils/responseBody';
-import logRouter from './modules/log/log.route';
 
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
