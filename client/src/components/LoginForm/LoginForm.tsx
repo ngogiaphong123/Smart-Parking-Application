@@ -3,6 +3,7 @@ import fb from '../../assets/icon/fb.png'
 import google from '../../assets/icon/google.png'
 import {motion} from 'framer-motion'
 import { useNavigate } from 'react-router-dom';
+import { pageMotionTime } from '../../configs';
 
 function LoginForm() {
     const [name, setName] = useState("")
@@ -23,7 +24,7 @@ function LoginForm() {
             y:"100%"
         }}
         transition={{
-            duration:1
+            duration:pageMotionTime
         }}
         className="rounded-2xl w-72 min-h-96 bg-white drop-shadow-md flex flex-col px-4 py-6">
             <div className="w-full h-10 px-4">

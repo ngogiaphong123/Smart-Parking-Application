@@ -1,6 +1,7 @@
 import { memo, useState } from 'react'
 import { motion } from 'framer-motion'
 import {useNavigate} from 'react-router-dom'
+import { pageMotionTime } from '../../configs'
 
 function SignUpForm() {
     const [name, setName] = useState<string>('')
@@ -27,7 +28,7 @@ function SignUpForm() {
                 y: "100%"
             }}
             transition={{
-                duration: 1
+                duration: pageMotionTime
             }}
             className="w-96 p-4 pb-6 min-h-96 bg-white drop-shadow-md flex flex-col rounded-xl ">
             <p className="text-lg font-semibold text-gray-500">Sign Up</p>

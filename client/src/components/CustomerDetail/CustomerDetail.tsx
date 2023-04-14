@@ -57,9 +57,9 @@ function CustomerDetail({ type }: { type: string }) {
         language: "en",
     }
     return (<>
-        <div className="w-full bg-violet-400 p-4 flex flex-col">
+        <div className="w-full flex flex-col">
             <div className="w-full flex">
-                <div className="dark flex flex-col bg-red-200 items-center flex-1 p-4">
+                <div className="dark flex flex-col items-center flex-1 p-4">
                     <img className="w-16 h-16 p-2 rounded-full drop-shadow border-1 border-gray" src={google} alt="" />
                     {
                         !adjust ?
@@ -71,7 +71,7 @@ function CustomerDetail({ type }: { type: string }) {
                             </>
                     }
                 </div>
-                <div className="flex flex-col w-full bg-blue-200 flex-[2_2_0] items-start p-4 gap-2">
+                <div className="flex flex-col w-full flex-[2_2_0] items-start py-2 pl-2 gap-2">
                     {
                         !adjust ?
                             <>
@@ -122,14 +122,14 @@ function CustomerDetail({ type }: { type: string }) {
                     }
                 </div>
             </div>
-            <div className="w-full flex justify-between items-start px-4">
+            <div className="w-full flex justify-between items-start px-4 py-2">
                 <div className="w-full flex flex-col items-start">
                     <p className="font-semibold text-super-small inline">RFID: <span className="text-super-small inline font-normal">ABCJAXMINE</span></p>
                     <p className="font-semibold text-super-small inline">Total Transportations: <span className="text-super-small inline font-normal">1</span></p>
                 </div>
                 {
                     type === "adjust" &&
-                    <button onClick={() => { setAdjust(prev => !prev) }} className="w-8 h-8 p-1 rounded-xl bg-blue-400 hover:bg-blue-500 flex justify-center items-center">
+                    <button onClick={() => { setAdjust(prev => !prev) }} className="w-8 h-8 p-1 rounded-xl hover:bg-blue-500 flex justify-center items-center">
                         <img src={wrench} alt="" />
                     </button>
                 }

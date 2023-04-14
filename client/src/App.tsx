@@ -8,6 +8,10 @@ import { AnimatePresence } from 'framer-motion';
 import DashboardAdmin from './pages/DashboardAdmin/DashboardAdmin';
 import TestGraph from './components/TestGraph/TestGraph';
 import PaymentHistory from './pages/PaymentHistory/PaymentHistory';
+import CustomersAndTransports from './pages/CustomersAndTransports/CustomersAndTransports';
+import CustomerAnalytic from './components/CustomerAnalytic/CustomerAnalytic';
+import CustomerVehicleCard from './components/CustomerVehicleCard/CustomerVehicleCard';
+import OrderDetail from './components/OrderDetail/OrderDetail';
 
 function App() {
   const location = useLocation()
@@ -33,9 +37,16 @@ function App() {
               <PaymentHistory />
             </GeneralPageAdmin>
           } />
+          <Route path="/admin/customersandtransports" element={
+            <GeneralPageAdmin>
+              <CustomersAndTransports />
+            </GeneralPageAdmin>
+          } />
 
           {/* testing route */}
           <Route path="/testing" element={<TestGraph/>} />
+          {/* testing route */}
+          <Route path="/testing1" element={<OrderDetail />} />
         </Routes>
       </AnimatePresence>
       {/* <OrderDetail/> */}

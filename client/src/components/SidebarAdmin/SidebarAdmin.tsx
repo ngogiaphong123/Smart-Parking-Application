@@ -21,8 +21,8 @@ function SidebarAdmin() {
             <SidebarChild onNavigationTo={"/admin"} content="Car Parking" icon={tagUser} iconOff={tagUserOff}/>
             <SidebarChild onNavigationTo={"/admin/dashboard"} content="Dashboard" icon={dashboard} iconOff={dashboardOff}/>
             <SidebarChild onNavigationTo={"/admin/paymenthistory"} content="Payments History" icon={payment} iconOff={paymentOff}/>
-            {/* <SidebarChild onNavigationTo={""} content="Customers" icon={customer} iconOff={customerOff}/>
-            <SidebarChild onNavigationTo={""} content="Analytics" icon={analytic} iconOff={analyticOff}/>
+            <SidebarChild onNavigationTo={"/admin/customersandtransports"} content="Customers" icon={customer} iconOff={customerOff}/>
+            {/* <SidebarChild onNavigationTo={""} content="Analytics" icon={analytic} iconOff={analyticOff}/>
             <SidebarChild onNavigationTo={""} content="AI Support" icon={chat} iconOff={chatOff}/>
             <SidebarChild onNavigationTo={""} content="Settings" icon={settings} iconOff={settingsOff}/> */}
         </div>
