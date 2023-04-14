@@ -2,6 +2,8 @@ import { Server } from "socket.io";
 import { getFanService, updateFanStatusToAdafruitService } from "./modules/device/fan/fan.service";
 import { getTemperatureService, updateTemperatureToAdafruitService } from "./modules/sensor/temperature/temperature.service";
 import { getLightService } from "./modules/sensor/light/light.service";
+import { getParkingSlotService, reservedParkingSlotService } from "./modules/parkingSlot/parkingSlot.service";
+import { updateRfidToAdafruitService } from "./modules/rfid/rfid.service";
 
 export default function configureSocket(server: any) {
   const io = new Server(server, {
@@ -31,12 +33,27 @@ export default function configureSocket(server: any) {
     socket.on("fan-control", async (data) => {
         const {value} = data;
         const result = await updateFanStatusToAdafruitService(value);
-        socket.emit("fan-control", [result]);
+        io.emit("fan-control", result);
     });
     socket.on("fan-status", async (data) => {
         const {page, limit} = data;
         const result = await getFanService({page, limit});
         socket.emit("fan-status", result);
+    })
+    socket.on("parking-slot-channel",async (data) => {
+        const {page, limit} = data;
+        const result = await getParkingSlotService({page, limit});
+        socket.emit("parking-slot-channel", result);
+    })
+    socket.on("rfid-control", async (data) => {
+        const {value} = data;
+        const result = await updateRfidToAdafruitService(value);
+        io.emit("rfid-control", result);
+    })
+    socket.on("parking-slot-reserved", async (data) => {
+        const {parkingSlotId, accountId} = data;
+        const result = await reservedParkingSlotService(parkingSlotId, accountId);
+        io.emit("parking-slot-reserved", result);
     })
     socket.on("disconnect", () => {
         console.log("user disconnected");

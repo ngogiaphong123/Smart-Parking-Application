@@ -1,5 +1,6 @@
 import { io } from "../../..";
 import prisma from "../../../utils/prisma";
+import ResponseBody from "../../../utils/responseBody";
 import Temperature from "./temperature.schema";
 import axios from 'axios';
 
@@ -19,7 +20,7 @@ export const getTemperatureService = async ({page,limit} : {
             timestamp : 'desc'
         }
     });
-    return temperature;
+    return new ResponseBody("Success", "Get temperature", temperature);
 }
   
 export const saveTemperatureService = async (temperature : Temperature) => {
@@ -48,7 +49,8 @@ export const saveTemperatureService = async (temperature : Temperature) => {
             temperature : temperature.temperature
         }
     })
-    io.emit("temperature-channel", [newTemperature]);
+    const res = new ResponseBody("Success", "Save temperature", [newTemperature]);
+    io.emit("temperature-channel", res);
     return newTemperature;
 }
 
