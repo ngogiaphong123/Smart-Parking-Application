@@ -51,8 +51,8 @@ export default function configureSocket(server: any) {
         io.emit("rfid-control", result);
     })
     socket.on("parking-slot-reserved", async (data) => {
-        const {parkingSlotId, accountId} = data;
-        const result = await reservedParkingSlotService(parkingSlotId, accountId);
+        const {parkingSlotId, accountId, vehicleId} = data;
+        const result = await reservedParkingSlotService(parkingSlotId, accountId,vehicleId);
         io.emit("parking-slot-reserved", result);
     })
     socket.on("disconnect", () => {

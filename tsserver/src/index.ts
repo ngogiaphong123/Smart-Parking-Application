@@ -4,13 +4,16 @@ import ExpressError from './utils/expressError';
 import { StatusCodes } from 'http-status-codes';
 import log from './utils/logger';
 import deserializeUser from './middlewares/deserializeUser';
-import userRouter from './modules/user/user.route';
+import userRouter from './modules/auth/user.route';
 import http from "http";
 import configureSocket from "./socket";
 import { fanCalling, lightCalling, rfidCalling, temperatureCalling } from './utils/adafruitApi';
 import rfidRouter from './modules/rfid/rfid.route';
 import vehicleRouter from './modules/vehicle/vehicle.route';
 import parkingSlotRouter from './modules/parkingSlot/parkingSlot.route';
+import customerRouter from './modules/customer/controller.route';
+import ResponseBody from './utils/responseBody';
+import logRouter from './modules/log/log.route';
 
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -35,12 +38,14 @@ app.use('/auth', userRouter)
 app.use('/vehicles', vehicleRouter)
 app.use('/rfid', rfidRouter)
 app.use('/parkingSlot', parkingSlotRouter)
+app.use('/customer',customerRouter)
+app.use('/log',logRouter)
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
     return next(new ExpressError('Not Found', StatusCodes.NOT_FOUND))
 })
 app.use((err: ExpressError, req: Request, res: Response, next: NextFunction) => {
     const { status = 500, message = 'Something went wrong' } = err;
-    res.status(status).send(message)
+    res.status(status).send(new ResponseBody("Error", message, null))
 })
 export const io = configureSocket(server);
 server.listen(port, () => {

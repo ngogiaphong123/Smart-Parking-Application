@@ -73,6 +73,7 @@ model ParkingSlot {
     reservedById    String? @db.ObjectId
     pricePerHour    String
     logs            Logs[]
+    // auto increment number
 }
 model Logs {
     logId           String @id @map("_id") @default(auto()) @db.ObjectId
@@ -82,7 +83,7 @@ model Logs {
     timeOut         DateTime?
     price           String?
     state           String @default("IN")
-    ParkingSlot     ParkingSlot @relation(fields: [parkingSlotId], references: [parkingSlotId])
+    parkingSlot     ParkingSlot @relation(fields: [parkingSlotId], references: [parkingSlotId])
     parkingSlotId   String @db.ObjectId
     vehicle         Vehicle @relation(fields: [vehicleId], references: [vehicleId])
     vehicleId       String @db.ObjectId

@@ -1,4 +1,5 @@
 import { io } from "../../..";
+import log from "../../../utils/logger";
 import prisma from "../../../utils/prisma";
 import ResponseBody from "../../../utils/responseBody";
 import Light from "./light.schema";
@@ -67,6 +68,11 @@ export const getLightFromAdafruitService = async (limit : number) => {
             limit : limit
         }
     };
-    const {data} = await axios.get(url, config);
-    return data;
+    try {
+        const {data} = await axios.get(url, config);
+        return data;
+    }
+    catch(err) {
+        log.info(err);
+    }
 }

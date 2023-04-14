@@ -1,6 +1,7 @@
 import prisma from "../../../utils/prisma";
 import axios from 'axios';
 import Servo from "./servo.schema";
+import log from "../../../utils/logger";
 
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -62,8 +63,13 @@ export const getServoStatusFromAdafruitService = async (limit : number) => {
             limit : limit
         }
     };
-    const {data} = await axios.get(url, config);
-    return data;
+    try {
+        const {data} = await axios.get(url, config);
+        return data;
+    }
+    catch(err) {
+        log.info(err);
+    }
 }
 
 export const updateServoStatusToAdafruitService = async (status : string) => {
@@ -77,11 +83,16 @@ export const updateServoStatusToAdafruitService = async (status : string) => {
             'Content-Type': 'application/json'
         }
     };
-    const {data} = await axios.post(url, {
-        value : status
-    }, config);
-    const result = await saveServoService(new Servo(data.id, new Date(data.created_at), data.value));
-    return result;
+    try {
+        const {data} = await axios.post(url, {
+            value : status
+        }, config);
+        const result = await saveServoService(new Servo(data.id, new Date(data.created_at), data.value));
+        return result;
+    }
+    catch(err) {
+        log.info(err);
+    }
 }
 
 export const updatePriceToAdafruitService = async (status : string) => {
@@ -95,7 +106,12 @@ export const updatePriceToAdafruitService = async (status : string) => {
             'Content-Type': 'application/json'
         }
     };
-    const {data} = await axios.post(url, {
-        value : status
-    }, config);
+    try {
+        const {data} = await axios.post(url, {
+            value : status
+        }, config);
+    }
+    catch(err) {
+        log.info(err);
+    }
 }
