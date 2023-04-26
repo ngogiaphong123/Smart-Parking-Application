@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { getCustomerService, getCustomersService } from "./controller.service";
+import { getCustomerService, getCustomersService } from "./customer.service";
 import { StatusCodes } from "http-status-codes";
-import { GetCustomersInput } from "./controller.schema";
+import { GetCustomersInput } from "./customer.schema";
 import ResponseBody from "../../utils/responseBody";
 
 export const getCustomersController = async (req: Request<{},{},GetCustomersInput>, res: Response) => {

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { requireAdmin, requireUser } from "../../middlewares/requireUser";
 import zodMiddlewares from "../../middlewares/zodValid";
-import { getCustomersSchema } from "./controller.schema";
+import { getCustomersSchema } from "./customer.schema";
 import { getCustomerByIdController, getCustomersController } from "./customer.controller";
 import catchAsync from "../../utils/catchAsync";
 
