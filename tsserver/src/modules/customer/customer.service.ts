@@ -1,5 +1,5 @@
 import prisma from "../../utils/prisma";
-import { GetCustomersInput } from "./controller.schema";
+import { GetCustomersInput } from "./customer.schema";
 
 export const getCustomersService = async (input: GetCustomersInput) => {
     const { page, limit } = input;

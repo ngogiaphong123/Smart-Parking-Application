@@ -40,7 +40,7 @@ export const registerController = async (req: Request<{},{},RegisterUserInput>, 
 export const loginController = async (req: Request<{},{},LoginUserInput>, res: Response) => {
     const user = await loginService(req.body);
     if(!user) {
-        res.status(StatusCodes.UNAUTHORIZED).send("Invalid email or password");
+        res.status(StatusCodes.UNAUTHORIZED).send(new ResponseBody("Error", "Invalid email or password", null));
     }
     else {
         const accessToken = signJwt(
