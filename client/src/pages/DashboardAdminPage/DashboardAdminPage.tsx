@@ -1,12 +1,35 @@
-import { memo, useRef } from 'react'
+import { memo, useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import DashboardToggle from '../../components/ForDashboardAdminPage/DashboardToggle/DashboardToggle';
 import TemperatureChart from '../../components/ForDashboardAdminPage/TemperatureChart/TemperatureChart';
 import LightChart from '../../components/ForDashboardAdminPage/LightChart/LightChart';
 import { pageMotionTime } from '../../configs';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 
 function DashboardAdminPage() {
-    const tempToggleRef = useRef<any>(null) 
+    const tempToggleRef = useRef<any>(null)
+    const [indexArray, setIndexArray] = useState<any>([1, 2, 3])
+    const [dragDropSignal, setDragDropSignal] = useState({ signal: false, result: false })
+    const handleDragEnd = (result: any) => {
+        setDragDropSignal((prev: any) => ({
+            signal: !prev.signal,
+            result: result
+        }))
+    }
+    useEffect(() => {
+        if (dragDropSignal.result) {
+            // @ts-ignore
+            const { destination, source } = dragDropSignal.result
+            if (destination.index !== source.index) {
+                setIndexArray((prev: any) => {
+                    const updatedArray = [...prev];
+                    const [removedItem] = updatedArray.splice(source.index-1, 1);
+                    updatedArray.splice(destination.index-1, 0, removedItem);
+                    return updatedArray;
+                })
+            }
+        }
+    }, [dragDropSignal.signal])
     return (<>
         <motion.div
             initial={{
@@ -31,20 +54,36 @@ function DashboardAdminPage() {
                     car parking's dashboard
                 </span>
             </div>
-            <div className="w-full flex justify-start items-center gap-8 py-6 flex-wrap md:flex-none " >
-                <DashboardToggle ref={tempToggleRef} kind='temperature'/>
-                <DashboardToggle kind='water'/>
-                <DashboardToggle kind='light&music'/>
-            </div>
+            <DragDropContext onDragEnd={handleDragEnd}>
+                <Droppable droppableId={"place to drop"} direction={"horizontal"} type="row">
+                    {
+                        (provided) => (
+                            <div ref={provided.innerRef} {...provided.droppableProps} className="w-full flex justify-start items-center gap-8 py-6 flex-wrap md:flex-none " >
+                                {
+                                    indexArray.map((value: number, index:number) => {
+                                        if (value === 1)
+                                            return <DashboardToggle index={index+1} ref={tempToggleRef} kind='temperature' key={"toggle1"} />
+                                        else if (value === 2)
+                                            return <DashboardToggle index={index+1} kind='water' key={"toggle2"} />
+                                        else if (value === 3)
+                                            return <DashboardToggle index={index+1} kind='light&music' key={"toggle3"} />
+                                    })
+                                }
+                                {provided.placeholder}
+                            </div>
+                        )
+                    }
+                </Droppable>
+            </DragDropContext>
             <div className="w-full flex justify-between items-center " >
                 <span className="text-md text-title-inPage font-semibold capitalize">
-                Car Parking Temperature
+                    Car Parking Temperature
                 </span>
             </div>
-            
+
             <div className="w-full flex justify-between items-center mt-4" >
                 <span className="text-md text-[#008000] font-semibold capitalize pr-8 inline">
-                Fire warning - Safe
+                    Fire warning - Safe
                 </span>
                 {/* <span className="text-md text-yellow-300 font-semibold capitalize pr-8 inline underline">
                 Fire warning - Need Fan
@@ -54,14 +93,14 @@ function DashboardAdminPage() {
                 </span> */}
             </div>
             <div className="w-full flex justify-between items-center my-8 pr-14" >
-                <TemperatureChart tempToggleRef={tempToggleRef}/>
+                <TemperatureChart tempToggleRef={tempToggleRef} />
             </div>
             <div className="w-full flex justify-between items-center " >
                 <span className="text-md text-title-inPage font-semibold capitalize">
-                Car Parking Light
+                    Car Parking Light
                 </span>
             </div>
-            
+
             <div className="w-full flex justify-between items-center my-8 pr-14" >
                 {/* <LightChart/> */}
             </div>
