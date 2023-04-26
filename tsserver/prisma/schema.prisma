@@ -83,9 +83,9 @@ model Logs {
     timeOut         DateTime?
     price           String?
     state           String @default("IN")
-    parkingSlot     ParkingSlot @relation(fields: [parkingSlotId], references: [parkingSlotId])
+    parkingSlot     ParkingSlot @relation(fields: [parkingSlotId], references: [parkingSlotId], onDelete: Cascade)
     parkingSlotId   String @db.ObjectId
-    vehicle         Vehicle @relation(fields: [vehicleId], references: [vehicleId])
+    vehicle         Vehicle @relation(fields: [vehicleId], references: [vehicleId], onDelete: Cascade)
     vehicleId       String @db.ObjectId
 }
 model Rfid {

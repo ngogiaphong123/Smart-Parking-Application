@@ -12,5 +12,8 @@ export const getCustomersController = async (req: Request<{},{},GetCustomersInpu
 export const getCustomerByIdController = async (req: Request, res: Response) => {
     const accountId = res.locals.user.accountId;
     const customer = await getCustomerService(accountId);
+    if (!customer) {
+        return res.status(StatusCodes.NOT_FOUND).send(new ResponseBody("Error", "Customer not found", null));
+    }
     res.status(StatusCodes.OK).send(new ResponseBody("Success", "Get customer successfully", customer));
 }
