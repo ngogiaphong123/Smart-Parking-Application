@@ -14,16 +14,36 @@ import LoginBackground from './layouts/Background/LoginBackground';
 import LoginForm from './components/ForAuthenticationPage/LoginForm/LoginForm';
 import SignUpForm from './components/ForAuthenticationPage/SignUpForm/SignUpForm';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ResponsiveSlice from './redux/slices/ResponsiveSlice';
 import AnalyticsPage from './pages/AnalyticsPage/AnalyticsPage';
 import OrderModal from './components/ForHomeAndParkingPage/OrderModal/OrderModal';
 import UserProfilePage from './pages/UserProfilePage/UserProfilePage';
+import { Login, getMe } from './redux/slices/UserSlice';
+import { UserStore } from './redux/selectors';
+import Notification from './components/Notification/Notification';
+import CheckMe from './middlewares/CheckMe';
+import Loggedin from './middlewares/Loggedin';
+import AdminOnly from './middlewares/AdminOnly';
+import CustomerOnly from './middlewares/CustomerOnly';
+import PageNotFound from './pages/PageNotFound/PageNotFound';
 
 function App() {
   const location = useLocation()
   const dispatch = useDispatch<any>()
-  useEffect(()=>{
+  const user = useSelector(UserStore).user
+  useEffect(() => {
+    // dispatch(Login({ email: "phong@gmail.com", password: "123456" }))
+    // .then((res:any)=>{
+    //   if(res.payload.status==="Success") 
+    //   {
+    // dispatch(getMe())
+    //     .then((res:any)=>{
+    //       console.log(res)
+    //       console.log(user)
+    //     })
+    //   }
+    // })
     if (window.innerWidth < 1024) {
       dispatch(ResponsiveSlice.actions.responsiveYesHandle({ data: true }))
     }
@@ -42,49 +62,67 @@ function App() {
     return () => {
       window.removeEventListener('resize', handleResponsive)
     }
-  },[])
+  }, [])
   return (
-    <div className="w-full bg-sky-200 h-screen flex flex-col overflow-x-hidden">
+    <div className="w-full bg-white h-screen flex flex-col overflow-x-hidden">
       <AnimatePresence mode="wait">
         <Routes key={location.pathname} location={location}>
-          <Route path="/" element={<LoginBackground />} >
-            <Route key="loginPage" path="" element={<LoginForm />} />
-            <Route key="signupPage" path="signup" element={<SignUpForm />} />
-            <Route key="loginPage" path="login" element={<LoginForm />} />
-          </Route>
-          <Route path="/admin" element={<GeneralPage />} >
-            <Route path="" element={
-                <HomeAndParking />
-            } />
-            <Route path="dashboard" element={
-                <DashboardAdmin />
-            } />
-            <Route path="paymenthistory" element={
-                <PaymentHistory />
-            } />
-            <Route path="customersandtransports" element={
-                <CustomersAndTransports />
-            } />
-            <Route path="analytics" element={
-                <AnalyticsPage />
-            } />
-          </Route>
-          <Route path="/user" element={<GeneralPage />} >
-            <Route path="" element={
-                <HomeAndParking />
-            } />
-            <Route path="paymenthistory" element={
-                <PaymentHistory />
-            } />
-            <Route path="profile" element={
-                <UserProfilePage />
-            } />
-          </Route>
+          <Route path="" element={<CheckMe />}>
+            <Route path="" element={<Loggedin />}>
+              <Route path="/" element={<LoginBackground />} >
+                <Route key="loginPage" path="" element={<LoginForm />} />
+                <Route key="signupPage" path="signup" element={<SignUpForm />} />
+                <Route key="loginPage" path="login" element={<LoginForm />} />
+              </Route>
+            </Route>
 
-          {/* testing route */}
-          <Route path="/testing" element={<OrderModal/>} />
-          {/* testing route */}
-          <Route path="/testing1" element={<OrderDetail />} />
+            <Route path="" element={<AdminOnly />} >
+              <Route path="/admin" element={<GeneralPage />} >
+                <Route path="" element={
+                  <HomeAndParking />
+                } />
+                <Route path="dashboard" element={
+                  <DashboardAdmin />
+                } />
+                <Route path="paymenthistory" element={
+                  <PaymentHistory />
+                } />
+                <Route path="customersandtransports" element={
+                  <CustomersAndTransports />
+                } />
+                <Route path="analytics" element={
+                  <AnalyticsPage />
+                } />
+              </Route>
+            </Route>
+            <Route path="" element={<CustomerOnly />} >
+              <Route path="/customer" element={<GeneralPage />} >
+                <Route path="" element={
+                  <HomeAndParking />
+                } />
+                <Route path="paymenthistory" element={
+                  <PaymentHistory />
+                } />
+                <Route path="profile" element={
+                  <UserProfilePage />
+                } />
+              </Route>
+            </Route>
+
+
+            {/* testing route */}
+            <Route path="/testing" element={<OrderModal />} />
+            {/* testing route */}
+            <Route path="/testing1" element={<OrderDetail />} />
+            <Route path="/notification" element={<LoginBackground />} >
+              <Route path="" element={
+                <div className="w-full h-full flex justify-center pt-32">
+                  <Notification />
+                </div>
+              } />
+            </Route>
+          </Route>
+          <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </AnimatePresence>
       {/* <OrderDetail/> */}

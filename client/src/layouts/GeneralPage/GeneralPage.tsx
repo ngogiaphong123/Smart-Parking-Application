@@ -25,7 +25,7 @@ function GeneralPage() {
             </div>
         </div>
         {
-            role !== 'admin' && location.pathname === '/user' &&
+            role !== 'admin' && location.pathname === '/customer' &&
             <OrderModal />
         }
     </>);
