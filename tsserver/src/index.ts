@@ -14,6 +14,7 @@ import parkingSlotRouter from './modules/parkingSlot/parkingSlot.route';
 import customerRouter from './modules/customer/customer.route';
 import ResponseBody from './utils/responseBody';
 import logRouter from './modules/log/log.route';
+import statisticRouter from './modules/statistic/statistic.route';
 
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -40,6 +41,7 @@ app.use('/rfid', rfidRouter)
 app.use('/parkingSlot', parkingSlotRouter)
 app.use('/customer',customerRouter)
 app.use('/log',logRouter)
+app.use('/statistic', statisticRouter)
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
     return next(new ExpressError('Not Found', StatusCodes.NOT_FOUND))
 })

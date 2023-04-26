@@ -1,4 +1,3 @@
-import { any } from "zod";
 import Fan from "../modules/device/fan/fan.schema";
 import { getFanStatusFromAdafruitService, saveFanService } from "../modules/device/fan/fan.service";
 import { getRfidFromAdafruitService, verifyRfid } from "../modules/rfid/rfid.service";

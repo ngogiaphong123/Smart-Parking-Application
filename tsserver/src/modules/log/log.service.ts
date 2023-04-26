@@ -1,4 +1,5 @@
 import prisma from "../../utils/prisma";
+import { getNewCustomerCountService } from "../customer/customer.service";
 import { GetLogsInput } from "./log.schema";
 
 // model Logs {
@@ -45,6 +46,7 @@ export const getLogsService = async (input: GetLogsInput) => {
                             firstName : true,
                             lastName : true,
                             phone : true,
+                            avatarUrl : true,
                         }
                     }
                 }
@@ -89,6 +91,7 @@ export const getMyLogService = async (accountId : string) => {
                             firstName : true,
                             lastName : true,
                             phone : true,
+                            avatarUrl : true,
                         }
                     }
                 }
@@ -96,4 +99,63 @@ export const getMyLogService = async (accountId : string) => {
         }
     });
     return logs;
+}
+
+export const getLogsDateService = async ({start,end} : {
+    start : Date,
+    end : Date
+}) => {
+    // time in >= start && time in <= end
+    const logs = await prisma.logs.findMany({
+        where : {
+            timeIn : {
+                gte : start,
+                lte : end
+            }
+        },
+        select: {
+            logId: true,
+            timeIn: true,
+            timeOut: true,
+            price: true,
+            state: true,
+            parkingSlot : {
+                select : {
+                    parkingSlotId : true,
+                    pricePerHour : true,
+                }
+            },
+            vehicle : {
+                select : {
+                    vehicleId : true,
+                    genre : true,
+                    model : true,
+                    numberPlate : true,
+                    rfidNumber : true,
+                    user : {
+                        select : {
+                            accountId : true,
+                            email : true,
+                            firstName : true,
+                            lastName : true,
+                            phone : true,
+                            avatarUrl : true,
+                        }
+                    }
+                }
+            }
+        }
+    });
+    const totalRecords = logs.length;
+    // get prices of logs
+    const prices = logs.map(log => log.price);
+    // calculate total price
+    let revenue = 0;
+    for(let i = 0; i < prices.length; i++) {
+        if(prices[i]) {
+            revenue += parseInt(prices[i] as string);
+        }
+    }
+    const newCustomerCount = await getNewCustomerCountService({start,end});
+    return {totalRecords, revenue, newCustomerCount , logs};
 }
