@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom';
 import { pageMotionTime } from '../../../configs';
 import { useDispatch, useSelector } from 'react-redux';
-import { Login, getMe } from '../../../redux/slices/UserSlice';
+import { Login, getMeAdmin, getMeCustomer } from '../../../redux/slices/UserSlice';
 import { UserStore } from '../../../redux/selectors';
 import Spinner from '../../Spinner/Spinner';
 
@@ -32,16 +32,29 @@ function LoginForm() {
             dispatch(Login({ email, password }))
                 .then((res: any) => {
                     if (res.payload.status === "Success") {
-                        dispatch(getMe())
-                            .then((res: any) => {
-                                navigate("/notification", {
-                                    state: {
-                                        type: "success",
-                                        message: "Login successfully",
-                                        link: "/"
-                                    }
+                        if (res.payload.data.role === "admin")
+                            dispatch(getMeAdmin())
+                                .then((res: any) => {
+                                    navigate("/notification", {
+                                        state: {
+                                            type: "success",
+                                            message: "Login successfully",
+                                            link: "/"
+                                        }
+                                    })
                                 })
-                            })
+                        else {
+                            dispatch(getMeCustomer())
+                                .then((res: any) => {
+                                    navigate("/notification", {
+                                        state: {
+                                            type: "success",
+                                            message: "Login successfully",
+                                            link: "/"
+                                        }
+                                    })
+                                })
+                        }
                     }
                     else {
                         navigate("/notification", {
@@ -60,7 +73,7 @@ function LoginForm() {
     }
     return (<>
         <motion.form
-            onSubmit={(e:any)=>{
+            onSubmit={(e: any) => {
                 e.preventDefault()
                 handleLogin()
             }}

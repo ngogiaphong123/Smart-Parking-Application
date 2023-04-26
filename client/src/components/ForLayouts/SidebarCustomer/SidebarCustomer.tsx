@@ -11,10 +11,10 @@ import SidebarChild from '../SidebarChild/SidebarChild';
 
 function SidebarCustomer() {
     return ( <>
-        <div className="w-60 mt-8 p-4 min-h-20 rounded-xl bg-gradient-sidebar flex flex-col items-center">
-            <SidebarChild onNavigationTo={'/user'} content="Car Parking" icon={tagUser} iconOff={tagUserOff}/>
-            <SidebarChild onNavigationTo={'/user/paymenthistory'} content="Payments History" icon={payment} iconOff={paymentOff}/>
-            <SidebarChild onNavigationTo={'/user/profile'} content="User" icon={user} iconOff={userOff}/>
+        <div className="w-60 mt-8 p-4 min-h-20 h-full rounded-xl bg-gradient-sidebar flex flex-col items-center">
+            <SidebarChild onNavigationTo={'/customer'} content="Car Parking" icon={tagUser} iconOff={tagUserOff}/>
+            <SidebarChild onNavigationTo={'/customer/paymenthistory'} content="Payments History" icon={payment} iconOff={paymentOff}/>
+            <SidebarChild onNavigationTo={'/customer/profile'} content="User" icon={user} iconOff={userOff}/>
             {/* <SidebarChild onNavigationTo={''} content="Review" icon={review} iconOff={reviewOff}/> */}
         </div>
     </> );

@@ -20,14 +20,36 @@ const UserSlice = createSlice({
         .addCase(Login.fulfilled, (state,action) => {
             state.loading = false
         })
-        .addCase(getMe.pending, (state,action) => {
+        .addCase(getMeAdmin.pending, (state,action) => {
             state.loading = true
         })
-        .addCase(getMe.fulfilled, (state,action) => {
+        .addCase(getMeAdmin.fulfilled, (state,action) => {
             state.loading = false
             if(action.payload.status === 'Success'){
                 // @ts-ignore
                 state.user = action.payload.data
+            }
+        })
+        .addCase(getMeCustomer.pending, (state,action) => {
+            state.loading = true
+        }
+        )
+        .addCase(getMeCustomer.fulfilled, (state,action) => {
+            state.loading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.user = action.payload.data
+            }
+        })
+        .addCase(logout.pending, (state,action) => {
+            state.loading = true
+        }
+        )
+        .addCase(logout.fulfilled, (state,action) => {
+            state.loading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.user = false
             }
         })
 
@@ -52,7 +74,7 @@ export const Login = createAsyncThunk('Login', async (input : any) => {
     }
 })
 
-export const getMe = createAsyncThunk('getMe', async () => {
+export const getMeAdmin = createAsyncThunk('getMeAdmin', async () => {
     try {
         const {data} = await axios.get(`${serverUrl}/auth/me`, {
             headers: {
@@ -61,6 +83,48 @@ export const getMe = createAsyncThunk('getMe', async () => {
             }
         });
         if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+export const getMeCustomer = createAsyncThunk('getMeCustomer', async () => {
+    try {
+        const {data} = await axios.get(`${serverUrl}/customer/me`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                "x-refresh": localStorage.getItem('refreshToken')
+            }
+        });
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+export const logout = createAsyncThunk('logout', async () => {
+    try {
+        const {data} = await axios.get(`${serverUrl}/auth/logout`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                "x-refresh": localStorage.getItem('refreshToken')
+            }
+        });
+        if(data.status === 'Success'){
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('refreshToken')
             return {status:"Success", "message":data.message, data:data.data};
         }
         else {

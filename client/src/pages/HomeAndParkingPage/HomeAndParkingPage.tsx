@@ -81,7 +81,7 @@ function HomeAndParkingPage() {
                 duration: pageMotionTime
             }}
 
-            className="w-full h-full p-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden">
+            className="w-full h-fit p-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden">
             <div className="w-full h-8 flex justify-between items-center " >
                 <span className="text-md text-title-inPage font-semibold capitalize">
                     car parking
