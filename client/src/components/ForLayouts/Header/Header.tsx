@@ -3,13 +3,21 @@ import {useNavigate} from "react-router-dom"
 import HeaderUser from '../HeaderUser/HeaderUser';
 import { useDispatch } from 'react-redux';
 import MenuSlice from '../../../redux/slices/MenuSlice';
+import { useSelector } from 'react-redux';
+import { UserStore } from '../../../redux/selectors';
 
 function Header() {
+    const user = useSelector(UserStore).user
     const navigate = useNavigate();
     const dispatch = useDispatch<any>()
     return (<>
         <div className=" z-10 fixed top-0 left-0 right-0 header w-full px-8 h-16 bg-white flex justify-between items-center drop-shadow">
-            <div onClick={()=>{navigate('/')}}  className="cursor-pointer logo text-2xl sm:text-4xl inline">Parking<p className="inline font-semibold">Auto</p>.com</div>
+            <div onClick={()=>{
+                if(user.role==="admin")
+                    navigate("/admin")
+                else
+                    navigate("/customer")
+            }}  className="cursor-pointer logo text-2xl sm:text-4xl inline">Parking<p className="inline font-semibold">Auto</p>.com</div>
             <div className="hidden md:block">
             <HeaderUser/>
             </div>
