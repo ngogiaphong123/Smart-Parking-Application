@@ -16,7 +16,7 @@ export const temperatureCalling = () => {
             const temp = new Temperature(element.id, "C", element.created_at, element.value)
             await saveTemperatureService(temp);
         });
-    },2000);
+    },10000);
 }
 
 export const lightCalling = () => {
@@ -28,7 +28,7 @@ export const lightCalling = () => {
             const temp = new Light(element.id, "lux", element.created_at, element.value)
             await saveLightService(temp);
         });
-    },2000);
+    },10000);
 }
 
 export const fanCalling = () => {
@@ -39,7 +39,7 @@ export const fanCalling = () => {
             const temp = new Fan(element.id, element.created_at, element.value)
             await saveFanService(temp);
         });
-    },2000);
+    },1000);
 }
 
 export const rfidCalling = () => {
@@ -57,5 +57,5 @@ export const rfidCalling = () => {
                 await verifyRfid(data[0].value);
             }
         }
-    },2000);
+    },1000);
 }

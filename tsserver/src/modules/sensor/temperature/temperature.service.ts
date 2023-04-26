@@ -1,4 +1,5 @@
 import { io } from "../../..";
+import log from "../../../utils/logger";
 import prisma from "../../../utils/prisma";
 import ResponseBody from "../../../utils/responseBody";
 import Temperature from "./temperature.schema";
@@ -67,9 +68,13 @@ export const getTemperatureFromAdafruitService = async (limit : number) => {
         params : {
             limit : limit
         }
-    };
-    const {data} = await axios.get(url, config);
-    return data;
+    };try {
+        const {data} = await axios.get(url, config);
+        return data;
+    }
+    catch (err) {
+        log.info(err);
+    }
 }
 
 export const updateTemperatureToAdafruitService = async (value : number) => {
@@ -83,8 +88,13 @@ export const updateTemperatureToAdafruitService = async (value : number) => {
             'Content-Type': 'application/json'
         }
     };
-    const {data} = await axios.post(url, {
-        value : value
-    }, config);
-    return data;
+    try {
+        const {data} = await axios.post(url, {
+            value : value
+        }, config);
+        return data;
+    }
+    catch (err) {
+        log.info(err);
+    }
 }
