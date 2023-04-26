@@ -2,12 +2,35 @@ import clsx from 'clsx'
 import { memo } from 'react'
 import HeaderUser from '../HeaderUser/HeaderUser';
 import Sidebar from '../SidebarAdmin/SidebarAdmin';
-import { MenuStore } from '../../../redux/selectors';
+import { MenuStore, UserStore } from '../../../redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuSlice from '../../../redux/slices/MenuSlice';
+import { logout } from '../../../redux/slices/UserSlice';
+import { useNavigate } from 'react-router-dom';
+import SmallNotificationSlice from '../../../redux/slices/modals/SmallNotificationSlice';
+import Spinner from '../../Spinner/Spinner';
 const MenuBar = () => {
+    const userLoading = useSelector(UserStore).loading
     const menuIsShow = useSelector(MenuStore).data
     const dispatch = useDispatch<any>()
+    const navigate = useNavigate()
+    const handleLogout = () => {
+        dispatch(logout())
+        .then((res:any)=>{
+            if(res.payload.status === "Success"){
+                navigate("/notification", {
+                    state: {
+                        type: "success",
+                        message: "Logout successfully",
+                        link: "/"
+                    }
+                })
+            }
+            else {
+                dispatch(SmallNotificationSlice.actions.handleOpen({type:"error", content:"Logout failed"}))
+            }
+        })
+    }
     return (
         <>
             <div onClick={() => { dispatch(MenuSlice.actions.handleClose({})) }} className={clsx("transition md:hidden duration-300 fixed top-0 left-0 right-0 bottom-0 bg-slate-400 z-10 opacity-50", {
@@ -36,8 +59,13 @@ const MenuBar = () => {
                     </div>
                 </div>
                 <div className="w-full flex h-50 justify-center">
-                    <button className="z-20 transition duration-200 ease-in-out rounded-xl bg-red-400 hover:bg-red-500 p-4 w-36 h-2/3 flex justify-center items-center">
-                        <p className="text-white semibold font-size-big-size">Log out</p>
+                    <button onClick={handleLogout} className="z-20 transition duration-200 ease-in-out rounded-xl bg-red-400 hover:bg-red-500 p-4 w-36 h-2/3 flex justify-center items-center">
+                        <p className="text-white semibold font-size-big-size">
+                        {
+                        userLoading ?
+                        <Spinner/>:
+                        "Log out"}
+                        </p>
                     </button>
                 </div>
             </div>
