@@ -4,15 +4,66 @@ import google from '../../../assets/icon/google.png'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom';
 import { pageMotionTime } from '../../../configs';
+import { useDispatch, useSelector } from 'react-redux';
+import { Login, getMe } from '../../../redux/slices/UserSlice';
+import { UserStore } from '../../../redux/selectors';
+import Spinner from '../../Spinner/Spinner';
 
 function LoginForm() {
-    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [nameError, setNameError] = useState("")
+    const [emailError, setEmailError] = useState("")
     const [passwordError, setPasswordError] = useState("")
     const navigate = useNavigate()
+    const dispatch = useDispatch<any>()
+    const userLoading = useSelector(UserStore).loading
+    const handleLogin = () => {
+        if (email === "")
+            setEmailError("Please enter email")
+        else
+            setEmailError("")
+
+        if (password === "")
+            setPasswordError("Please enter password")
+        else
+            setPasswordError("")
+
+        if (email !== "" && password !== "") {
+            dispatch(Login({ email, password }))
+                .then((res: any) => {
+                    if (res.payload.status === "Success") {
+                        dispatch(getMe())
+                            .then((res: any) => {
+                                navigate("/notification", {
+                                    state: {
+                                        type: "success",
+                                        message: "Login successfully",
+                                        link: "/"
+                                    }
+                                })
+                            })
+                    }
+                    else {
+                        navigate("/notification", {
+                            state: {
+                                type: "error",
+                                message: res.payload.message,
+                                link: "/"
+                            }
+                        })
+                    }
+                })
+        }
+        else {
+            return
+        }
+    }
     return (<>
-        <motion.div
+        <motion.form
+            onSubmit={(e:any)=>{
+                e.preventDefault()
+                handleLogin()
+            }}
             key="loginpage"
             initial={{
                 opacity: 0,
@@ -48,13 +99,13 @@ function LoginForm() {
             <div className="w-full gap-2 flex flex-col">
                 <div className="relative w-full">
                     <input onChange={(e) => {
-                        setName(e.target.value)
-                    }} value={name} type="text" id="floating_outlined1" className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                        setEmail(e.target.value)
+                    }} value={email} type="text" id="floating_outlined1" className="block px-1 pb-1 pt-1 w-full text-super-small text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-gray-500 dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
                     <label htmlFor="floating_outlined1" className="font-semibold absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                        Name:</label>
+                        Email:</label>
                 </div>
                 {
-                    nameError !== "" && <span className=" text-ant text-red-400 font-normal ">{nameError}</span>
+                    emailError !== "" && <span className=" text-ant text-red-400 font-normal ">{emailError}</span>
                 }
 
                 <div className="relative w-full">
@@ -72,18 +123,11 @@ function LoginForm() {
             <p className="w-full px-4 pb-8 font-semibold text-sm pt-4">
                 Forgot password?
             </p>
-            <button onClick={() => {
-                if (name === "")
-                    setNameError("Please enter name")
-                else
-                    setNameError("")
-                
-                if(password === "")
-                    setPasswordError("Please enter password")
-                else
-                    setPasswordError("")
-            }} className="rounded-md w-full py-1 bg-blue-500 hover:bg-blue-600">
-                <p className="text-center text-white font-semibold text-md">Sign in</p>
+            <button onClick={handleLogin} className="rounded-md w-full py-1 bg-blue-500 hover:bg-blue-600">
+                <p className="text-center text-white font-semibold text-md">{
+                    userLoading ? <Spinner /> :
+                        "Sign in"
+                }</p>
             </button>
             <button onClick={() => { navigate('/admin') }} className="mt-2 rounded-md w-full py-1 bg-blue-500 hover:bg-blue-600">
                 <p className="text-center text-white font-semibold text-md">Try as admin</p>
@@ -94,7 +138,7 @@ function LoginForm() {
                 </p>
                 <p onClick={() => { navigate('/signup') }} className="cursor-pointer hover:text-blue-400 pl-2 font-semibold">Sign Up</p>
             </div>
-        </motion.div>
+        </motion.form>
     </>);
 }
 
