@@ -7,6 +7,7 @@ import FanDeviceSlice from './slices/FanDeviceSlice';
 import MenuSlice from './slices/MenuSlice';
 import ResponsiveSlice from './slices/ResponsiveSlice';
 import OrderModalSlice from './slices/modals/OrderModalSlice';
+import SmallNotificationSlice from './slices/modals/SmallNotificationSlice';
 
 
 const store = configureStore({
@@ -17,7 +18,8 @@ const store = configureStore({
         fanDevice : FanDeviceSlice.reducer,
         menu: MenuSlice.reducer,
         responsive: ResponsiveSlice.reducer,
-        orderModal: OrderModalSlice.reducer
+        orderModal: OrderModalSlice.reducer,
+        smallNotificationModal: SmallNotificationSlice.reducer,
     }
 })
 

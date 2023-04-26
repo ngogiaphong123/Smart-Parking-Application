@@ -23,7 +23,7 @@ function PaymentHistoryPage() {
         transition={{
             duration: pageMotionTime
         }}
-    className="flex h-full w-full flex-col-reverse lg:flex-row lg:justify-between">
+    className="flex h-fit w-full flex-col-reverse lg:flex-row lg:justify-between">
         <div
             className="h-full w-full p-4 mb-4 bg-white rounded-xl drop-shadow-md flex flex-col overflow-hidden"
         >
@@ -55,7 +55,7 @@ function PaymentHistoryPage() {
             </div>
         </div>
         <div
-            className="h-full min-w-[370px] mb-4 drop-shadow-xl flex overflow-hidden justify-center"
+            className="h-fit min-w-[370px] mb-4 drop-shadow-xl flex overflow-hidden justify-center"
         >
             <CalendarForApp></CalendarForApp>
         </div>

@@ -17,7 +17,7 @@ import SidebarChild from '../SidebarChild/SidebarChild';
 
 function SidebarAdmin() {
     return ( <>
-        <div className="w-72 mt-8 p-4 min-h-20 rounded-xl bg-gradient-sidebar flex flex-col items-center">
+        <div className="w-72 mt-8 p-4 min-h-20 h-full rounded-xl bg-gradient-sidebar flex flex-col items-center">
             <SidebarChild onNavigationTo={"/admin"} content="Car Parking" icon={tagUser} iconOff={tagUserOff}/>
             <SidebarChild onNavigationTo={"/admin/dashboard"} content="Dashboard" icon={dashboard} iconOff={dashboardOff}/>
             <SidebarChild onNavigationTo={"/admin/paymenthistory"} content="Payments History" icon={payment} iconOff={paymentOff}/>

@@ -19,19 +19,21 @@ import ResponsiveSlice from './redux/slices/ResponsiveSlice';
 import AnalyticsPage from './pages/AnalyticsPage/AnalyticsPage';
 import OrderModal from './components/ForHomeAndParkingPage/OrderModal/OrderModal';
 import UserProfilePage from './pages/UserProfilePage/UserProfilePage';
-import { Login, getMe } from './redux/slices/UserSlice';
-import { UserStore } from './redux/selectors';
+import { Login } from './redux/slices/UserSlice';
+import { SmallNotificationStore, UserStore } from './redux/selectors';
 import Notification from './components/Notification/Notification';
 import CheckMe from './middlewares/CheckMe';
 import Loggedin from './middlewares/Loggedin';
 import AdminOnly from './middlewares/AdminOnly';
 import CustomerOnly from './middlewares/CustomerOnly';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
+import SmallNotification from './components/SmallNotification/SmallNotification';
 
 function App() {
   const location = useLocation()
   const dispatch = useDispatch<any>()
   const user = useSelector(UserStore).user
+  const smallNotificationIsShow = useSelector(SmallNotificationStore).show
   useEffect(() => {
     // dispatch(Login({ email: "phong@gmail.com", password: "123456" }))
     // .then((res:any)=>{
@@ -65,6 +67,12 @@ function App() {
   }, [])
   return (
     <div className="w-full bg-white h-screen flex flex-col overflow-x-hidden">
+    <AnimatePresence mode="wait">
+      {
+        smallNotificationIsShow &&
+        <SmallNotification />
+      }
+    </AnimatePresence>
       <AnimatePresence mode="wait">
         <Routes key={location.pathname} location={location}>
           <Route path="" element={<CheckMe />}>
