@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux'
 import OrderModalSlice from '../../../redux/slices/modals/OrderModalSlice'
 import { useSelector } from 'react-redux'
 import { UserStore } from '../../../redux/selectors'
+import handleDateShowingFromDBS from '../../../utils/handleDateShowingFromDBS'
+import handleBalanceCalFromDBS from '../../../utils/handleBalanceCalFromDBS'
 
 function ParkingSlotCard({ data, index }: { data: any, index: number }) {
     if (data.status === "RESERVED")
@@ -13,35 +15,6 @@ function ParkingSlotCard({ data, index }: { data: any, index: number }) {
     const dispatch = useDispatch<any>()
     const user = useSelector(UserStore).user
     const [stop, setStop] = useState(false)
-    function handleBalanceCal(time: string, pricePerHour: string) {
-        console.log(time)
-        const timeIn = new Date(time);
-        const timeOut = new Date();
-        const diff = timeOut.getTime() - timeIn.getTime();
-        const diffHours = diff / (1000 * 3600);
-        const price = Math.ceil(diffHours) * parseInt(pricePerHour);
-        return price;
-    }
-    function handleDateShowing(time: string) {
-        // create a new Date object with the original date string
-        const originalDate = new Date(time);
-
-        // create an array of weekday names
-        const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-        const dayOfWeek = daysOfWeek[originalDate.getDay()];
-        const dayOfMonth = originalDate.getDate();
-        const year = originalDate.getFullYear();
-        let hour = originalDate.getHours();
-        const ampm = hour >= 12 ? 'PM' : 'AM';
-        hour = hour % 12;
-        hour = hour ? hour : 12;
-        const minutes = originalDate.getMinutes();
-
-        const formattedDate = `${dayOfMonth} ${dayOfWeek} ${year} ${hour}:${minutes.toString().padStart(2, '0')} ${ampm}`;
-
-        return (formattedDate); // "4/27 Thursday"
-    }
     useEffect(() => {
         const handleStop = setTimeout(() => {
             setStop(true)
@@ -89,10 +62,10 @@ function ParkingSlotCard({ data, index }: { data: any, index: number }) {
                                 data.status === "OCCUPIED" &&
                                 <>
                                     <div>
-                                        <p className="font-normal text-sky-50 text-center">From: {handleDateShowing(data.startTime)}</p>
+                                        <p className="font-normal text-sky-50 text-center">From: {handleDateShowingFromDBS(data.startTime)}</p>
                                     </div>
                                     <div className="-mb-2">
-                                        <p className="font-semibold text-sky-50 text-center">Unpaid balance: {handleBalanceCal(data.startTime, data.pricePerHour)}$</p>
+                                        <p className="font-semibold text-sky-50 text-center">Unpaid balance: {handleBalanceCalFromDBS(data.startTime, data.pricePerHour)}$</p>
                                     </div>
                                     <div className="cursor-pointer p-2 px-4 bg-blue-800 rounded-full mb-2 mx-auto">
                                         <p className="text-center text-white my-auto">Send Payment</p>

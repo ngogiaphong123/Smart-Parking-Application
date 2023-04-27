@@ -73,7 +73,18 @@ function HomeAndParkingPage() {
         socket.on(parkingSlotChannelLinkName, (res:any)=>{
             if(res.status==="Success")
             {
-                setParkingSlots([...res.data])
+                setParkingSlots((prev:any)=>{
+                    if(prev.length===0)
+                        return [...res.data]
+                    else {
+                        const updateParkingSlot = res.data
+                        let newArray = prev.map((item:any, index:number)=>{
+                            if(updateParkingSlot.parkingSlotId===item.parkingSlotId)
+                                return updateParkingSlot
+                            else return item
+                        })
+                    }
+                })
                 setReceiveData((prev)=>!prev)
             }
         })
@@ -164,12 +175,12 @@ function HomeAndParkingPage() {
                     </span>
                 </div>
                 <div className="w-full lg:w-1/2 min-h-0 flex flex-col gap-2 max-h-[400px] overflow-auto p-4">
+                    {/* <CustomerVehicleCard type="unpaid" />
                     <CustomerVehicleCard type="unpaid" />
                     <CustomerVehicleCard type="unpaid" />
                     <CustomerVehicleCard type="unpaid" />
                     <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
+                    <CustomerVehicleCard type="unpaid" /> */}
                 </div>
                 </>
             }
