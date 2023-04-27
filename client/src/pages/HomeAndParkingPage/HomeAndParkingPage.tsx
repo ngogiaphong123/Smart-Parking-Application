@@ -148,7 +148,7 @@ function HomeAndParkingPage() {
                         parkingSlots.map((parkingSlot:any, index:number)=>{
                             return(
                                 <SwiperSlide key={index}>
-                                    <ParkingSlotCard data={parkingSlot}/>
+                                    <ParkingSlotCard data={parkingSlot} index={index}/>
                                 </SwiperSlide>
                             )
                         })
