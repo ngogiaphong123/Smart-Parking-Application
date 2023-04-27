@@ -56,3 +56,16 @@ export const getCustomerService = async (accountId : string) => {
     })
     return customer;
 }
+
+export const getNewCustomerCountService = async ({start,end} : {start : Date, end : Date}) => {
+    const customers = await prisma.user.findMany({
+        where : {
+            createdAt : {
+                gte : start,
+                lte : end
+            },
+            role : "customer"
+        }
+    });
+    return customers.length;
+}

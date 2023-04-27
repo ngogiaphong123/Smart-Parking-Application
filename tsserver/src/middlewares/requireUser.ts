@@ -10,7 +10,7 @@ export const requireUser = (req: Request, res: Response, next: NextFunction) => 
 
 export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
     if(!res.locals.user) {
-        return res.status(401).send("Unauthorized");
+        return res.status(401).send(new ResponseBody("Error", "Unauthorized", null));
     }
     if(res.locals.user.role !== 'admin') {
         return res.status(403).send(new ResponseBody("Error", "Forbidden", null));

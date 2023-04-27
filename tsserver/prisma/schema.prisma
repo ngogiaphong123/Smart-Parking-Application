@@ -63,6 +63,7 @@ model Vehicle {
     genre       String
     numberPlate String
     model       String
+    parkingSlot ParkingSlot[]
 }
 model ParkingSlot {
     parkingSlotId   String @id @map("_id") @default(auto()) @db.ObjectId
@@ -71,9 +72,10 @@ model ParkingSlot {
     status          String // reserved, occupied, available
     reservedBy      User? @relation(fields: [reservedById], references: [accountId])
     reservedById    String? @db.ObjectId
+    vehicle         Vehicle? @relation(fields: [vehicleId], references: [vehicleId])
+    vehicleId       String? @db.ObjectId
     pricePerHour    String
     logs            Logs[]
-    // auto increment number
 }
 model Logs {
     logId           String @id @map("_id") @default(auto()) @db.ObjectId
@@ -83,9 +85,9 @@ model Logs {
     timeOut         DateTime?
     price           String?
     state           String @default("IN")
-    parkingSlot     ParkingSlot @relation(fields: [parkingSlotId], references: [parkingSlotId])
+    parkingSlot     ParkingSlot @relation(fields: [parkingSlotId], references: [parkingSlotId], onDelete: Cascade)
     parkingSlotId   String @db.ObjectId
-    vehicle         Vehicle @relation(fields: [vehicleId], references: [vehicleId])
+    vehicle         Vehicle @relation(fields: [vehicleId], references: [vehicleId], onDelete: Cascade)
     vehicleId       String @db.ObjectId
 }
 model Rfid {

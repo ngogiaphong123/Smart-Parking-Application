@@ -113,5 +113,6 @@ export const updatePriceToAdafruitService = async (status : string) => {
     }
     catch(err) {
         log.info(err);
+        return null;
     }
 }
