@@ -53,7 +53,7 @@ export default function configureSocket(server: any) {
     socket.on("parking-slot-reserved", async (data) => {
         const {parkingSlotId, accountId, vehicleId} = data;
         const result = await reservedParkingSlotService(parkingSlotId, accountId,vehicleId);
-        io.emit("parking-slot-reserved", result);
+        socket.emit("parking-slot-reserved", result);
     })
     socket.on("disconnect", () => {
         console.log("user disconnected");

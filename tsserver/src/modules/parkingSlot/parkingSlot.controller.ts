@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ParkingSlotIdInput, ParkingSlotInput } from "./parkingSlot.schema";
-import {createParkingSlotService, getParkingSlotByIdService, reservedParkingSlotService } from "./parkingSlot.service";
+import {createParkingSlotService, getParkingSlotByIdService } from "./parkingSlot.service";
 import { StatusCodes } from "http-status-codes";
 import ResponseBody from "../../utils/responseBody";
 

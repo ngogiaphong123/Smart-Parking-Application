@@ -68,10 +68,8 @@ export const verifyRfid = async (rfid: string) => {
         }
     });
     if (!checkRfid) {
-        const res = new ResponseBody("Error", "Rfid not found",null);
-        io.emit("parking-slot-channel", res);
         await updateLCDToAdafruitService("Rfid not found");
-        return res;
+        return;
     }
     // get vehicle
     const vehicle = await prisma.vehicle.findFirst({
@@ -80,10 +78,8 @@ export const verifyRfid = async (rfid: string) => {
         }
     });
     if (!vehicle) {
-        const res = new ResponseBody("Error", "No vehicle found",null);
-        io.emit("parking-slot-channel", res);
         await updateLCDToAdafruitService("No vehicle found");
-        return res;
+        return;
     }
     const checkLog = await prisma.logs.findFirst({
         where: {
@@ -101,9 +97,8 @@ export const verifyRfid = async (rfid: string) => {
             }
         })
         if(!slotPrice) {
-            const res = new ResponseBody("Error", "Parking slot not found",null);
-            io.emit("parking-slot-channel", res);
-            return res;
+            updateLCDToAdafruitService("Slot not found");
+            return;
         }
         const timeIn = new Date(checkLog.timeIn);
         const timeOut = new Date();
@@ -229,9 +224,8 @@ export const verifyRfid = async (rfid: string) => {
                 }
             });
             if(!availableParkingSlot) {
-                io.emit("parking-slot-channel", new ResponseBody("Error", "No vacant slot",null));
                 await updateLCDToAdafruitService("No vacant slot");
-                return null;
+                return;
             }
             const newLog = await prisma.logs.create({
                 data: {
