@@ -20,21 +20,11 @@ const UserSlice = createSlice({
         .addCase(Login.fulfilled, (state,action) => {
             state.loading = false
         })
-        .addCase(getMeAdmin.pending, (state,action) => {
-            state.loading = true
-        })
-        .addCase(getMeAdmin.fulfilled, (state,action) => {
-            state.loading = false
-            if(action.payload.status === 'Success'){
-                // @ts-ignore
-                state.user = action.payload.data
-            }
-        })
-        .addCase(getMeCustomer.pending, (state,action) => {
+        .addCase(getMe.pending, (state,action) => {
             state.loading = true
         }
         )
-        .addCase(getMeCustomer.fulfilled, (state,action) => {
+        .addCase(getMe.fulfilled, (state,action) => {
             state.loading = false
             if(action.payload.status === 'Success'){
                 // @ts-ignore
@@ -74,29 +64,9 @@ export const Login = createAsyncThunk('Login', async (input : any) => {
     }
 })
 
-export const getMeAdmin = createAsyncThunk('getMeAdmin', async () => {
+export const getMe = createAsyncThunk('getMe', async () => {
     try {
-        const {data} = await axios.get(`${serverUrl}/auth/me`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                "x-refresh": localStorage.getItem('refreshToken')
-            }
-        });
-        if(data.status === 'Success'){
-            return {status:"Success", "message":data.message, data:data.data};
-        }
-        else {
-            return {status:"Error", "message":data.data.message};
-        }
-    }
-    catch (error : any) {
-        return handleAxiosError(error)
-    }
-})
-
-export const getMeCustomer = createAsyncThunk('getMeCustomer', async () => {
-    try {
-        const {data} = await axios.get(`${serverUrl}/customer/me`, {
+        const {data} = await axios.get(`${serverUrl}/auth/info`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                 "x-refresh": localStorage.getItem('refreshToken')
