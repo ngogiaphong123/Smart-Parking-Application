@@ -81,11 +81,18 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
             where : {
                 reservedById : vehicle.ownerId,
                 vehicleId : vehicle.vehicleId,
-                status : "RESERVED"
+                OR : [
+                    {
+                        status : "RESERVED"
+                    },
+                    {
+                        status : "OCCUPIED"
+                    }
+                ]
             }
         });
         if (checkReserved) {
-            const res = new ResponseBody("Error", "You already reserved a parking slot",null);
+            const res = new ResponseBody("Error", "You already reserved or parking in a parking slot",null);
             return res;
         }
         if (parkingSlot.status === "AVAILABLE") {
