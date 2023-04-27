@@ -124,13 +124,15 @@ export const verifyRfid = async (rfid: string) => {
             data: {
                 status: "AVAILABLE",
                 reservedById: null,
-                vehicleId: null
+                vehicleId: null,
+                startTime: null,
             },
             select : {
                 parkingSlotId : true,
                 status : true,
                 reservedById : true,
                 pricePerHour : true,
+                startTime : true,
                 reservedBy : {
                     select : {
                         accountId : true,
@@ -182,12 +184,14 @@ export const verifyRfid = async (rfid: string) => {
                 },
                 data: {
                     status: "OCCUPIED",
+                    startTime: new Date(),
                 },
                 select : {
                     parkingSlotId : true,
                     status : true,
                     reservedById : true,
                     pricePerHour : true,
+                    startTime : true,
                     reservedBy : {
                         select : {
                             accountId : true,
@@ -241,13 +245,15 @@ export const verifyRfid = async (rfid: string) => {
                 data: {
                     status: "OCCUPIED",
                     reservedById : vehicle.ownerId,
-                    vehicleId : vehicle.vehicleId
+                    vehicleId : vehicle.vehicleId,
+                    startTime: new Date(),
                 },
                 select : {
                     parkingSlotId : true,
                     status : true,
                     reservedById : true,
                     pricePerHour : true,
+                    startTime : true,
                     reservedBy : {
                         select : {
                             accountId : true,
