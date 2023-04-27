@@ -58,7 +58,6 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
     })
     if (!parkingSlot) {
         const res = new ResponseBody("Error", "Parking slot not found",null);
-        io.emit("parking-slot-channel",res);
         return res;
     }
     // find vehicle
@@ -72,7 +71,6 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
     })
     if (!vehicle) {
         const res = new ResponseBody("Error", "Vehicle is not valid",null);
-        io.emit("parking-slot-channel",res);
         return res;
     }
     else {
@@ -86,7 +84,6 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
         });
         if (checkReserved) {
             const res = new ResponseBody("Error", "You already reserved a parking slot",null);
-            // io.emit("parking-slot-channel",res);
             return res;
         }
         if (parkingSlot.status === "AVAILABLE") {
@@ -130,7 +127,6 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
         }
         else {
             const res = new ResponseBody("Error", "Parking slot is not available", null);
-            io.emit("parking-slot-channel",res);
             return res;
         }
     }
