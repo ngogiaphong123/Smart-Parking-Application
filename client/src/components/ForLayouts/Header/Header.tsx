@@ -18,7 +18,7 @@ function Header() {
                 else
                     navigate("/customer")
             }}  className="cursor-pointer logo text-2xl sm:text-4xl inline">Parking<p className="inline font-semibold">Auto</p>.com</div>
-            <div className="hidden md:block">
+            <div className="hidden md:block w-fit">
             <HeaderUser/>
             </div>
             <div onClick={()=>{

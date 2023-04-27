@@ -32,6 +32,7 @@ function LoginForm() {
             dispatch(Login({ email, password }))
                 .then((res: any) => {
                     if (res.payload.status === "Success") {
+                        console.log(res)
                         if (res.payload.data.role === "admin")
                             dispatch(getMeAdmin())
                                 .then((res: any) => {
@@ -39,7 +40,7 @@ function LoginForm() {
                                         state: {
                                             type: "success",
                                             message: "Login successfully",
-                                            link: "/"
+                                            link: "/admin"
                                         }
                                     })
                                 })
@@ -50,7 +51,7 @@ function LoginForm() {
                                         state: {
                                             type: "success",
                                             message: "Login successfully",
-                                            link: "/"
+                                            link: "/customer"
                                         }
                                     })
                                 })

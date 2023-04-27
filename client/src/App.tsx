@@ -35,6 +35,8 @@ function App() {
   const user = useSelector(UserStore).user
   const smallNotificationIsShow = useSelector(SmallNotificationStore).show
   useEffect(() => {
+    // change web name
+    document.title = "Smart Parking Auto"
     // dispatch(Login({ email: "phong@gmail.com", password: "123456" }))
     // .then((res:any)=>{
     //   if(res.payload.status==="Success") 

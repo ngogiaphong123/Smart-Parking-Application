@@ -48,7 +48,7 @@ function HeaderUser() {
         return () => document.removeEventListener('mousedown', handleAvatarClickOutside);
     });
     return (<>
-        <div className="w-60 items-center justify-between flex space-x-4">
+        <div className="w-fit items-center justify-between flex space-x-4">
             <div className="w-10 h-10 bg-neutral-200 rounded-xl flex justify-center items-center drop-shadow">
                 <FontAwesomeIcon icon={faBell as IconProp} className='w-6 h-6 text-gray-500' />
             </div>

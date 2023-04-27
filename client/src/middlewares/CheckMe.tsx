@@ -31,7 +31,7 @@ function CheckMe() {
                         user.user ?
                             <Outlet />
                             :
-                            <div className="w-full h-[600px] flex justify-center items-center">
+                            <div className="w-full h-full flex justify-center items-center">
                                 <Spinner />
                             </div>
                     }
