@@ -7,6 +7,6 @@ import { DaySchema } from "./statistic.schema";
 const statisticRouter = Router();
 
 statisticRouter.get("/slotPercentage", catchAsync(slotPieChartController))
-statisticRouter.get("/logPerHour", zodMiddlewares(DaySchema, "body"), catchAsync(numLogsInDayController))
+statisticRouter.post("/logPerHour", zodMiddlewares(DaySchema, "body"), catchAsync(numLogsInDayController))
 
 export default statisticRouter;

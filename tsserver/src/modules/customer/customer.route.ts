@@ -7,6 +7,6 @@ import catchAsync from "../../utils/catchAsync";
 
 const customerRouter = Router();
 
-customerRouter.get('/',requireAdmin, zodMiddlewares(getCustomersSchema,"body"),catchAsync(getCustomersController))
+customerRouter.post('/',requireAdmin, zodMiddlewares(getCustomersSchema,"body"),catchAsync(getCustomersController))
 
 export default customerRouter

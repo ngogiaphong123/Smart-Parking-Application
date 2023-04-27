@@ -70,5 +70,5 @@ export const rfidCalling = () => {
         else {
             console.log("Error");
         }
-    },1000);
+    },1500);
 }
