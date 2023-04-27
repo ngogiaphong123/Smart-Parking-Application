@@ -12,7 +12,6 @@ export const temperatureCalling = () => {
         const data = await getTemperatureFromAdafruitService(limit);
         if(data) {
             data.forEach(async (element : any) => {
-                // to change timezone to GMT+7
                 const temp = new Temperature(element.id, "C", element.created_at, element.value)
                 await saveTemperatureService(temp);
             });

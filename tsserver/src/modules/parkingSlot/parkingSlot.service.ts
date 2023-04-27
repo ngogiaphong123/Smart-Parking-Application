@@ -32,6 +32,16 @@ export const getParkingSlotService = async ({page, limit} :{
                     firstName : true,
                     lastName : true,
                     email : true,
+                    avatarUrl : true,
+                }
+            },
+            vehicle : {
+                select : {
+                    vehicleId : true,
+                    genre : true,
+                    model : true,
+                    numberPlate : true,
+                    rfidNumber : true,
                 }
             }
         }
@@ -70,6 +80,7 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
         const checkReserved = await prisma.parkingSlot.findFirst({
             where : {
                 reservedById : vehicle.ownerId,
+                vehicleId : vehicle.vehicleId,
                 status : "RESERVED"
             }
         });
@@ -85,7 +96,8 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
                 },
                 data : {
                     status : "RESERVED",
-                    reservedById : vehicle.ownerId
+                    reservedById : vehicle.ownerId,
+                    vehicleId : vehicle.vehicleId
                 },
                 select : {
                     parkingSlotId : true,
@@ -98,6 +110,16 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
                             firstName : true,
                             lastName : true,
                             email : true,
+                            avatarUrl : true,
+                        }
+                    },
+                    vehicle : {
+                        select : {
+                            vehicleId : true,
+                            genre : true,
+                            model : true,
+                            numberPlate : true,
+                            rfidNumber : true,
                         }
                     }
                 }
@@ -130,6 +152,16 @@ export const getParkingSlotByIdService = async (parkingSlotId : string) => {
                     firstName : true,
                     lastName : true,
                     email : true,
+                    avatarUrl : true,
+                }
+            },
+            vehicle : {
+                select : {
+                    vehicleId : true,
+                    genre : true,
+                    model : true,
+                    numberPlate : true,
+                    rfidNumber : true,
                 }
             }
         }

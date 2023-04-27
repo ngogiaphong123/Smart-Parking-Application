@@ -128,7 +128,8 @@ export const verifyRfid = async (rfid: string) => {
             },
             data: {
                 status: "AVAILABLE",
-                reservedById: null
+                reservedById: null,
+                vehicleId: null
             },
             select : {
                 parkingSlotId : true,
@@ -141,6 +142,16 @@ export const verifyRfid = async (rfid: string) => {
                         firstName : true,
                         lastName : true,
                         email : true,
+                    }
+                },
+                vehicle : {
+                    select : {
+                        vehicleId : true,
+                        model : true,
+                        genre : true,
+                        numberPlate : true,
+                        rfidNumber : true,
+
                     }
                 }
             }
@@ -157,6 +168,7 @@ export const verifyRfid = async (rfid: string) => {
         const checkReserved = await prisma.parkingSlot.findFirst({
             where: {
                 reservedById: vehicle.ownerId,
+                vehicleId: vehicle.vehicleId,
                 status: "RESERVED"
             }
         });
@@ -188,6 +200,15 @@ export const verifyRfid = async (rfid: string) => {
                             lastName : true,
                             email : true,
                         }
+                    },
+                    vehicle : {
+                        select : {
+                            vehicleId : true,
+                            model : true,
+                            genre : true,
+                            numberPlate : true,
+                            rfidNumber : true,
+                        }
                     }
                 }
             });
@@ -208,6 +229,7 @@ export const verifyRfid = async (rfid: string) => {
                 }
             });
             if(!availableParkingSlot) {
+                io.emit("parking-slot-channel", new ResponseBody("Error", "No vacant slot",null));
                 await updateLCDToAdafruitService("No vacant slot");
                 return null;
             }
@@ -224,7 +246,8 @@ export const verifyRfid = async (rfid: string) => {
                 },
                 data: {
                     status: "OCCUPIED",
-                    reservedById: null
+                    reservedById : vehicle.ownerId,
+                    vehicleId : vehicle.vehicleId
                 },
                 select : {
                     parkingSlotId : true,
@@ -237,6 +260,15 @@ export const verifyRfid = async (rfid: string) => {
                             firstName : true,
                             lastName : true,
                             email : true,
+                        }
+                    },
+                    vehicle : {
+                        select : {
+                            vehicleId : true,
+                            model : true,
+                            genre : true,
+                            numberPlate : true,
+                            rfidNumber : true,
                         }
                     }
                 }
