@@ -168,7 +168,7 @@ export const verifyRfid = async (rfid: string) => {
             }
         });
         // update price to adafruit
-        const res = new ResponseBody("Success", "Check out success",updateParkingSlot);
+        const res = new ResponseBody("Success", "Check out success",[updateParkingSlot]);
         io.emit("parking-slot-channel",res);
         await updateLCDToAdafruitService(`Price : ${price.toString()}`);
         await updateServoStatusToAdafruitService("1");
@@ -224,7 +224,7 @@ export const verifyRfid = async (rfid: string) => {
                     }
                 }
             });
-            const res = new ResponseBody("Success", "Check in success",updateParkingSlot);
+            const res = new ResponseBody("Success", "Check in success",[updateParkingSlot]);
             io.emit("parking-slot-channel",res);
             const length = updateParkingSlot.parkingSlotId.length;
             const sentString = `Please go to ${updateParkingSlot.parkingSlotId[length - 2] + updateParkingSlot.parkingSlotId[length - 1]}`;
@@ -286,7 +286,7 @@ export const verifyRfid = async (rfid: string) => {
                     }
                 }
             });
-            const res = new ResponseBody("Success", "Check in success", updateParkingSlot);
+            const res = new ResponseBody("Success", "Check in success", [updateParkingSlot]);
             const length = updateParkingSlot.parkingSlotId.length;
             // send last two character of parking slot id to adafruit using slice
             const sentString = `Please go to ${updateParkingSlot.parkingSlotId[length - 2] + updateParkingSlot.parkingSlotId[length - 1]}`;
