@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import google from '../../assets/icon/google.png'
 import wrench from '../../assets/icon/wrench.svg'
 
-function TransportDetail({ type }: { type: string }) {
+function TransportDetail({ type }: { type: "nothing"|"adjust" }) {
     const [name, setName] = useState("xe em be");
     const [license, setLicense] = useState("123456");
     const [adjust, setAdjust] = useState(false);
@@ -20,7 +20,7 @@ function TransportDetail({ type }: { type: string }) {
                         </>
                 }
             </div>
-            <div className="w-full flex flex-1 flex-col items-start justify-center">
+            <div className="w-full flex flex-1 flex-col items-start">
                 {
                     !adjust ?
                         <>
@@ -39,7 +39,7 @@ function TransportDetail({ type }: { type: string }) {
                         </>
                 }
             </div>
-            <div className="w-full flex flex-1 justify-center items-center">
+            <div className="w-full flex flex-1 items-center">
                 {
                     type === "adjust" &&
                     <button onClick={() => { setAdjust(prev => !prev) }} className="w-8 h-8 p-1 rounded-xl bg-blue-400 hover:bg-blue-500 flex justify-center items-center">

@@ -11,7 +11,7 @@ export const getLogsController = async (req: Request<{},{},GetLogsInput>, res: R
 
 export const getMyLogsController = async (req: Request, res: Response) => {
     const accountId = res.locals.user.accountId;
-    const logs = await getMyLogService(accountId);
+    const logs = await getLogsService(accountId);
     res.status(StatusCodes.OK).send(new ResponseBody("Success", "Get logs successfully", logs));
 }
 

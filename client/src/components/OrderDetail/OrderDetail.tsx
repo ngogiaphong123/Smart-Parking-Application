@@ -1,7 +1,10 @@
 import { memo, useState, useCallback } from 'react'
 import CalendarForApp from '../CalendarForApp/CalendarForApp';
+import OrderModalSlice from '../../redux/slices/modals/OrderModalSlice';
+import { useDispatch } from 'react-redux';
 function OrderDetail() {
     const [minutes, setMinutes] = useState(180)
+    const dispatch = useDispatch<any>()
     const convertHHMM = useCallback((minutes: number) => {
         const hours = Math.floor(minutes / 60);
         const mins = minutes % 60;
@@ -9,8 +12,18 @@ function OrderDetail() {
     }, [])
     return (<>
         <div className="min-w-0 max-w-[600px] rounded-2xl drop-shadow-md flex flex-col bg-white p-4 light">
-            <div className="w-full text-sm font-semibold text-gray-700 py-2">
-                Order Detail
+            <div className="flex items-start justify-between p-2 border-b rounded-t dark:border-gray-600">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    Order detail
+                </h3>
+                <button
+                    onClick={() => {
+                        dispatch(OrderModalSlice.actions.handleClose({}))
+                    }}
+                    type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+                    <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span className="sr-only">Close modal</span>
+                </button>
             </div>
             <div className="w-full flex">
                 <div className="w-[45%] flex flex-col items-start gap-2">
