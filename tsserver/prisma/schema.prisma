@@ -75,6 +75,7 @@ model ParkingSlot {
     vehicle         Vehicle? @relation(fields: [vehicleId], references: [vehicleId])
     vehicleId       String? @db.ObjectId
     pricePerHour    String
+    startTime       DateTime?
     logs            Logs[]
 }
 model Logs {

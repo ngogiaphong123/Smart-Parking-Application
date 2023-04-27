@@ -8,6 +8,7 @@ export const createParkingSlotService = async (parkingSlot : ParkingSlotInput) =
         data : {
             status : "AVAILABLE",
             pricePerHour,
+            startTime : null,
         },
     })
     return new ResponseBody("Success", "Create parking slot success", newParkingSlot);
@@ -26,6 +27,7 @@ export const getParkingSlotService = async ({page, limit} :{
             status : true,
             reservedById : true,
             pricePerHour : true,
+            startTime : true,
             reservedBy : {
                 select : {
                     accountId : true,
@@ -94,13 +96,14 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
                 data : {
                     status : "RESERVED",
                     reservedById : vehicle.ownerId,
-                    vehicleId : vehicle.vehicleId
+                    vehicleId : vehicle.vehicleId,
                 },
                 select : {
                     parkingSlotId : true,
                     status : true,
                     reservedById : true,
                     pricePerHour : true,
+                    startTime : true,
                     reservedBy : {
                         select : {
                             accountId : true,
@@ -142,6 +145,7 @@ export const getParkingSlotByIdService = async (parkingSlotId : string) => {
             status : true,
             reservedById : true,
             pricePerHour : true,
+            startTime : true,
             reservedBy : {
                 select : {
                     accountId : true,
