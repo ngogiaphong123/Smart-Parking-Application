@@ -56,3 +56,30 @@ export const loginService = async (input : LoginUserInput) => {
     }
     return null;
 }
+
+export const getUserService = async (accountId : string) => {
+    const user = await prisma.user.findUnique({
+        where : {
+            accountId : accountId
+        },
+        select : {
+            accountId : true,
+            firstName : true,
+            lastName : true,
+            email : true,
+            role : true,
+            avatarUrl : true,
+            phone : true,
+            vehicles : {
+                select : {
+                    vehicleId : true,
+                    genre : true,
+                    model : true,
+                    numberPlate : true,
+                    rfidNumber : true,
+                }
+            }
+        }
+    });
+    return user;
+}

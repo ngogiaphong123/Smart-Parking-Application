@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from "express";
 import { LoginUserInput, RegisterUserInput } from "./user.schema";
-import { loginService, registerService } from "./user.service";
+import { getUserService, loginService, registerService } from "./user.service";
 import { signJwt } from '../../utils/jwt.utils';
 import ResponseBody from '../../utils/responseBody';
 
@@ -59,6 +59,14 @@ export const loginController = async (req: Request<{},{},LoginUserInput>, res: R
 }
 export const getUserController = async (req: Request, res: Response) => {
     return res.status(StatusCodes.OK).send(new ResponseBody("Success", "Get user success", res.locals.user));
+}
+export const getUserInfoController = async (req: Request, res: Response) => {
+    const accountId = res.locals.user.accountId;
+    const result = await getUserService(accountId);
+    if(!result) {
+        return res.status(StatusCodes.NOT_FOUND).send(new ResponseBody("Error", "User not found", null));
+    }
+    return res.status(StatusCodes.OK).send(new ResponseBody("Success", "Get user info success", result));
 }
 export const logoutController = async (req: Request, res: Response) => {
     return res.status(StatusCodes.OK).send(new ResponseBody("Success", "Logout success", {

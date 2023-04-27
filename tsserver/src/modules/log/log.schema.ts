@@ -1,12 +1,14 @@
 import { z } from "zod";
-
-export const GetLogsSchema = z.object({
+export const PageLimitSchema = {
     page: z.number({
         required_error: "Page is required",
     }),
     limit: z.number({
         required_error: "Limit is required",
-    }),
+    })
+}
+export const GetLogsSchema = z.object({
+    ...PageLimitSchema
 })
 export const GetLogsDateSchema = z.object({
     start : z.string({
@@ -17,6 +19,7 @@ export const GetLogsDateSchema = z.object({
         // regex
         required_error : "From date is required"
     }).regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/),
+    ...PageLimitSchema
 })
 export type GetLogsInput = z.infer<typeof GetLogsSchema>;
 export type GetLogsDateInput = z.infer<typeof GetLogsDateSchema>;

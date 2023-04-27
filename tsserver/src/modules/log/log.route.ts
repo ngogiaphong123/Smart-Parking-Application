@@ -8,6 +8,6 @@ import { getLogsController, getLogsDateController, getMyLogsController } from ".
 const logRouter = Router();
 
 logRouter.get('/', requireAdmin, zodMiddlewares(GetLogsSchema,"body"),catchAsync(getLogsController))
-logRouter.get('/me', requireUser, catchAsync(getMyLogsController))
+logRouter.get('/me', requireUser, zodMiddlewares(GetLogsSchema, "body"),catchAsync(getMyLogsController))
 logRouter.get('/date', requireAdmin, zodMiddlewares(GetLogsDateSchema,"body"), catchAsync(getLogsDateController))
 export default logRouter;

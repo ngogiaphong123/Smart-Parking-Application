@@ -1,3 +1,4 @@
+
 import prisma from "../../utils/prisma";
 import { getNewCustomerCountService } from "../customer/customer.service";
 import { GetLogsInput } from "./log.schema";
@@ -51,13 +52,18 @@ export const getLogsService = async (input: GetLogsInput) => {
                     }
                 }
             }
+        },
+        orderBy : {
+            timeIn : "desc"
         }
     });
     return logs;
 }
 
-export const getMyLogService = async (accountId : string) => {
+export const getMyLogService = async (accountId : string, page : number, limit : number) => {
     const logs = await prisma.logs.findMany({
+        skip: page * limit,
+        take: limit,
         where : {
             vehicle : {
                 user : {
@@ -96,17 +102,24 @@ export const getMyLogService = async (accountId : string) => {
                     }
                 }
             }
+        },
+        orderBy : {
+            timeIn : "desc"
         }
     });
     return logs;
 }
 
-export const getLogsDateService = async ({start,end} : {
+export const getLogsDateService = async ({start,end,page,limit} : {
     start : Date,
-    end : Date
+    end : Date,
+    page : number,
+    limit : number
 }) => {
     // time in >= start && time in <= end
     const logs = await prisma.logs.findMany({
+        skip: page * limit,
+        take: limit,
         where : {
             timeIn : {
                 gte : start,
@@ -144,11 +157,30 @@ export const getLogsDateService = async ({start,end} : {
                     }
                 }
             }
+        },
+        orderBy : {
+            timeIn : "desc"
         }
     });
-    const totalRecords = logs.length;
+    const logsFull = await prisma.logs.findMany({
+        where : {
+            timeIn : {
+                gte : start,
+                lte : end
+            }
+        },
+        select: {
+            logId: true,
+            timeIn: true,
+            price: true,
+        },
+        orderBy : {
+            timeIn : "desc"
+        }
+    })
+    const totalRecords = logsFull.length;
     // get prices of logs
-    const prices = logs.map(log => log.price);
+    const prices = logsFull.map(log => log.price);
     // calculate total price
     let revenue = 0;
     for(let i = 0; i < prices.length; i++) {
