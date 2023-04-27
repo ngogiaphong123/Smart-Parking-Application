@@ -63,20 +63,21 @@ const LightSensorSlice = createSlice({
 // }
 // )
 
-export const getLightRecord = createAsyncThunk('getLightRecord', async (input:any) => {
-    try {
-        const {page, limit} = input
-        const {data} = await axios.get(`${serverUrl}/sensors/light?page=${page}&limit=${limit}`)
-        if(data.status === "200") {
-            return {message:data.message, "data":data.data};
-        }
-        else {
-            return {message:data.message, "data":data.data};
-        }
-    }
-    catch (error : any) {
-        return {message:error.response.data.message, "data":error.response.data.data};
-    }
-})
+// export const getLightRecord = createAsyncThunk('getLightRecord', async (input:any) => {
+//     try {
+//         const {page, limit} = input
+//         const {data} = await axios.get(`${serverUrl}/sensors/light?page=${page}&limit=${limit}`)
+//         if(data.status === "200") {
+//             return {message:data.message, "data":data.data};
+//         }
+//         else {
+//             return {message:data.message, "data":data.data};
+//         }
+//     }
+//     catch (error : any) {
+//         return {message:error.response.data.message, "data":error.response.data.data};
+//     }
+// })
 
+export const lightChannelLinkName = "light-channel"
 export default LightSensorSlice

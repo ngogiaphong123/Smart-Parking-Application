@@ -16,13 +16,13 @@ function GeneralPage() {
         <Header />
         {/* mt for Header 16 */}
         {/* Start coding body here */}
-        <div className="w-full h-full mt-16 flex items-start">
+        <div className="w-full h-fit mt-16 flex items-start">
             <div className="md:block hidden">
                 {
                     user.role === 'admin' ? <SidebarAdmin /> : <SidebarCustomer />
                 }
             </div>
-            <div className="px-6 w-full h-full mt-8 flex items-start justify-center overflow-hidden">
+            <div className="px-6 w-full h-full mt-8 flex items-start justify-center overflow-hidden pb-8">
                 <Outlet />
             </div>
         </div>

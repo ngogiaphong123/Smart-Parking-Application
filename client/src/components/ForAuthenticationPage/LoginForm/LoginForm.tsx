@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom';
 import { pageMotionTime } from '../../../configs';
 import { useDispatch, useSelector } from 'react-redux';
-import { Login, getMeAdmin, getMeCustomer } from '../../../redux/slices/UserSlice';
+import { Login, getMe} from '../../../redux/slices/UserSlice';
 import { UserStore } from '../../../redux/selectors';
 import Spinner from '../../Spinner/Spinner';
 
@@ -32,30 +32,26 @@ function LoginForm() {
             dispatch(Login({ email, password }))
                 .then((res: any) => {
                     if (res.payload.status === "Success") {
-                        console.log(res)
-                        if (res.payload.data.role === "admin")
-                            dispatch(getMeAdmin())
-                                .then((res: any) => {
+                        dispatch(getMe())
+                            .then((res: any) => {
+                                if (res.payload.status === "Success")
                                     navigate("/notification", {
                                         state: {
                                             type: "success",
                                             message: "Login successfully",
-                                            link: "/admin"
+                                            link: res.payload.data.role === "admin" ? "/admin" : "/customer"
                                         }
                                     })
-                                })
-                        else {
-                            dispatch(getMeCustomer())
-                                .then((res: any) => {
+                                else {
                                     navigate("/notification", {
                                         state: {
-                                            type: "success",
-                                            message: "Login successfully",
-                                            link: "/customer"
+                                            type: "error",
+                                            message: res.payload.message,
+                                            link: "/"
                                         }
                                     })
-                                })
-                        }
+                                }
+                            })
                     }
                     else {
                         navigate("/notification", {

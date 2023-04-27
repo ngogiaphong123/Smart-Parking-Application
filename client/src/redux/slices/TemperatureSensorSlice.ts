@@ -12,15 +12,15 @@ const TemperatureSensorSlice = createSlice({
     reducers:{
     },
     extraReducers(builder) {
-        builder
-        .addCase(getTemperatureRecord.pending, (state,action) => {
-            state.loading = true
-        })
-        .addCase(getTemperatureRecord.fulfilled, (state,action) => {
-            state.loading = false
-            const {data} = action.payload
-            state.data = data
-        })
+        // builder
+        // .addCase(getTemperatureRecord.pending, (state,action) => {
+        //     state.loading = true
+        // })
+        // .addCase(getTemperatureRecord.fulfilled, (state,action) => {
+        //     state.loading = false
+        //     const {data} = action.payload
+        //     state.data = data
+        // })
     }
 })
 
@@ -61,21 +61,21 @@ const TemperatureSensorSlice = createSlice({
 // }
 // )
 
-export const getTemperatureRecord = createAsyncThunk('getTemperatureRecord', async (input:any) => {
-    try {
-        const {page, limit} = input
-        const {data} = await axios.get(`${serverUrl}/sensors/temperature?page=${page}&limit=${limit}`)
-        if(data.status === "200") {
-            return {message:data.message, "data":data.data};
-        }
-        else {
-            return {message:data.message, "data":data.data};
-        }
-    }
-    catch (error : any) {
-        return {message:error.response.data.message, "data":error.response.data.data};
-    }
-})
+// export const getTemperatureRecord = createAsyncThunk('getTemperatureRecord', async (input:any) => {
+//     try {
+//         const {page, limit} = input
+//         const {data} = await axios.get(`${serverUrl}/sensors/temperature?page=${page}&limit=${limit}`)
+//         if(data.status === "200") {
+//             return {message:data.message, "data":data.data};
+//         }
+//         else {
+//             return {message:data.message, "data":data.data};
+//         }
+//     }
+//     catch (error : any) {
+//         return {message:error.response.data.message, "data":error.response.data.data};
+//     }
+// })
 
 // name of link for socket
 export const temperatureChannelLinkName = "temperature-channel" 

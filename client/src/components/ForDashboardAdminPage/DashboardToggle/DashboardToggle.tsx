@@ -1,6 +1,5 @@
 import {
-    memo, useState, useEffect, forwardRef,
-    useImperativeHandle
+    memo, useState, useEffect
 } from 'react'
 import temperature from '../../../assets/icon/temperature.svg'
 import temperature_off from '../../../assets/icon/temperature_off.svg'
@@ -18,14 +17,15 @@ import { fanSocketStatus, fanSocketControl } from '../../../redux/slices/FanDevi
 import socket from '../../../utils/socket'
 import { v4 as uuidv4 } from 'uuid'
 import { Draggable } from 'react-beautiful-dnd'
-const DashboardToggle = forwardRef(({ kind, index }: { kind: string, index: number }, ref) => {
+const DashboardToggle = ({ kind, index, overHeating }: { overHeating?:any, kind: string, index: number }) => {
     const dispatch = useDispatch<any>();
     const [receiveData, setReceiveData] = useState(false)
     const isResponsive = useSelector(ResponsiveStore).data
+    // call first
     useEffect(() => {
         if (kind === "temperature") {
             socket.on(fanSocketStatus, (res: any) => {
-                if (res[0].status === "0") {
+                if (res.data[0].status === "0") {
                     setIsOn(false)
                 }
                 else {
@@ -40,7 +40,7 @@ const DashboardToggle = forwardRef(({ kind, index }: { kind: string, index: numb
     useEffect(() => {
         if (kind === "temperature") {
             socket.on(fanSocketControl, (res: any) => {
-                if (res[0].status === "0") {
+                if (res.data[0].status === "0") {
                     setIsOn(false)
                 }
                 else {
@@ -63,9 +63,12 @@ const DashboardToggle = forwardRef(({ kind, index }: { kind: string, index: numb
         else
             socket.emit(fanSocketControl, { value: "0" })
     }
-    const handleGetState = () => {
-        return isOn
-    }
+    
+    useEffect(()=>{
+        if(overHeating && !isOn){
+            handleToggle()
+        }
+    }, [overHeating&&isOn])
 
     // chill
     const [waterVolumne, setWaterVolumne] = useState(100)
@@ -79,11 +82,6 @@ const DashboardToggle = forwardRef(({ kind, index }: { kind: string, index: numb
     //         return () => clearInterval(interval)
     //     }
     // }, [isOn])
-
-    useImperativeHandle(ref, () => ({
-        handleToggle,
-        handleGetState
-    }));
     return (<>
         <Draggable key={index} draggableId={uuidv4()} index={index} >
             {
@@ -148,6 +146,6 @@ const DashboardToggle = forwardRef(({ kind, index }: { kind: string, index: numb
             }
         </Draggable>
     </>);
-})
+}
 
 export default memo(DashboardToggle);
