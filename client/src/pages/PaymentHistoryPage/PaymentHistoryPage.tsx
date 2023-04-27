@@ -1,12 +1,23 @@
-import { memo, useState } from 'react'
+import { memo, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { pageMotionTime } from '../../configs';
 import clsx from 'clsx';
 import CustomerVehicleCard from '../../components/ForHomeAndParkingPage/CustomerVehicleCard/CustomerVehicleCard';
 import CalendarForApp from '../../components/CalendarForApp/CalendarForApp';
+import { useDispatch } from 'react-redux';
+import { getLogs } from '../../redux/slices/LogsSlice';
 
 function PaymentHistoryPage() {
     const [paidState, setPaidState] = useState<any>("paid");
+    const dispatch = useDispatch<any>()
+    useEffect(() => {
+      dispatch(getLogs)
+    
+      return () => {
+        
+      }
+    }, [])
+    
     return (<motion.div 
         initial={{
             opacity: 0,
