@@ -81,13 +81,25 @@ export const verifyRfid = async (rfid: string) => {
         await updateLCDToAdafruitService("No vehicle found");
         return;
     }
-    const checkLog = await prisma.logs.findFirst({
+    let logs = await prisma.logs.findMany({
         where: {
             vehicleId: vehicle.vehicleId,
             state: "IN",
         },
+        orderBy: {
+            timeIn: "desc"
+        }
     });
-    if (checkLog) {
+    if (logs.length === 2) {
+        const deleteLog = await prisma.logs.delete({
+            where: {
+                logId: logs[1].logId
+            }
+        });
+        logs = [logs[0]];
+    }
+    if (logs.length === 1) {
+        const checkLog = logs[0];
         const slotPrice = await prisma.parkingSlot.findFirst({
             where: {
                 parkingSlotId: checkLog.parkingSlotId,
@@ -172,7 +184,6 @@ export const verifyRfid = async (rfid: string) => {
             }
         });
         if (checkReserved) {
-            // create new log
             const newLog = await prisma.logs.create({
                 data: {
                     vehicleId: vehicle.vehicleId,
@@ -275,7 +286,7 @@ export const verifyRfid = async (rfid: string) => {
                     }
                 }
             });
-            const res = new ResponseBody("Success", "Check in success",updateParkingSlot);
+            const res = new ResponseBody("Success", "Check in success", updateParkingSlot);
             const length = updateParkingSlot.parkingSlotId.length;
             // send last two character of parking slot id to adafruit using slice
             const sentString = `Please go to ${updateParkingSlot.parkingSlotId[length - 2] + updateParkingSlot.parkingSlotId[length - 1]}`;
