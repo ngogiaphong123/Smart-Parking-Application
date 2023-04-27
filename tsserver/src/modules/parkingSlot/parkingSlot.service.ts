@@ -131,7 +131,7 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
                     }
                 }
             })
-            const res = new ResponseBody("Success", "Reserved parking slot success",updatedParkingSlot);
+            const res = new ResponseBody("Success", "Reserved parking slot success",[updatedParkingSlot]);
             io.emit("parking-slot-channel",res);
             return res;
         }
