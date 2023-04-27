@@ -36,7 +36,7 @@ export const numLogsInDayService = async ({day} : {day : Date}) => {
                 }
             }
         });
-        numLogsPerHour.push({logs : numLogs,totalRecords : numLogs.length , start : startHour, end : endHour});
+        numLogsPerHour.push({logs : numLogs,totalRecords : numLogs.length , start : startHour, end : endHour, clockHour : i});
     }
     return numLogsPerHour;
 }
