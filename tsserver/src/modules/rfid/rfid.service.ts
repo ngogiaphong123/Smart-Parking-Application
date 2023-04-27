@@ -90,7 +90,9 @@ export const verifyRfid = async (rfid: string) => {
     if (checkLog) {
         const slotPrice = await prisma.parkingSlot.findFirst({
             where: {
-                parkingSlotId: checkLog.parkingSlotId
+                parkingSlotId: checkLog.parkingSlotId,
+                vehicleId: vehicle.vehicleId,
+                reservedById: vehicle.ownerId
             },
             select: {
                 pricePerHour: true
