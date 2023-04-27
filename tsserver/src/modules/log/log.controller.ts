@@ -9,19 +9,23 @@ export const getLogsController = async (req: Request<{},{},GetLogsInput>, res: R
     res.status(StatusCodes.OK).send(new ResponseBody("Success", "Get logs successfully", logs));
 }
 
-export const getMyLogsController = async (req: Request, res: Response) => {
+export const getMyLogsController = async (req: Request<{},{},GetLogsInput>, res: Response) => {
+    const {page, limit} = req.body;
     const accountId = res.locals.user.accountId;
-    const logs = await getLogsService(accountId);
+    const logs = await getMyLogService(accountId,page,limit);
     res.status(StatusCodes.OK).send(new ResponseBody("Success", "Get logs successfully", logs));
 }
 
 export const getLogsDateController = async (req: Request<{},{}, GetLogsDateInput>, res: Response) => {
     const {start} = req.body;
     const {end} = req.body;
+    const {page, limit} = req.body;
     // convert date to timestamp
     const input = {
         start: new Date(start),
-        end: new Date(end)
+        end: new Date(end),
+        page : page,
+        limit : limit
     }
     const result = await getLogsDateService(input);
     res.status(StatusCodes.OK).send(new ResponseBody("Success", "Get logs successfully", result));
