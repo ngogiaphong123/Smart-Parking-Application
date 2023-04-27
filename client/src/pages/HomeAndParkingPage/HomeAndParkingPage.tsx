@@ -10,10 +10,16 @@ import CustomerVehicleCard from '../../components/ForHomeAndParkingPage/Customer
 import { motion } from 'framer-motion'
 import {pageMotionTime} from '../../configs'
 import OrderDetail from '../../components/OrderDetail/OrderDetail';
+import socket from '../../utils/socket';
+import { useSelector } from 'react-redux';
+import { UserStore } from '../../redux/selectors';
+import { parkingSlotChannelLinkName } from '../../redux/slices/ParkingSlotsSlice';
 function HomeAndParkingPage() {
-    const [role, setRole] = useState('user')
+    const user = useSelector(UserStore).user
     const swiperRef = useRef<any>(null)
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [receiveData, setReceiveData] = useState(false)
+    const [parkingSlots, setParkingSlots] = useState<any>([])
     const handleIncreaseIndex = useCallback(() => {
         setCurrentIndex((prev) => {
             if (prev < 5) {
@@ -63,6 +69,27 @@ function HomeAndParkingPage() {
         }
     }, [])
 
+    useEffect(()=>{
+        socket.on(parkingSlotChannelLinkName, (res:any)=>{
+            if(res.status==="Success")
+            {
+                setParkingSlots([...res.data])
+                setReceiveData((prev)=>!prev)
+            }
+        })
+
+        return ()=>{
+            socket.off(parkingSlotChannelLinkName)
+        }
+    },[receiveData])
+    
+    useEffect(()=>{
+        socket.emit(parkingSlotChannelLinkName, {
+            "page" : 0,
+            "limit" : 4
+        })
+    },[])
+
     return (<>
         <motion.div
             initial={{
@@ -98,7 +125,7 @@ function HomeAndParkingPage() {
                 </span>
                 <div className="w-48 flex justify-between items-center">
                     <span className="text-sm text-gray-500 font-bold capitalize">
-                        Order: 1-6
+                        Order: 1-4
                     </span>
                     <ArrowsLR handleIncreaseIndex={handleIncreaseIndex} handleDecreaseIndex={handleDecreaseIndex} />
                 </div>
@@ -117,28 +144,19 @@ function HomeAndParkingPage() {
                 onSlideChange={handleSlideChange}
             >
                 <div className="w-full min-h-full gap-2 my-12">
-                    <SwiperSlide key={1}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
-                    <SwiperSlide key={2}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
-                    <SwiperSlide key={3}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
-                    <SwiperSlide key={4}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
-                    <SwiperSlide key={5}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
-                    <SwiperSlide key={6}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
+                    {
+                        parkingSlots.map((parkingSlot:any, index:number)=>{
+                            return(
+                                <SwiperSlide key={index}>
+                                    <ParkingSlotCard data={parkingSlot}/>
+                                </SwiperSlide>
+                            )
+                        })
+                    }
                 </div>
             </Swiper>
             {
-                role === 'admin' &&
+                user.role === 'admin' &&
                 <>
                 <div className="w-full my-2 mt-4 h-8 flex justify-between items-center " >
                     <span className="text-sm text-gray-500 font-bold capitalize">
