@@ -57,7 +57,19 @@ export const getLogsService = async (input: GetLogsInput) => {
             timeIn : "desc"
         }
     });
-    return logs;
+    const count = await prisma.logs.findMany({
+        select: {
+            logId: true,
+            price: true,
+        }
+    });
+    let revenue = 0;
+    for (let i = 0; i < count.length; i++) {
+        if(count[i].price) {
+            revenue += parseInt(count[i].price as string);
+        }
+    }
+    return {totalRecords : count.length, revenue,logs}; 
 }
 
 export const getMyLogService = async (accountId : string, page : number, limit : number) => {
@@ -107,7 +119,26 @@ export const getMyLogService = async (accountId : string, page : number, limit :
             timeIn : "desc"
         }
     });
-    return logs;
+    const count = await prisma.logs.findMany({
+        where : {
+            vehicle : {
+                user : {
+                    accountId : accountId
+                }
+            }
+        },
+        select: {
+            logId: true,
+            price: true,
+        }
+    })
+    let revenue = 0;
+    for (let i = 0; i < count.length; i++) {
+        if(count[i].price) {
+            revenue += parseInt(count[i].price as string);
+        }
+    }
+    return {totalRecords : count.length, revenue,logs};
 }
 
 export const getLogsDateService = async ({start,end,page,limit} : {
