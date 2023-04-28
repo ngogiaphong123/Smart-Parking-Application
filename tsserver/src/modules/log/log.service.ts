@@ -312,3 +312,87 @@ export const getLogsCustomerDateService = async ({accountId,start,end,page,limit
     }
     return {totalRecords, revenue, logs};
 }
+
+export const getLogsByVehicleService = async ({vehicleId,accountId,page,limit} : {
+    vehicleId : string,
+    accountId : string,
+    page : number,
+    limit : number
+}) => {
+    const logs = await prisma.logs.findMany({
+        skip: page * limit,
+        take: limit,
+        where : {
+            vehicleId : vehicleId,
+            vehicle : {
+                user : {
+                    accountId : accountId
+                }
+            }
+        },
+        select: {
+            logId: true,
+            timeIn: true,
+            timeOut: true,
+            price: true,
+            state: true,
+            parkingSlot : {
+                select : {
+                    parkingSlotId : true,
+                    pricePerHour : true,
+                }
+            },
+            vehicle : {
+                select : {
+                    vehicleId : true,
+                    genre : true,
+                    model : true,
+                    numberPlate : true,
+                    rfidNumber : true,
+                    user : {
+                        select : {
+                            accountId : true,
+                            email : true,
+                            firstName : true,
+                            lastName : true,
+                            phone : true,
+                            avatarUrl : true,
+                        }
+                    }
+                }
+            }
+        },
+        orderBy : {
+            timeIn : "desc"
+        }
+    });
+    const logsFull = await prisma.logs.findMany({
+        where : {
+            vehicleId : vehicleId,
+            vehicle : {
+                user : {
+                    accountId : accountId
+                }
+            }
+        },
+        select: {
+            logId: true,
+            timeIn: true,
+            price: true,
+        },
+        orderBy : {
+            timeIn : "desc"
+        }
+    })
+    const totalRecords = logsFull.length;
+    // get prices of logs
+    const prices = logsFull.map(log => log.price);
+    // calculate total price
+    let revenue = 0;
+    for(let i = 0; i < prices.length; i++) {
+        if(prices[i]) {
+            revenue += parseInt(prices[i] as string);
+        }
+    }
+    return {totalRecords, revenue, logs};
+}
