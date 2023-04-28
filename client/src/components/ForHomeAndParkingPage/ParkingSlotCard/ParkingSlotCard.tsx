@@ -9,9 +9,7 @@ import { UserStore } from '../../../redux/selectors'
 import handleDateShowingFromDBS from '../../../utils/handleDateShowingFromDBS'
 import handleBalanceCalFromDBS from '../../../utils/handleBalanceCalFromDBS'
 
-function ParkingSlotCard({ data, index }: { data: any, index: number }) {
-    if (data.status === "RESERVED")
-        console.log(data)
+function ParkingSlotCard({ data, index }: { data?: any, index: number }) {
     const dispatch = useDispatch<any>()
     const user = useSelector(UserStore).user
     const [stop, setStop] = useState(false)
@@ -22,15 +20,19 @@ function ParkingSlotCard({ data, index }: { data: any, index: number }) {
         return () => {
             clearTimeout(handleStop)
         }
-    }, []);
+    }, [stop]);
     return (<>
         <div onClick={() => {
-            if (user.role === "user")
-                dispatch(OrderModalSlice.actions.handleOpen({}))
-        }} className="group w-fit cursor-pointer">
+            if (user.role === "customer" && data.status === "AVAILABLE")
+                dispatch(OrderModalSlice.actions.handleOpen({parkingSlotData:data}))
+        }} 
+        onMouseEnter={()=>{
+            setStop(false)
+        }}
+        className="group w-fit cursor-pointer">
             <div id="main" className="gap-3 w-64 h-96 rounded-lg shadow-lg bg-white ease-linear transition duration-150 hover:bg-blue-300">
                 {
-                    data.status !== "AVAILABLE" &&
+                    data&&data.status !== "AVAILABLE" &&
                     <>
                         <div className="group-hover:hidden flex flex-col justify-around w-full h-full">
                             <img id="car" className=" w-4/5  mx-auto mt-5 rounded-lg" src={stop ? car_stop_img : car_gif} />

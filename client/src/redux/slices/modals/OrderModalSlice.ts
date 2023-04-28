@@ -4,14 +4,16 @@ const OrderModalSlice = createSlice({
     name:"OrderModalSlice",
     initialState:{
         loading:false,
-        data:false,
+        show:false,
+        parkingSlotData:false
     },
     reducers:{
         handleOpen(state,action) {
-            state.data = true
+            state.show = true
+            state.parkingSlotData = action.payload.parkingSlotData
         },
         handleClose(state,action) {
-            state.data = false
+            state.show = false
         }
     },
     extraReducers(builder) {

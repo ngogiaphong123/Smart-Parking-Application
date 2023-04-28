@@ -4,12 +4,11 @@ import { pageMotionTime } from '../../configs';
 import clsx from 'clsx';
 import CustomerVehicleCard from '../../components/ForHomeAndParkingPage/CustomerVehicleCard/CustomerVehicleCard';
 import CalendarForApp from '../../components/CalendarForApp/CalendarForApp';
-import { useDispatch } from 'react-redux';
-import { getLogsDate } from '../../redux/slices/LogsSlice';
-import { LogsStore } from '../../redux/selectors';
+import { LogsStore, UserStore } from '../../redux/selectors';
 import { useSelector } from 'react-redux';
 import Spinner from '../../components/Spinner/Spinner';
 import Pagination from '../../components/Pagination/Pagination';
+import useGetLogs from '../../utils/hooks/useGetLogs';
 
 function PaymentHistoryPage() {
     const [paidState, setPaidState] = useState<any>("paid");
@@ -24,22 +23,12 @@ function PaymentHistoryPage() {
             end: endOfDay.toISOString()
         }
     })
-    const dispatch = useDispatch<any>()
     const logsLoading = useSelector(LogsStore).loading
+    const user = useSelector(UserStore).user
     const logs = useSelector(LogsStore).logs
-    console.log(date)
-    useEffect(() => {
-        dispatch(getLogsDate({
-            "start": date.start,
-            "end": date.end,
-            "page": currPage - 1,
-            "limit": 8,
-            "paidState": paidState
-        }))
-            .then((res: any) => {
-                setTotalPage(Math.ceil(res.payload.data.totalRecords / 8))
-            })
-    }, [currPage, paidState, date])
+    useGetLogs({
+        paidState,currPage,setTotalPage,date
+    })
     return (<motion.div
         initial={{
             opacity: 0,
@@ -68,12 +57,16 @@ function PaymentHistoryPage() {
             <div className="w-full h-fit flex justify-start items-center">
                 <span onClick={() => { setPaidState("paid") }} className={clsx("cursor-pointer text-md capitalize", {
                     "text-title-inPage font-normal": paidState === "paid",
-                    "text-gray-400 font-thin": paidState === "unpaid"
+                    "text-gray-400 font-thin": paidState === "unpaid" || paidState === "all"
                 })}>Paid</span>/
                 <span onClick={() => { setPaidState("unpaid") }} className={clsx("pl-1 cursor-pointer text-md capitalize", {
                     "text-title-inPage font-normal": paidState === "unpaid",
-                    "text-gray-400 font-thin": paidState === "paid"
-                })}> unpaid</span>
+                    "text-gray-400 font-thin": paidState === "paid" || paidState === "all"
+                })}> unpaid</span>/
+                <span onClick={() => { setPaidState("all") }} className={clsx("pl-1 cursor-pointer text-md capitalize", {
+                    "text-title-inPage font-normal": paidState === "all",
+                    "text-gray-400 font-thin": paidState === "paid" || paidState === "unpaid"
+                })}> all</span>
             </div>
             <div className="w-full h-fit flex justify-start items-center">
                 <span className="font-bold text-super-small">Results: {logs.length}</span>
@@ -101,7 +94,10 @@ function PaymentHistoryPage() {
         <div
             className="h-fit min-w-[370px] mb-4 drop-shadow-xl flex overflow-hidden justify-center"
         >
-            <CalendarForApp date={date} setDate={setDate} />
+            {
+                user.role === "admin" &&
+                <CalendarForApp date={date} setDate={setDate} />
+            }
         </div>
     </motion.div>);
 }

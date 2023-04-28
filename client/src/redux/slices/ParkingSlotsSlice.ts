@@ -8,9 +8,12 @@ const ParkingSlotsSlice = createSlice({
     name:"ParkingSlotsSlice",
     initialState:{
         loading:false,
-        parkingSlots:false,
+        parkingSlots:[],
     },
     reducers:{
+        handleSetParkingSlots(state, action){
+            state.parkingSlots = action.payload
+        },
     },
     extraReducers(builder) {
         // builder

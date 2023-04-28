@@ -4,7 +4,7 @@ import wrench from '../../../assets/icon/wrench.svg'
 // @ts-ignore
 import Datepicker from "tailwind-datepicker-react"
 
-function CustomerDetail({ type }: { type: "nothing"|"adjust" }) {
+function CustomerDetail({ type, data }: { type: "nothing"|"adjust", data?:any }) {
     const [adjust, setAdjust] = useState(false)
     const [showCalendar, setShowCalendar] = useState(false)
     const handleChange = (selectedDate: Date) => {
@@ -25,9 +25,9 @@ function CustomerDetail({ type }: { type: "nothing"|"adjust" }) {
     const handleClose = (state: boolean) => {
         setShowCalendar(state)
     }
-    const [name, setName] = useState("Nguyen Chung Son")
-    const [email, setEmail] = useState("HiBuiTienDuc@gmail.com")
-    const [phone, setPhone] = useState("0123456789")
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState("")
     const [address, setAddress] = useState("Hanoi, Vietnam")
     const [birth, setBirth] = useState("01/01/2000")
     const options = {
@@ -60,7 +60,7 @@ function CustomerDetail({ type }: { type: "nothing"|"adjust" }) {
         <div className="w-full flex flex-col">
             <div className="w-full flex">
                 <div className="dark flex flex-col items-center flex-1 p-4">
-                    <img className="w-16 h-16 p-2 rounded-full drop-shadow border-1 border-gray" src={google} alt="" />
+                    <img className="w-16 h-16 p-2 rounded-full drop-shadow border-1 border-gray" src={data.avatarUrl} alt="" />
                     {
                         !adjust ?
                             <span className="text-sm font-normal py-4">Avatar image</span>
@@ -75,12 +75,12 @@ function CustomerDetail({ type }: { type: "nothing"|"adjust" }) {
                     {
                         !adjust ?
                             <>
-                                <p className="font-bold text-super-small inline">Name: <span className="text-super-small inline font-normal">{name}</span></p>
+                                <p className="font-bold text-super-small inline">Name: <span className="text-super-small inline font-normal">{data.firstName + " " + data.lastName}</span></p>
                                 <p className="font-bold text-super-small inline">Birth: <span className="text-super-small inline font-normal">{birth}</span></p>
                                 <p className="font-bold text-super-small inline">Address: <span className="text-super-small inline font-normal">{address}</span></p>
-                                <p className="font-bold text-super-small inline">Email: <span className="text-super-small inline font-normal">HiBuiTienDuc@gmail.com</span></p>
-                                <p className="font-bold text-super-small inline">Phone: <span className="text-super-small inline font-normal">{phone}</span></p>
-                                <p className="font-bold text-super-small inline">SSN: <span className="text-super-small inline font-normal">010203thi04diemvxl</span></p>
+                                <p className="font-bold text-super-small inline">Email: <span className="text-super-small inline font-normal">{data.email}</span></p>
+                                <p className="font-bold text-super-small inline">Phone: <span className="text-super-small inline font-normal">{data.phone}</span></p>
+                                <p className="font-bold text-super-small inline">SSN: <span className="text-super-small inline font-normal">{data.accountId}</span></p>
                             </>
                             :
                             <>
@@ -124,8 +124,7 @@ function CustomerDetail({ type }: { type: "nothing"|"adjust" }) {
             </div>
             <div className="w-full flex justify-between items-start px-4 py-2">
                 <div className="w-full flex flex-col items-start">
-                    <p className="font-semibold text-super-small inline">RFID: <span className="text-super-small inline font-normal">ABCJAXMINE</span></p>
-                    <p className="font-semibold text-super-small inline">Total Transportations: <span className="text-super-small inline font-normal">1</span></p>
+                    <p className="font-semibold text-super-small inline">Total Transportations: <span className="text-super-small inline font-normal">{data.vehicles.length}</span></p>
                 </div>
                 <div className="w-full flex flex-col items-start">
                     {

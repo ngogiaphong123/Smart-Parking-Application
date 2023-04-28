@@ -16,7 +16,7 @@ function GeneralPage() {
         <Header />
         {/* mt for Header 16 */}
         {/* Start coding body here */}
-        <div className="w-full h-fit mt-16 flex items-start">
+        <div className="w-full h-full mt-16 bg-sky-100 flex items-start">
             <div className="md:block hidden">
                 {
                     user.role === 'admin' ? <SidebarAdmin /> : <SidebarCustomer />
@@ -27,7 +27,7 @@ function GeneralPage() {
             </div>
         </div>
         {
-            user.role !== 'admin' && location.pathname === '/customer' &&
+            user.role !== 'admin' && location.pathname.includes('/customer')  &&
             <OrderModal />
         }
     </>);

@@ -8,18 +8,23 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper";
 import CustomerVehicleCard from '../../components/ForHomeAndParkingPage/CustomerVehicleCard/CustomerVehicleCard';
 import { motion } from 'framer-motion'
-import {pageMotionTime} from '../../configs'
-import OrderDetail from '../../components/OrderDetail/OrderDetail';
-import socket from '../../utils/socket';
+import { pageMotionTime } from '../../configs'
 import { useSelector } from 'react-redux';
-import { UserStore } from '../../redux/selectors';
-import { parkingSlotChannelLinkName } from '../../redux/slices/ParkingSlotsSlice';
+import { LogsStore, UserStore } from '../../redux/selectors';
+import useParkingSlotsSocket from '../../utils/hooks/useParkingSlotsSocket';
+import useGetLogs from '../../utils/hooks/useGetLogs';
 function HomeAndParkingPage() {
     const user = useSelector(UserStore).user
     const swiperRef = useRef<any>(null)
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [receiveData, setReceiveData] = useState(false)
-    const [parkingSlots, setParkingSlots] = useState<any>([])
+    const parkingSlots = useParkingSlotsSocket()
+    const [currPage, setCurrPage] = useState(1)
+    const [totalPage, setTotalPage] = useState<boolean | number>(false)
+    const logs = useSelector(LogsStore).logs
+    useGetLogs({
+        currPage, setTotalPage,
+        paidState:"unpaidWithNoDate"
+    })
     const handleIncreaseIndex = useCallback(() => {
         setCurrentIndex((prev) => {
             if (prev < 5) {
@@ -68,38 +73,6 @@ function HomeAndParkingPage() {
             window.removeEventListener('resize', handleSwiperRes);
         }
     }, [])
-
-    useEffect(()=>{
-        socket.on(parkingSlotChannelLinkName, (res:any)=>{
-            if(res.status==="Success")
-            {
-                setParkingSlots((prev:any)=>{
-                    if(prev.length===0)
-                        return [...res.data]
-                    else {
-                        const updateParkingSlot = res.data
-                        let newArray = prev.map((item:any, index:number)=>{
-                            if(updateParkingSlot.parkingSlotId===item.parkingSlotId)
-                                return updateParkingSlot
-                            else return item
-                        })
-                    }
-                })
-                setReceiveData((prev)=>!prev)
-            }
-        })
-
-        return ()=>{
-            socket.off(parkingSlotChannelLinkName)
-        }
-    },[receiveData])
-    
-    useEffect(()=>{
-        socket.emit(parkingSlotChannelLinkName, {
-            "page" : 0,
-            "limit" : 4
-        })
-    },[])
 
     return (<>
         <motion.div
@@ -156,10 +129,10 @@ function HomeAndParkingPage() {
             >
                 <div className="w-full min-h-full gap-2 my-12">
                     {
-                        parkingSlots.map((parkingSlot:any, index:number)=>{
-                            return(
+                        parkingSlots.map((parkingSlot: any, index: number) => {
+                            return (
                                 <SwiperSlide key={index}>
-                                    <ParkingSlotCard data={parkingSlot} index={index}/>
+                                    <ParkingSlotCard data={parkingSlot} index={index} />
                                 </SwiperSlide>
                             )
                         })
@@ -169,19 +142,20 @@ function HomeAndParkingPage() {
             {
                 user.role === 'admin' &&
                 <>
-                <div className="w-full my-2 mt-4 h-8 flex justify-between items-center " >
-                    <span className="text-sm text-gray-500 font-bold capitalize">
-                        Current parking slots
-                    </span>
-                </div>
-                <div className="w-full lg:w-1/2 min-h-0 flex flex-col gap-2 max-h-[400px] overflow-auto p-4">
-                    {/* <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" /> */}
-                </div>
+                    <div className="w-full my-2 mt-4 h-8 flex justify-between items-center " >
+                        <span className="text-sm text-gray-500 font-bold capitalize">
+                            Current parking slots information
+                        </span>
+                    </div>
+                    <div className="w-full lg:w-1/2 min-h-0 flex flex-col gap-2 max-h-[400px] overflow-auto p-4">
+                        {
+                            logs&&logs.map((log: any, index: number) => {
+                                return (
+                                    <CustomerVehicleCard key={index} data={log} type={log.timeOut?"paid":"unpaid"} />
+                                )
+                            })
+                        }
+                    </div>
                 </>
             }
         </motion.div>
