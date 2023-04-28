@@ -3,7 +3,7 @@ import parking_vehicle from '../../../assets/VehicleImage/parking_vehicle.png'
 import trashbin from '../../../assets/icon/trashbin.svg'
 import cancel from '../../../assets/icon/cancel.svg'
 
-function TransportCard({slot, data, setTransport, scrollToView}:{slot?:any, data?:any, setTransport?:any, scrollToView?:any}) {
+function TransportCard({noAdjustSignal=false, slot, data, setTransport, scrollToView}:{noAdjustSignal?:boolean, slot?:any, data?:any, setTransport?:any, scrollToView?:any}) {
     return (<>
         <div onClick={()=>{
             if(setTransport)
@@ -28,17 +28,20 @@ function TransportCard({slot, data, setTransport, scrollToView}:{slot?:any, data
                 }
                 </p>
             </div>
-            <div className="h-full my-auto flex items-center gap-2">
-                <div className="cursor-pointer hover:bg-[#CECECE] transition duration-100 ease-in-out flex justify-center items-center rounded-md w-6 h-6 bg-[#D9D9D9]">
-                    <img src={cancel} alt="" className="w-4 h-4 " />
+            {
+                !noAdjustSignal&&
+                <div className="h-full my-auto flex items-center gap-2">
+                    <div className="cursor-pointer hover:bg-[#CECECE] transition duration-100 ease-in-out flex justify-center items-center rounded-md w-6 h-6 bg-[#D9D9D9]">
+                        <img src={cancel} alt="" className="w-4 h-4 " />
+
+                    </div>
+                    <div className="cursor-pointer hover:bg-[#F35B52] transition duration-100 ease-in-out flex justify-center items-center rounded-md w-6 h-6 bg-[#F7665E]">
+                        <img src={trashbin} alt="" className="w-4 h-4 " />
+
+                    </div>
 
                 </div>
-                <div className="cursor-pointer hover:bg-[#F35B52] transition duration-100 ease-in-out flex justify-center items-center rounded-md w-6 h-6 bg-[#F7665E]">
-                    <img src={trashbin} alt="" className="w-4 h-4 " />
-
-                </div>
-
-            </div>
+            }
         </div>
     </>);
 }

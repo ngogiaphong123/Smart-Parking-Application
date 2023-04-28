@@ -24,7 +24,7 @@ function ParkingSlotCard({ data, index }: { data?: any, index: number }) {
     return (<>
         <div onClick={() => {
             if (user.role === "customer" && data.status === "AVAILABLE")
-                dispatch(OrderModalSlice.actions.handleOpen({parkingSlotData:data}))
+                dispatch(OrderModalSlice.actions.handleOpen({parkingSlotData:data, parkingSlotIndex:index}))
         }} 
         onMouseEnter={()=>{
             setStop(false)

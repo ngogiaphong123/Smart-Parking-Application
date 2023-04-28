@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { OrderModalStore, UserStore } from "../../../redux/selectors";
+import { OrderModalStore } from "../../../redux/selectors";
 import OrderModalSlice from "../../../redux/slices/modals/OrderModalSlice";
 import { AnimatePresence, motion } from "framer-motion";
 import { pageMotionTime } from "../../../configs";
@@ -8,8 +8,6 @@ import OrderDetail from "../../OrderDetail/OrderDetail";
 
 function OrderModal() {
     const orderModalIsShow = useSelector(OrderModalStore).show
-    const parkingSlotData = useSelector(OrderModalStore).parkingSlotData
-    const user = useSelector(UserStore).user
     const dispatch = useDispatch<any>()
     return (<>
         <AnimatePresence mode="wait">

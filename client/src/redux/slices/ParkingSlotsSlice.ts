@@ -23,4 +23,5 @@ const ParkingSlotsSlice = createSlice({
 })
 
 export const parkingSlotChannelLinkName = "parking-slot-channel"
+export const reserveSlotChannelLinkName = "parking-slot-reserved"
 export default ParkingSlotsSlice
