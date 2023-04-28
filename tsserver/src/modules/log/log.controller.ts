@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { GetLogsDateInput, GetLogsInput } from "./log.schema";
-import { getLogsDateService as getLogsDateService, getLogsService, getMyLogService } from "./log.service";
+import { getLogsCustomerDateService, getLogsDateService as getLogsDateService, getLogsService, getMyLogService } from "./log.service";
 import { StatusCodes } from "http-status-codes";
 import ResponseBody from "../../utils/responseBody";
 
@@ -29,4 +29,21 @@ export const getLogsDateController = async (req: Request<{},{}, GetLogsDateInput
     }
     const result = await getLogsDateService(input);
     res.status(StatusCodes.OK).send(new ResponseBody("Success", "Get logs successfully", result));
+}
+
+export const getLogsCustomerDateController = async (req: Request<{},{}, GetLogsDateInput>, res: Response) => {
+    const accountId = res.locals.user.accountId;
+    const {start} = req.body;
+    const {end} = req.body;
+    const {page, limit} = req.body;
+    // convert date to timestamp
+    const input = {
+        accountId : accountId,
+        start: new Date(start),
+        end: new Date(end),
+        page : page,
+        limit : limit
+    }
+    const result = await getLogsCustomerDateService(input);
+    res.status(StatusCodes.OK).send(new ResponseBody("Success", "Get customers logs successfully", result));
 }

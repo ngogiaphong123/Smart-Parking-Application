@@ -72,11 +72,11 @@ export const reservedParkingSlotService = async (parkingSlotId : string, account
         return null;
     })
     if (!vehicle) {
-        const res = new ResponseBody("Error", "Vehicle is not valid",null);
+        const res = new ResponseBody("Error", "No vehicle found",null);
         return res;
     }
     else {
-        // only 1 vehicle can be reserved
+        // only 1 vehicle can be reserved or parking in a parking slot
         const checkReserved = await prisma.parkingSlot.findFirst({
             where : {
                 reservedById : vehicle.ownerId,
