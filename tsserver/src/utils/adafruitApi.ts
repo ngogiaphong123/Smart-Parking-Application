@@ -52,23 +52,25 @@ export const fanCalling = () => {
 
 export const rfidCalling = () => {
     const prevData : any = [];
+    let first = true;
     setInterval(async () => {
         const limit = 1;
         const data = await getRfidFromAdafruitService(limit);
-        // avoid duplicate data
+        if (first) {
+            prevData.push(data[0]);
+            first = false;
+        }
         if(data) {
-            if (prevData.length === 0) {
+            // check if data id is in prevData
+            const check = prevData.find((element : any) => element.id === data[0].id);
+            if(!check) {
                 prevData.push(data[0]);
-            } else {
-                if (prevData[0].id !== data[0].id) {
-                    prevData.pop();
-                    prevData.push(data[0]);
-                    await verifyRfid(data[0].value);
-                }
+                console.log("RFID: ", data[0].value);
+                const result = await verifyRfid(data[0].value);
             }
         }
         else {
             console.log("Error");
         }
-    },1000);
+    },2500);
 }
