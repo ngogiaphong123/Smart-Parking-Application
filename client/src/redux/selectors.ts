@@ -6,4 +6,7 @@ export const MenuStore = (state:any) => state.menu
 export const ResponsiveStore = (state:any) => state.responsive
 export const OrderModalStore = (state:any) => state.orderModal
 export const SmallNotificationStore = (state:any) => state.smallNotificationModal
+export const LogsStore = (state:any) => state.logs
+export const CustomersStore = (state:any) => state.customers
+export const ParkingSlotsStore = (state:any) => state.parkingSlots
 

@@ -1,17 +1,27 @@
-import { memo, useRef, useState, useEffect } from 'react'
+import { memo, useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import DashboardToggle from '../../components/ForDashboardAdminPage/DashboardToggle/DashboardToggle';
 import TemperatureChart from '../../components/ForDashboardAdminPage/TemperatureChart/TemperatureChart';
 import LightChart from '../../components/ForDashboardAdminPage/LightChart/LightChart';
 import { pageMotionTime } from '../../configs';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import clsx from 'clsx';
+import { v4 as uuidv4 } from 'uuid'
 
 function DashboardAdminPage() {
-    const tempToggleRef = useRef<any>(null)
     const [indexArray, setIndexArray] = useState<any>([1, 2, 3])
+    const [indexArray2, setIndexArray2] = useState<any>([1, 2])
+    const [overHeating, setOverHeating] = useState(false)
     const [dragDropSignal, setDragDropSignal] = useState({ signal: false, result: false })
+    const [dragDropSignal2, setDragDropSignal2] = useState({ signal: false, result: false })
     const handleDragEnd = (result: any) => {
         setDragDropSignal((prev: any) => ({
+            signal: !prev.signal,
+            result: result
+        }))
+    }
+    const handleDragEnd2 = (result: any) => {
+        setDragDropSignal2((prev: any) => ({
             signal: !prev.signal,
             result: result
         }))
@@ -23,13 +33,28 @@ function DashboardAdminPage() {
             if (destination.index !== source.index) {
                 setIndexArray((prev: any) => {
                     const updatedArray = [...prev];
-                    const [removedItem] = updatedArray.splice(source.index-1, 1);
-                    updatedArray.splice(destination.index-1, 0, removedItem);
+                    const [removedItem] = updatedArray.splice(source.index - 1, 1);
+                    updatedArray.splice(destination.index - 1, 0, removedItem);
                     return updatedArray;
                 })
             }
         }
     }, [dragDropSignal.signal])
+
+    useEffect(() => {
+        if (dragDropSignal2.result) {
+            // @ts-ignore
+            const { destination, source } = dragDropSignal2.result
+            if (destination.index !== source.index) {
+                setIndexArray2((prev: any) => {
+                    const updatedArray = [...prev];
+                    const [removedItem] = updatedArray.splice(source.index - 1, 1);
+                    updatedArray.splice(destination.index - 1, 0, removedItem);
+                    return updatedArray;
+                })
+            }
+        }
+    }, [dragDropSignal2.signal])
     return (<>
         <motion.div
             initial={{
@@ -60,13 +85,13 @@ function DashboardAdminPage() {
                         (provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps} className="w-full flex justify-start items-center gap-8 py-6 flex-wrap md:flex-none " >
                                 {
-                                    indexArray.map((value: number, index:number) => {
+                                    indexArray.map((value: number, index: number) => {
                                         if (value === 1)
-                                            return <DashboardToggle index={index+1} ref={tempToggleRef} kind='temperature' key={"toggle1"} />
+                                            return <DashboardToggle index={index + 1} kind='temperature' key={"toggle1"} overHeating={overHeating} />
                                         else if (value === 2)
-                                            return <DashboardToggle index={index+1} kind='water' key={"toggle2"} />
+                                            return <DashboardToggle index={index + 1} kind='water' key={"toggle2"} />
                                         else if (value === 3)
-                                            return <DashboardToggle index={index+1} kind='light&music' key={"toggle3"} />
+                                            return <DashboardToggle index={index + 1} kind='light&music' key={"toggle3"} />
                                     })
                                 }
                                 {provided.placeholder}
@@ -75,36 +100,33 @@ function DashboardAdminPage() {
                     }
                 </Droppable>
             </DragDropContext>
-            <div className="w-full flex justify-between items-center " >
-                <span className="text-md text-title-inPage font-semibold capitalize">
-                    Car Parking Temperature
-                </span>
-            </div>
 
-            <div className="w-full flex justify-between items-center mt-4" >
-                <span className="text-md text-[#008000] font-semibold capitalize pr-8 inline">
-                    Fire warning - Safe
-                </span>
-                {/* <span className="text-md text-yellow-300 font-semibold capitalize pr-8 inline underline">
-                Fire warning - Need Fan
-                </span>
-                <span className="text-md text-[red] font-semibold capitalize pr-8 inline underline decoration-double">
-                Fire warning - Danger!
-                </span> */}
-            </div>
-            <div className="w-full flex justify-between items-center my-8 pr-14" >
-                <TemperatureChart tempToggleRef={tempToggleRef} />
-            </div>
-            <div className="w-full flex justify-between items-center " >
-                <span className="text-md text-title-inPage font-semibold capitalize">
-                    Car Parking Light
-                </span>
-            </div>
 
-            <div className="w-full flex justify-between items-center my-8 pr-14" >
-                {/* <LightChart/> */}
-            </div>
-        </motion.div>
+            <DragDropContext onDragEnd={handleDragEnd2}>
+                <Droppable droppableId={"place to drop2"} direction={"vertical"} type="column">
+                    {
+                        (provided) => (
+                            <div ref={provided.innerRef} {...provided.droppableProps} className="w-full h-fit">
+                                {
+                                    indexArray2.map((value: number, index: number) => {
+                                        if (value === 1)
+                                            return (<div className="w-full h-fit" key={index}>
+                                                <TemperatureChart overHeating={overHeating} key={index} setOverHeating={setOverHeating} index={index} />
+                                            </div>)
+                                        else if (value === 2)
+                                            return (<div className="w-full h-fit" key={index}>
+                                                <LightChart key={index} index={index} />
+                                            </div>)
+                                    })
+                                }
+                                {provided.placeholder}
+                            </div>
+                        )
+                    }
+                </Droppable>
+            </DragDropContext>
+
+        </motion.div >
     </>);
 }
 

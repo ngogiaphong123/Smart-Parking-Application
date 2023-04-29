@@ -8,6 +8,9 @@ import MenuSlice from './slices/MenuSlice';
 import ResponsiveSlice from './slices/ResponsiveSlice';
 import OrderModalSlice from './slices/modals/OrderModalSlice';
 import SmallNotificationSlice from './slices/modals/SmallNotificationSlice';
+import LogsSlice from './slices/LogsSlice';
+import CustomersSlice from './slices/CustomersSlice';
+import ParkingSlotsSlice from './slices/ParkingSlotsSlice';
 
 
 const store = configureStore({
@@ -20,6 +23,9 @@ const store = configureStore({
         responsive: ResponsiveSlice.reducer,
         orderModal: OrderModalSlice.reducer,
         smallNotificationModal: SmallNotificationSlice.reducer,
+        logs: LogsSlice.reducer,
+        customers: CustomersSlice.reducer,
+        parkingSlots: ParkingSlotsSlice.reducer,
     }
 })
 

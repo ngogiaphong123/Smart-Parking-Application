@@ -8,12 +8,26 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper";
 import CustomerVehicleCard from '../../components/ForHomeAndParkingPage/CustomerVehicleCard/CustomerVehicleCard';
 import { motion } from 'framer-motion'
-import {pageMotionTime} from '../../configs'
-import OrderDetail from '../../components/OrderDetail/OrderDetail';
+import { pageMotionTime } from '../../configs'
+import { useSelector } from 'react-redux';
+import { LogsStore, UserStore } from '../../redux/selectors';
+import useParkingSlotsSocket from '../../utils/hooks/useParkingSlotsSocket';
+import useGetLogs from '../../utils/hooks/useGetLogs';
+import useLoadingForSocket from '../../utils/hooks/useLoadingForSocket';
+import Spinner from '../../components/Spinner/Spinner';
 function HomeAndParkingPage() {
-    const [role, setRole] = useState('user')
+    const user = useSelector(UserStore).user
     const swiperRef = useRef<any>(null)
     const [currentIndex, setCurrentIndex] = useState(0);
+    const parkingSlots = useParkingSlotsSocket()
+    const {parkingSlotsLoading} = useLoadingForSocket()
+    const [currPage, setCurrPage] = useState(1)
+    const [totalPage, setTotalPage] = useState<boolean | number>(false)
+    const logs = useSelector(LogsStore).logs
+    useGetLogs({
+        currPage, setTotalPage,
+        paidState:"unpaidWithNoDate"
+    })
     const handleIncreaseIndex = useCallback(() => {
         setCurrentIndex((prev) => {
             if (prev < 5) {
@@ -98,7 +112,7 @@ function HomeAndParkingPage() {
                 </span>
                 <div className="w-48 flex justify-between items-center">
                     <span className="text-sm text-gray-500 font-bold capitalize">
-                        Order: 1-6
+                        Order: 1-4
                     </span>
                     <ArrowsLR handleIncreaseIndex={handleIncreaseIndex} handleDecreaseIndex={handleDecreaseIndex} />
                 </div>
@@ -117,42 +131,38 @@ function HomeAndParkingPage() {
                 onSlideChange={handleSlideChange}
             >
                 <div className="w-full min-h-full gap-2 my-12">
-                    <SwiperSlide key={1}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
-                    <SwiperSlide key={2}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
-                    <SwiperSlide key={3}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
-                    <SwiperSlide key={4}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
-                    <SwiperSlide key={5}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
-                    <SwiperSlide key={6}>
-                        <ParkingSlotCard />
-                    </SwiperSlide>
+                    {
+                        !parkingSlotsLoading?parkingSlots.map((parkingSlot: any, index: number) => {
+                            return (
+                                <SwiperSlide key={index}>
+                                    <ParkingSlotCard data={parkingSlot} index={index} />
+                                </SwiperSlide>
+                            )
+                        })
+                        :
+                        <div className="w-full h-full flex justify-center items-center">
+                            <Spinner/>
+                        </div>
+                    }
                 </div>
             </Swiper>
             {
-                role === 'admin' &&
+                user.role === 'admin' &&
                 <>
-                <div className="w-full my-2 mt-4 h-8 flex justify-between items-center " >
-                    <span className="text-sm text-gray-500 font-bold capitalize">
-                        Current parking slots
-                    </span>
-                </div>
-                <div className="w-full lg:w-1/2 min-h-0 flex flex-col gap-2 max-h-[400px] overflow-auto p-4">
-                    <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
-                    <CustomerVehicleCard type="unpaid" />
-                </div>
+                    <div className="w-full my-2 mt-4 h-8 flex justify-between items-center " >
+                        <span className="text-sm text-gray-500 font-bold capitalize">
+                            Current parking slots information
+                        </span>
+                    </div>
+                    <div className="w-full lg:w-1/2 min-h-0 flex flex-col gap-2 max-h-[400px] overflow-auto p-4">
+                        {
+                            logs&&logs.map((log: any, index: number) => {
+                                return (
+                                    <CustomerVehicleCard key={index} data={log} type={log.timeOut?"paid":"unpaid"} />
+                                )
+                            })
+                        }
+                    </div>
                 </>
             }
         </motion.div>
