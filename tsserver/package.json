@@ -6,8 +6,6 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --exit-child src/index.ts",
     "start": "node build/index.js",
-    "prepare": "npx prisma generate",
-    "postinstall": "tsc",
     "studio": "npx prisma studio",
     "resetDB": "npx ts-node ./src/utils/resetDB.ts"
   },

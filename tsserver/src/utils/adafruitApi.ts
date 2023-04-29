@@ -56,11 +56,11 @@ export const rfidCalling = () => {
     setInterval(async () => {
         const limit = 1;
         const data = await getRfidFromAdafruitService(limit);
-        if (first) {
-            prevData.push(data[0]);
-            first = false;
-        }
         if(data) {
+            if (first) {
+                prevData.push(data[0]);
+                first = false;
+            }
             // check if data id is in prevData
             const check = prevData.find((element : any) => element.id === data[0].id);
             if(!check) {
