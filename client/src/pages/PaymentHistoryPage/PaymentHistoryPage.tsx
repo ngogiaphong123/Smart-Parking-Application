@@ -12,6 +12,7 @@ import useGetLogs from '../../utils/hooks/useGetLogs';
 
 function PaymentHistoryPage() {
     const [paidState, setPaidState] = useState<any>("paid");
+    const [transport, setTransport] = useState<any>(false)
     const [currPage, setCurrPage] = useState(1)
     const [totalPage, setTotalPage] = useState<boolean | number>(false)
     const [date, setDate] = useState<any>(() => {
@@ -95,8 +96,12 @@ function PaymentHistoryPage() {
             className="h-fit min-w-[370px] mb-4 drop-shadow-xl flex overflow-hidden justify-center"
         >
             {
-                user.role === "admin" &&
+                user.role === "admin" ?
                 <CalendarForApp date={date} setDate={setDate} />
+                :
+                <>
+
+                </>
             }
         </div>
     </motion.div>);
