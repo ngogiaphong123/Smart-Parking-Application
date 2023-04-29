@@ -34,7 +34,7 @@ function OrderModal() {
                         transition={{
                             duration: pageMotionTime
                         }}
-                        className="w-[100%] max-w-[360px] sm:max-w-[600px] h-fit fixed -mt-32  shadow-md "
+                        className="w-[100%] max-w-[360px] sm:max-w-[600px] h-fit fixed -mt-16  shadow-md "
                     >
                         <OrderDetail/>
                     </motion.div>
