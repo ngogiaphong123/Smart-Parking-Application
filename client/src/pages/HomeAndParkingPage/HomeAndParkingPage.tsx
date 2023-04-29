@@ -13,11 +13,14 @@ import { useSelector } from 'react-redux';
 import { LogsStore, UserStore } from '../../redux/selectors';
 import useParkingSlotsSocket from '../../utils/hooks/useParkingSlotsSocket';
 import useGetLogs from '../../utils/hooks/useGetLogs';
+import useLoadingForSocket from '../../utils/hooks/useLoadingForSocket';
+import Spinner from '../../components/Spinner/Spinner';
 function HomeAndParkingPage() {
     const user = useSelector(UserStore).user
     const swiperRef = useRef<any>(null)
     const [currentIndex, setCurrentIndex] = useState(0);
     const parkingSlots = useParkingSlotsSocket()
+    const {parkingSlotsLoading} = useLoadingForSocket()
     const [currPage, setCurrPage] = useState(1)
     const [totalPage, setTotalPage] = useState<boolean | number>(false)
     const logs = useSelector(LogsStore).logs
@@ -129,13 +132,17 @@ function HomeAndParkingPage() {
             >
                 <div className="w-full min-h-full gap-2 my-12">
                     {
-                        parkingSlots.map((parkingSlot: any, index: number) => {
+                        !parkingSlotsLoading?parkingSlots.map((parkingSlot: any, index: number) => {
                             return (
                                 <SwiperSlide key={index}>
                                     <ParkingSlotCard data={parkingSlot} index={index} />
                                 </SwiperSlide>
                             )
                         })
+                        :
+                        <div className="w-full h-full flex justify-center items-center">
+                            <Spinner/>
+                        </div>
                     }
                 </div>
             </Swiper>

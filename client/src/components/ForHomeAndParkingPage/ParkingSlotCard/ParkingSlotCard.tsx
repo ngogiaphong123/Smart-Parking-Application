@@ -14,30 +14,45 @@ function ParkingSlotCard({ data, index }: { data?: any, index: number }) {
     const user = useSelector(UserStore).user
     const [stop, setStop] = useState(false)
     useEffect(() => {
-        const handleStop = setTimeout(() => {
-            setStop(true)
-        }, 4000)
-        return () => {
-            clearTimeout(handleStop)
+        if(data.status!=="AVAILABLE"){
+            const handleStop = setTimeout(() => {
+                setStop(true)
+            }, 4000)
+            return () => {
+                clearTimeout(handleStop)
+            }
         }
-    }, [stop]);
+    }, [stop, data.status]);
     return (<>
         <div onClick={() => {
             if (user.role === "customer" && data.status === "AVAILABLE")
-                dispatch(OrderModalSlice.actions.handleOpen({parkingSlotData:data, parkingSlotIndex:index}))
-        }} 
-        onMouseEnter={()=>{
-            setStop(false)
+                dispatch(OrderModalSlice.actions.handleOpen({ parkingSlotData: data, parkingSlotIndex: index }))
         }}
-        className="group w-fit cursor-pointer">
+            onMouseEnter={() => {
+                setStop(false)
+            }}
+            className="group w-fit cursor-pointer">
             <div id="main" className="gap-3 w-64 h-96 rounded-lg shadow-lg bg-white ease-linear transition duration-150 hover:bg-blue-300">
                 {
-                    data&&data.status !== "AVAILABLE" &&
+                    data && data.status !== "AVAILABLE" &&
                     <>
                         <div className="group-hover:hidden flex flex-col justify-around w-full h-full">
                             <img id="car" className=" w-4/5  mx-auto mt-5 rounded-lg" src={stop ? car_stop_img : car_gif} />
-                            <div className="rounded-xl bg-sky-300 w-40 mx-auto mb-8 p-2">
-                                <p className="text-center text-white font-semibold">{data.status}</p>
+                            <div className="w-full h-fit flex-flex-col items-center justify-center">
+                                <div className="rounded-xl bg-sky-300 w-40 mx-auto mb-4 p-2">
+                                    <p className="text-center text-white font-semibold">{data.status}</p>
+                                </div>
+                                {
+                                    (() => {
+                                        let result = false
+                                        user.vehicles.forEach((vehicle: any) => {
+                                            if (vehicle.vehicleId === data.vehicle.vehicleId)
+                                                result = true
+                                        })
+                                        return result
+                                    })() &&
+                                    <p className="font-normal text-gray-500 text-center">By You</p>
+                                }
                             </div>
                         </div>
                         <div className="w-full h-full group-hover:flex hidden flex-col justify-around ">

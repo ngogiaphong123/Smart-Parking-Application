@@ -1,4 +1,4 @@
-import { memo, useState,useEffect } from 'react'
+import { memo, useState, useEffect } from 'react'
 import OrderModalSlice from '../../redux/slices/modals/OrderModalSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -10,6 +10,8 @@ import SmallNotificationSlice from '../../redux/slices/modals/SmallNotificationS
 import clsx from 'clsx';
 import socket from '../../utils/socket';
 import { reserveSlotChannelLinkName } from '../../redux/slices/ParkingSlotsSlice';
+import useLoadingForSocket from '../../utils/hooks/useLoadingForSocket';
+import Spinner from '../Spinner/Spinner';
 function OrderDetail() {
     // const [minutes, setMinutes] = useState(180)
     const dispatch = useDispatch<any>()
@@ -19,33 +21,31 @@ function OrderDetail() {
     const [transport, setTransport] = useState<any>(false)
     const user = useSelector(UserStore).user
     const [receiveData, setReceiveData] = useState(false)
+    const { reserveLoading, handleLoading } = useLoadingForSocket()
     // const convertHHMM = useCallback((minutes: number) => {
     //     const hours = Math.floor(minutes / 60);
     //     const mins = minutes % 60;
     //     return `${hours}h ${mins}m`;
     // }, [])
-    useEffect(()=>{
+    useEffect(() => {
         socket.on(reserveSlotChannelLinkName, (res: any) => {
-            console.log(res)
-            if(res.payload.status==="Success")
-            {
-                dispatch(SmallNotificationSlice.actions.handleOpen({type:"success", content:"Reserve slot successfully"}))
+            if (res.status === "Success") {
+                dispatch(SmallNotificationSlice.actions.handleOpen({ type: "success", content: "Reserve slot successfully" }))
                 dispatch(OrderModalSlice.actions.handleClose({}))
+                handleLoading(reserveSlotChannelLinkName, false)
             }
-            else
-            {
-                dispatch(SmallNotificationSlice.actions.handleOpen({type:"error", content:"Reserve slot failed"}))
+            else {
+                dispatch(SmallNotificationSlice.actions.handleOpen({ type: "error", content: "Reserve slot failed" }))
             }
-            setReceiveData(prev=>!prev)
+            setReceiveData(prev => !prev)
         })
         return () => {
             socket.off(reserveSlotChannelLinkName)
         }
-    },[receiveData])
+    }, [receiveData])
     const handleReserve = () => {
-        if(!transport) 
-        {
-            dispatch(SmallNotificationSlice.actions.handleOpen({type:"error", content:"Please choose a vehicle"}))
+        if (!transport) {
+            dispatch(SmallNotificationSlice.actions.handleOpen({ type: "error", content: "Please choose a vehicle" }))
             return
         }
 
@@ -54,6 +54,8 @@ function OrderDetail() {
             parkingSlotId: parkingSlotData.parkingSlotId,
             accountId: user.accountId
         })
+
+        handleLoading(reserveSlotChannelLinkName, true)
     }
     return (<>
         <div className="min-w-0 max-w-[600px] rounded-2xl drop-shadow-md flex flex-col bg-white p-4 light space-y-4">
@@ -77,32 +79,32 @@ function OrderDetail() {
                     <div className="w-full flex flex-col mt-4">
                         <div className="w-full h-full bg-blue-200 p-4 flex flex-col gap-4">
                             <span className={clsx("font-normal text-super-smal uppercase", {
-                                "text-gray-500": transport===false,
-                                "text-green-500": transport!==false
-                            })}>{transport?"Your vehicle: "+transport.numberPlate:"Choose your vehicle"}</span>
+                                "text-gray-500": transport === false,
+                                "text-green-500": transport !== false
+                            })}>{transport ? "Your vehicle: " + transport.numberPlate + ", " + transport.genre + ", " + transport.model : "Choose your vehicle"}</span>
                             {
                                 transport &&
-                                <span onClick={()=>{setTransport(false)}} className="cursor-pointer font-semibold text-super-small text-blue-500 uppercase w-fit">Choose another ?</span>
+                                <span onClick={() => { setTransport(false) }} className="cursor-pointer font-semibold text-super-small text-blue-500 uppercase w-fit">Choose another ?</span>
                             }
                             {
-                                transport===false ? 
-                                (user.vehicles.length>0?
-                                user.vehicles.map((vehicle:any, index:number) => {
-                                    let check = handleFindSlotNumFromVehicleId(vehicle.vehicleId, parkingSlots)
-                                    if(!check)
-                                        return <TransportCard noAdjustSignal slot={null} data={vehicle} setTransport={setTransport}/>
-                                })
-                                :
-                                <div className="w-full h-full flex justify-center items-center">
-                                    <span className="font-normal text-super-small text-gray-500 uppercase">You don't have any vehicle</span>
-                                </div>)
-                                :
-                                <TransportCard noAdjustSignal slot={parkingSlotIndex+1} data={transport}/>
+                                transport === false ?
+                                    (user.vehicles.length > 0 ?
+                                        user.vehicles.map((vehicle: any, index: number) => {
+                                            let check = handleFindSlotNumFromVehicleId(vehicle.vehicleId, parkingSlots)
+                                            if (!check)
+                                                return <TransportCard noAdjustSignal slot={null} data={vehicle} setTransport={setTransport} />
+                                        })
+                                        :
+                                        <div className="w-full h-full flex justify-center items-center">
+                                            <span className="font-normal text-super-small text-gray-500 uppercase">You don't have any vehicle</span>
+                                        </div>)
+                                    :
+                                    <TransportCard noAdjustSignal slot={parkingSlotIndex + 1} data={transport} transport={transport} />
                             }
                             <span className="font-normal text-super-small text-gray-500 uppercase">parking price per hour</span>
                             <div className="flex justify-between">
                                 <span className="font-bold text-super-small">Price: {parkingSlotData.pricePerHour}$/h</span>
-                                <span className="font-bold text-super-small">Slot: {parkingSlotIndex+1}</span>
+                                <span className="font-bold text-super-small">Slot: {parkingSlotIndex + 1}</span>
                             </div>
                         </div>
                         <div className="w-full p-2 border-l-2 border-blue-500 bg-blue-300 flex items-center justify-between">
@@ -114,7 +116,12 @@ function OrderDetail() {
             </div>
             <div className="w-full h-12 flex justify-center items-center">
                 <div onClick={handleReserve} className="w-36 rounded-xl bg-blue-400 transition duration-150 hover:bg-blue-500 cursor-pointer h-8 text-white font-semibold flex justify-center items-center">
-                    Reserve
+                    {
+                    reserveLoading?
+                    <Spinner/>
+                    :
+                    "Reserve"
+                    }
                 </div>
             </div>
         </div>

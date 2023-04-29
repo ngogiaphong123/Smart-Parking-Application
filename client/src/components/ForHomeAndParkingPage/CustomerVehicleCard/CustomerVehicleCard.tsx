@@ -1,7 +1,6 @@
 import {memo} from 'react'
-import handleBalanceCalFromDBS from '../../../utils/handleBalanceCalFromDBS';
 import handleDateShowingFromDBS from '../../../utils/handleDateShowingFromDBS';
-
+import handleBalanceCalFromDBS from '../../../utils/handleBalanceCalFromDBS';
 function CustomerVehicleCard({type, data}: {data:any, type: "paid"|"unpaid"}) {
     return ( <>
         <div className="w-full cursor-pointer bg-white hover:bg-gray transition duration-200 ease-in-out rounded-xl p-4  flex items-center drop-shadow-md">
@@ -12,9 +11,18 @@ function CustomerVehicleCard({type, data}: {data:any, type: "paid"|"unpaid"}) {
             </div>
             <div className="flex flex-col justify-center items-center flex-[2_2_0]">
                 <span className="font-semibold text-super-small">{data.vehicle.user.firstName + " " + data.vehicle.user.lastName}</span>
-                <p className="font-thin text-super-small capitalize">From: {handleDateShowingFromDBS(data.timeIn)}{data.timeOut?" to "+handleDateShowingFromDBS(data.timeOut):""}</p>
-                <div className="p-1 min-w-0 max-w-[100px] rounded-md bg-[#81D0DF] flex justify-center items-center">
-                    <span className="text-white text-ant uppercase truncate">{data.vehicle.numberPlate}</span>
+                <p className="font-thin text-super-small capitalize">From: {handleDateShowingFromDBS
+                (data.timeIn)}{data.timeOut?" to "+handleDateShowingFromDBS(data.timeOut):""}</p>
+                <div className="w-fit h-fit flex space-x-2">
+                    <div className="p-1 min-w-0 max-w-[100px] rounded-md bg-[#81D0DF] flex justify-center items-center">
+                        <span className="text-white text-ant uppercase truncate">{data.vehicle.genre}</span>
+                    </div>
+                    <div className="p-1 min-w-0 max-w-[100px] rounded-md bg-[#81D0DF] flex justify-center items-center">
+                        <span className="text-white text-ant uppercase truncate">{data.vehicle.model}</span>
+                    </div>
+                    <div className="p-1 min-w-0 max-w-[100px] rounded-md bg-[#81D0DF] flex justify-center items-center">
+                        <span className="text-white text-ant uppercase truncate">{data.vehicle.numberPlate}</span>
+                    </div>
                 </div>
             </div>
             <div className="flex flex-col flex-1 justify-center items-center border-l-1 border-gray">

@@ -45,7 +45,7 @@ function UserProfilePage() {
                         user.vehicles ? user.vehicles.map((vehicle: any, index: number) => {
                             return <TransportCard setTransport={setTransport} scrollToView={()=>{
                                 viewScrollRef.current?.scrollIntoView({behavior: "smooth"})
-                            }} slot={handleFindSlotNumFromVehicleId(vehicle.vehicleId, parkingSlots)} data={vehicle} key={index} />
+                            }} slot={handleFindSlotNumFromVehicleId(vehicle.vehicleId, parkingSlots)} data={vehicle} key={index} transport={transport}/>
                         })
                             : <div className="w-full h-full flex justify-center items-center">
                                 <span className="text-md text-title-inPage font-semibold capitalize">

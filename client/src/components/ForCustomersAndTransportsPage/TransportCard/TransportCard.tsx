@@ -2,15 +2,18 @@ import { memo, useEffect } from 'react'
 import parking_vehicle from '../../../assets/VehicleImage/parking_vehicle.png'
 import trashbin from '../../../assets/icon/trashbin.svg'
 import cancel from '../../../assets/icon/cancel.svg'
+import clsx from 'clsx';
 
-function TransportCard({noAdjustSignal=false, slot, data, setTransport, scrollToView}:{noAdjustSignal?:boolean, slot?:any, data?:any, setTransport?:any, scrollToView?:any}) {
+function TransportCard({noAdjustSignal=false, slot, data, setTransport, scrollToView, transport}:{noAdjustSignal?:boolean, slot?:any, data?:any, setTransport?:any, scrollToView?:any, transport?:any}) {
     return (<>
         <div onClick={()=>{
             if(setTransport)
                 setTransport(data)
             if(scrollToView)
                 scrollToView()
-        }} className="w-full cursor-pointer bg-white hover:bg-gray transition duration-200 ease-in-out rounded-xl p-4  flex items-center drop-shadow-md">
+        }} className={clsx("w-full cursor-pointer bg-white hover:bg-gray transition duration-200 ease-in-out rounded-xl p-4  flex items-center drop-shadow-md",{
+            "border-2 border-[#81D0DF]":transport?transport.vehicleId===data?.vehicleId:false
+        })}>
             <div className="flex flex-1">
                 <div className="flex justify-center items-center border-1 border-gray rounded-full">
                     <img src={parking_vehicle} alt="" className="w-16 h-16 p-2  " />
