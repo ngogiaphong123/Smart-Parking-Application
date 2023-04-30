@@ -101,82 +101,19 @@ export const verifyRfid = async (rfidNumber: string) => {
         }
         // create new log, mutex
         const release = await mutex.acquire();
-        let updateParkingSlot;
         try {
-            await prisma.logs.create({
-                data: {
-                    vehicleId: vehicle.vehicleId,
-                    parkingSlotId: availableParkingSlot.parkingSlotId,
-                    state: "IN"
-                }
-            })
-            // update parking slot
-            updateParkingSlot = await prisma.parkingSlot.update({
-                where: {
-                    parkingSlotId: availableParkingSlot.parkingSlotId
-                },
-                data: {
-                    status: "OCCUPIED",
-                    reservedById: vehicle.ownerId,
-                    vehicleId: vehicle.vehicleId,
-                    startTime: new Date(),
-                },
-                select: {
-                    parkingSlotId: true,
-                    status: true,
-                    reservedById: true,
-                    pricePerHour: true,
-                    startTime: true,
-                    reservedBy: {
-                        select: {
-                            accountId: true,
-                            firstName: true,
-                            lastName: true,
-                            email: true,
-                            avatarUrl: true,
-                        }
-                    },
-                    vehicle: {
-                        select: {
-                            vehicleId: true,
-                            model: true,
-                            genre: true,
-                            numberPlate: true,
-                            rfidNumber: true,
-                        }
-                    }
-                }
-            });
-        }
-        finally {
-            release();
-        }
-        const res = new ResponseBody("Success", "Check in success", [updateParkingSlot]);
-        const length = updateParkingSlot.parkingSlotId.length;
-        // send last two character of parking slot id to adafruit using slice
-        const sentString = `Please go to ${updateParkingSlot.parkingSlotId[length - 2] + updateParkingSlot.parkingSlotId[length - 1]}`;
-        io.emit("parking-slot-channel", res);
-        await updateLCDToAdafruitService(`${sentString}`)
-        await updateServoStatusToAdafruitService("1");
-        return res;
-    }   
-    else {
-        if(parkingSlot.status === "RESERVED") {
-            log.info("Reserved")
-            const release = await mutex.acquire();
-            let updateParkingSlot;
-            try {
+            if(process.env.IS_PHONG === 'true') {
                 await prisma.logs.create({
                     data: {
                         vehicleId: vehicle.vehicleId,
-                        parkingSlotId: parkingSlot.parkingSlotId,
+                        parkingSlotId: availableParkingSlot.parkingSlotId,
                         state: "IN"
                     }
-                });
+                })
                 // update parking slot
-                updateParkingSlot = await prisma.parkingSlot.update({
+                await prisma.parkingSlot.update({
                     where: {
-                        parkingSlotId: parkingSlot.parkingSlotId
+                        parkingSlotId: availableParkingSlot.parkingSlotId
                     },
                     data: {
                         status: "OCCUPIED",
@@ -211,13 +148,144 @@ export const verifyRfid = async (rfidNumber: string) => {
                     }
                 });
             }
+        }
+        finally {
+            release();
+        }
+        const updatedParkingSlot = await prisma.parkingSlot.findFirst({
+            where: {
+                parkingSlotId: availableParkingSlot.parkingSlotId
+            },
+            select: {
+                parkingSlotId: true,
+                status: true,
+                reservedById: true,
+                pricePerHour: true,
+                startTime: true,
+                reservedBy: {
+                    select: {
+                        accountId: true,
+                        firstName: true,
+                        lastName: true,
+                        email: true,
+                        avatarUrl: true,
+                    }
+                },
+                vehicle: {
+                    select: {
+                        vehicleId: true,
+                        model: true,
+                        genre: true,
+                        numberPlate: true,
+                        rfidNumber: true,
+                    }
+                }
+            }
+        })
+        if (!updatedParkingSlot) {
+            return;
+        }
+        const res = new ResponseBody("Success", "Check in success", [updatedParkingSlot]);
+        const length = updatedParkingSlot.parkingSlotId.length;
+        // send last two character of parking slot id to adafruit using slice
+        const sentString = `Please go to ${updatedParkingSlot.parkingSlotId[length - 2] + updatedParkingSlot.parkingSlotId[length - 1]}`;
+        io.emit("parking-slot-channel", res);
+        await updateLCDToAdafruitService(`${sentString}`)
+        await updateServoStatusToAdafruitService("1");
+        return res;
+    }   
+    else {
+        if(parkingSlot.status === "RESERVED") {
+            log.info("Reserved")
+            const release = await mutex.acquire();
+            try {
+                if(process.env.IS_PHONG==='true') {
+                    await prisma.logs.create({
+                        data: {
+                            vehicleId: vehicle.vehicleId,
+                            parkingSlotId: parkingSlot.parkingSlotId,
+                            state: "IN"
+                        }
+                    });
+                    // update parking slot
+                    await prisma.parkingSlot.update({
+                        where: {
+                            parkingSlotId: parkingSlot.parkingSlotId
+                        },
+                        data: {
+                            status: "OCCUPIED",
+                            reservedById: vehicle.ownerId,
+                            vehicleId: vehicle.vehicleId,
+                            startTime: new Date(),
+                        },
+                        select: {
+                            parkingSlotId: true,
+                            status: true,
+                            reservedById: true,
+                            pricePerHour: true,
+                            startTime: true,
+                            reservedBy: {
+                                select: {
+                                    accountId: true,
+                                    firstName: true,
+                                    lastName: true,
+                                    email: true,
+                                    avatarUrl: true,
+                                }
+                            },
+                            vehicle: {
+                                select: {
+                                    vehicleId: true,
+                                    model: true,
+                                    genre: true,
+                                    numberPlate: true,
+                                    rfidNumber: true,
+                                }
+                            }
+                        }
+                    });
+                }
+            }
             finally {
                 release();
             }
-            const res = new ResponseBody("Success", "Check in success", [updateParkingSlot]);
-            const length = updateParkingSlot.parkingSlotId.length;
+            const updatedParkingSlot = await prisma.parkingSlot.findFirst({
+                where: {
+                    parkingSlotId: parkingSlot.parkingSlotId
+                },
+                select: {
+                    parkingSlotId: true,
+                    status: true,
+                    reservedById: true,
+                    pricePerHour: true,
+                    startTime: true,
+                    reservedBy: {
+                        select: {
+                            accountId: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            avatarUrl: true,
+                        }
+                    },
+                    vehicle: {
+                        select: {
+                            vehicleId: true,
+                            model: true,
+                            genre: true,
+                            numberPlate: true,
+                            rfidNumber: true,
+                        }
+                    }
+                }
+            })
+            if(!updatedParkingSlot) {
+                return;
+            }
+            const res = new ResponseBody("Success", "Check in success", [updatedParkingSlot]);
+            const length = updatedParkingSlot.parkingSlotId.length;
             // send last two character of parking slot id to adafruit using slice
-            const sentString = `Please go to ${updateParkingSlot.parkingSlotId[length - 2] + updateParkingSlot.parkingSlotId[length - 1]}`;
+            const sentString = `Please go to ${updatedParkingSlot.parkingSlotId[length - 2] + updatedParkingSlot.parkingSlotId[length - 1]}`;
             io.emit("parking-slot-channel", res);
             await updateLCDToAdafruitService(`${sentString}`)
             await updateServoStatusToAdafruitService("1");
@@ -225,82 +293,115 @@ export const verifyRfid = async (rfidNumber: string) => {
         }
         else if(parkingSlot.status === "OCCUPIED") {
             log.info("Check out")
-            const release = await mutex.acquire();
-            let updateParkingSlot;
-            try {
-                let logIn = await prisma.logs.findFirst({
-                    where: {
-                        vehicleId: vehicle.vehicleId,
-                        parkingSlotId: parkingSlot.parkingSlotId,
-                        state: "IN"
-                    },
-                })
+            let logIn = await prisma.logs.findFirst({
+                where: {
+                    vehicleId: vehicle.vehicleId,
+                    parkingSlotId: parkingSlot.parkingSlotId,
+                    state: "IN"
+                },
+            })
+            if (!logIn) {
                 if (!logIn) {
-                    if (!logIn) {
-                        await updateLCDToAdafruitService("No vehicle found");
-                        return;
-                    }
+                    await updateLCDToAdafruitService("No vehicle found");
+                    return;
                 }
-                updateParkingSlot = await prisma.parkingSlot.update({
-                    where: {
-                        parkingSlotId: parkingSlot.parkingSlotId
-                    },
-                    data: {
-                        status: "AVAILABLE",
-                        vehicleId: null,
-                        reservedById: null,
-                        startTime: null,
-                    },
-                    select: {
-                        parkingSlotId: true,
-                        status: true,
-                        reservedById: true,
-                        pricePerHour: true,
-                        startTime: true,
-                        reservedBy: {
-                            select: {
-                                accountId: true,
-                                firstName: true,
-                                lastName: true,
-                                email: true,
-                                avatarUrl: true,
-                            }
+            }
+            const release = await mutex.acquire();
+            try {
+                if(process.env.IS_PHONG === 'true') {
+                    await prisma.parkingSlot.update({
+                        where: {
+                            parkingSlotId: parkingSlot.parkingSlotId
                         },
-                        vehicle: {
-                            select: {
-                                vehicleId: true,
-                                model: true,
-                                genre: true,
-                                numberPlate: true,
-                                rfidNumber: true,
+                        data: {
+                            status: "AVAILABLE",
+                            vehicleId: null,
+                            reservedById: null,
+                            startTime: null,
+                        },
+                        select: {
+                            parkingSlotId: true,
+                            status: true,
+                            reservedById: true,
+                            pricePerHour: true,
+                            startTime: true,
+                            reservedBy: {
+                                select: {
+                                    accountId: true,
+                                    firstName: true,
+                                    lastName: true,
+                                    email: true,
+                                    avatarUrl: true,
+                                }
+                            },
+                            vehicle: {
+                                select: {
+                                    vehicleId: true,
+                                    model: true,
+                                    genre: true,
+                                    numberPlate: true,
+                                    rfidNumber: true,
+                                }
                             }
                         }
-                    }
-                });
-                const timeIn = new Date(logIn.timeIn);
-                const timeOut = new Date();
-                const diff = timeOut.getTime() - timeIn.getTime();
-                const diffHours = diff / (1000 * 3600);
-                const price = Math.ceil(diffHours) * parseInt(parkingSlot.pricePerHour);    
-                await prisma.logs.update({
-                    where: {
-                        logId: logIn.logId
-                    },
-                    data: {
-                        state: "OUT",
-                        timeOut: new Date(),
-                        price: price.toString(),
-                    }
-                })
-
+                    });
+                    const timeIn = new Date(logIn.timeIn);
+                    const timeOut = new Date();
+                    const diff = timeOut.getTime() - timeIn.getTime();
+                    const diffHours = diff / (1000 * 3600);
+                    const price = Math.ceil(diffHours) * parseInt(parkingSlot.pricePerHour);    
+                    await prisma.logs.update({
+                        where: {
+                            logId: logIn.logId
+                        },
+                        data: {
+                            state: "OUT",
+                            timeOut: new Date(),
+                            price: price.toString(),
+                        }
+                    })
+                }
             }   
             finally {
                 release();
             }
-            const res = new ResponseBody("Success", "Check out success", [updateParkingSlot]);
-            const length = updateParkingSlot.parkingSlotId.length;
+            const updatedParkingSlot = await prisma.parkingSlot.findFirst({
+                where: {
+                    parkingSlotId: parkingSlot.parkingSlotId
+                },
+                select: {
+                    parkingSlotId: true,
+                    status: true,
+                    reservedById: true,
+                    pricePerHour: true,
+                    startTime: true,
+                    reservedBy: {
+                        select: {
+                            accountId: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            avatarUrl: true,
+                        }
+                    },
+                    vehicle: {
+                        select: {
+                            vehicleId: true,
+                            model: true,
+                            genre: true,
+                            numberPlate: true,
+                            rfidNumber: true,
+                        }
+                    }
+                }
+            })
+            if(!updatedParkingSlot) {
+                return;
+            }
+            const res = new ResponseBody("Success", "Check out success", [updatedParkingSlot]);
+            const length = updatedParkingSlot.parkingSlotId.length;
             // send last two character of parking slot id to adafruit using slice
-            const sentString = `Please go to ${updateParkingSlot.parkingSlotId[length - 2] + updateParkingSlot.parkingSlotId[length - 1]}`;
+            const sentString = `Please go to ${updatedParkingSlot.parkingSlotId[length - 2] + updatedParkingSlot.parkingSlotId[length - 1]}`;
             io.emit("parking-slot-channel", res);
             await updateLCDToAdafruitService(`${sentString}`)
             await updateServoStatusToAdafruitService("1");
