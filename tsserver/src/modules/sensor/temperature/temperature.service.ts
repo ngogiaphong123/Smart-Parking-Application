@@ -63,7 +63,8 @@ export const getTemperatureFromAdafruitService = async (limit : number) => {
     const config = {
         headers: {
             'X-AIO-Key': AIO_KEY,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'timeout' : '1000'
         },
         params : {
             limit : limit
@@ -72,8 +73,9 @@ export const getTemperatureFromAdafruitService = async (limit : number) => {
         const {data} = await axios.get(url, config);
         return data;
     }
-    catch (err) {
-        log.info(err);
+    catch(err : any) {
+        log.info(AIO_USERNAME, AIO_KEY)
+        log.error(err);
     }
 }
 
@@ -85,7 +87,8 @@ export const updateTemperatureToAdafruitService = async (value : number) => {
     const config = {
         headers: {
             'X-AIO-Key': AIO_KEY,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'timeout' : '1000'
         }
     };
     try {
@@ -94,7 +97,7 @@ export const updateTemperatureToAdafruitService = async (value : number) => {
         }, config);
         return data;
     }
-    catch (err) {
-        log.info(err);
+    catch(err : any) {
+        log.error(err);
     }
 }

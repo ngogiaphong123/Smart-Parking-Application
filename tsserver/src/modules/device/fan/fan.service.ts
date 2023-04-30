@@ -70,7 +70,7 @@ export const getFanStatusFromAdafruitService = async (limit : number) => {
         return data;
     }
     catch(err) {
-        log.info(err)
+        log.error(err)
     }
 }
 
