@@ -72,7 +72,7 @@ model ParkingSlot {
     status          String // reserved, occupied, available
     reservedBy      User? @relation(fields: [reservedById], references: [accountId])
     reservedById    String? @db.ObjectId
-    vehicle         Vehicle? @relation(fields: [vehicleId], references: [vehicleId])
+    vehicle         Vehicle? @relation(fields: [vehicleId], references: [vehicleId], onUpdate: Cascade)
     vehicleId       String? @db.ObjectId
     pricePerHour    String
     startTime       DateTime?
@@ -86,9 +86,9 @@ model Logs {
     timeOut         DateTime?
     price           String?
     state           String @default("IN")
-    parkingSlot     ParkingSlot @relation(fields: [parkingSlotId], references: [parkingSlotId], onDelete: Cascade)
+    parkingSlot     ParkingSlot @relation(fields: [parkingSlotId], references: [parkingSlotId], onUpdate: Cascade, onDelete: Cascade)
     parkingSlotId   String @db.ObjectId
-    vehicle         Vehicle @relation(fields: [vehicleId], references: [vehicleId], onDelete: Cascade)
+    vehicle         Vehicle @relation(fields: [vehicleId], references: [vehicleId], onUpdate: Cascade, onDelete: Cascade)
     vehicleId       String @db.ObjectId
 }
 model Rfid {

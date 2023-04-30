@@ -7,7 +7,7 @@ import deserializeUser from './middlewares/deserializeUser';
 import userRouter from './modules/auth/user.route';
 import http from "http";
 import configureSocket from "./socket";
-import { fanCalling, lightCalling, rfidCalling, temperatureCalling } from './utils/adafruitApi';
+import { lightCalling, rfidCalling, temperatureCalling } from './utils/adafruitApi';
 import rfidRouter from './modules/rfid/rfid.route';
 import vehicleRouter from './modules/vehicle/vehicle.route';
 import parkingSlotRouter from './modules/parkingSlot/parkingSlot.route';
@@ -52,7 +52,9 @@ app.use((err: ExpressError, req: Request, res: Response, next: NextFunction) => 
 export const io = configureSocket(server);
 server.listen(port, () => {
     log.info(`Server is running on port ${port}`)
-    temperatureCalling();
-    lightCalling();
-    rfidCalling();
+    Promise.all([lightCalling(), temperatureCalling(), rfidCalling([])]).then(() => {
+        log.info("Adafruit API is running")
+    }).catch((err) => {
+        log.error(err)
+    })
 });
