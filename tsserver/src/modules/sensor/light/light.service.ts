@@ -62,7 +62,8 @@ export const getLightFromAdafruitService = async (limit : number) => {
     const config = {
         headers: {
             'X-AIO-Key': AIO_KEY,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'timeout' : '1000'
         },
         params : {
             limit : limit
@@ -74,6 +75,6 @@ export const getLightFromAdafruitService = async (limit : number) => {
     }
     catch(err : any) {
         log.info(AIO_USERNAME, AIO_KEY)
-        log.error(err?.err.message);
+        log.error(err);
     }
 }

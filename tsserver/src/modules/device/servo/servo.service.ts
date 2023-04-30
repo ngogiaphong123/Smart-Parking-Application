@@ -68,7 +68,7 @@ export const getServoStatusFromAdafruitService = async (limit : number) => {
         return data;
     }
     catch(err : any) {
-        log.error(err?.err.message);
+        log.error(err);
     }
 }
 
@@ -91,7 +91,7 @@ export const updateServoStatusToAdafruitService = async (status : string) => {
         return result;
     }
     catch(err : any) {
-        log.error(err?.err.message);
+        log.error(err);
     }
 }
 
@@ -112,7 +112,7 @@ export const updatePriceToAdafruitService = async (status : string) => {
         }, config);
     }
     catch(err : any) {
-        log.error(err?.err.message);
+        log.error(err);
         return null;
     }
 }
