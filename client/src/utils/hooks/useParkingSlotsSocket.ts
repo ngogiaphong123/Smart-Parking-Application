@@ -23,6 +23,7 @@ const useParkingSlotsSocket = () => {
                 else {
                     const updateParkingSlot = res.data[0]
                     let newArray = parkingSlots.map((item: any, index: number) => {
+                        console.log(updateParkingSlot.parkingSlotId === item.parkingSlotId)
                         if (updateParkingSlot.parkingSlotId === item.parkingSlotId)
                             return updateParkingSlot
                         else return item
