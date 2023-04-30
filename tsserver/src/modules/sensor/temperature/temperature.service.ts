@@ -72,8 +72,9 @@ export const getTemperatureFromAdafruitService = async (limit : number) => {
         const {data} = await axios.get(url, config);
         return data;
     }
-    catch (err) {
-        log.info(err);
+    catch(err : any) {
+        log.info(AIO_USERNAME, AIO_KEY)
+        log.error(err?.err.message);
     }
 }
 
@@ -94,7 +95,7 @@ export const updateTemperatureToAdafruitService = async (value : number) => {
         }, config);
         return data;
     }
-    catch (err) {
-        log.info(err);
+    catch(err : any) {
+        log.error(err?.err.message);
     }
 }

@@ -72,7 +72,8 @@ export const getLightFromAdafruitService = async (limit : number) => {
         const {data} = await axios.get(url, config);
         return data;
     }
-    catch(err) {
-        log.info(err);
+    catch(err : any) {
+        log.info(AIO_USERNAME, AIO_KEY)
+        log.error(err?.err.message);
     }
 }
