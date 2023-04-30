@@ -64,7 +64,7 @@ export const updateRfidToAdafruitService = async (status: string) => {
 }
 
 export const verifyRfid = async (rfidNumber: string) => {
-    const vehicle = await prisma.vehicle.findFirst({
+    let vehicle = await prisma.vehicle.findFirst({
         where: {
             rfidNumber: rfidNumber
         },
@@ -81,14 +81,15 @@ export const verifyRfid = async (rfidNumber: string) => {
         await updateLCDToAdafruitService("No vehicle found");
         return;
     }
-    const parkingSlot = await prisma.parkingSlot.findFirst({
+    let parkingSlot = await prisma.parkingSlot.findFirst({
         where: {
             vehicleId: vehicle.vehicleId
         }
     })
+    log.info(parkingSlot)
     // no reserved parking slot
     if (!parkingSlot) {
-        console.log("No reserved")
+        log.info("No reserved")
         let availableParkingSlot = await prisma.parkingSlot.findFirst({
             where: {
                 status: "AVAILABLE"
@@ -161,7 +162,7 @@ export const verifyRfid = async (rfidNumber: string) => {
     }   
     else {
         if(parkingSlot.status === "RESERVED") {
-            console.log("Reserved")
+            log.info("Reserved")
             const release = await mutex.acquire();
             let updateParkingSlot;
             try {
@@ -223,7 +224,7 @@ export const verifyRfid = async (rfidNumber: string) => {
             return res;
         }
         else if(parkingSlot.status === "OCCUPIED") {
-            console.log("Check out")
+            log.info("Check out")
             const release = await mutex.acquire();
             let updateParkingSlot;
             try {

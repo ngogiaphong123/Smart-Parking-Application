@@ -5,72 +5,72 @@ import Light from "../modules/sensor/light/light.schema";
 import { getLightFromAdafruitService, saveLightService } from "../modules/sensor/light/light.service";
 import Temperature from "../modules/sensor/temperature/temperature.schema";
 import { getTemperatureFromAdafruitService, saveTemperatureService } from "../modules/sensor/temperature/temperature.service";
+import log from "./logger";
 
-export const temperatureCalling = () => {
-    setInterval(async () => {
-        const limit = 1;
-        const data = await getTemperatureFromAdafruitService(limit);
-        if(data) {
-            data.forEach(async (element : any) => {
-                const temp = new Temperature(element.id, "C", element.created_at, element.value)
-                await saveTemperatureService(temp);
-            });
-        }
-        else {
-            console.log("Error");
-        }
-    },10000);
-}
-
-export const lightCalling = () => {
-    setInterval(async () => {
-        const limit = 1;
-        const data = await getLightFromAdafruitService(limit);
-        if(data) {
-            data.forEach(async (element : any) => {
-                // to change timezone to GMT+7
-                const temp = new Light(element.id, "lux", element.created_at, element.value)
-                await saveLightService(temp);
-            });
-        }
-        else {
-            console.log("Error");
-        }
-    },10000);
-}
-
-export const fanCalling = () => {
-    setInterval(async () => {
-        const limit = 1;
-        const data = await getFanStatusFromAdafruitService(limit);
-        data.forEach(async (element : any) => {
-            const temp = new Fan(element.id, element.created_at, element.value)
-            await saveFanService(temp);
+export const temperatureCalling = async () => {
+    const limit = 1;
+    const data = await getTemperatureFromAdafruitService(limit);
+    if (data) {
+        data.forEach(async (element: any) => {
+            // to change timezone to GMT+7
+            const temp = new Temperature(element.id, "C", element.created_at, element.value)
+            await saveTemperatureService(temp);
         });
-    },1000);
+    }
+    else {
+        console.log("Error calling temperature");
+    }
+    setTimeout(() => {
+        temperatureCalling();
+    }, 11111);
 }
 
-export const rfidCalling = () => {
-    const prevData : any = [];
-    let first = true;
-    setInterval(async () => {
-        const limit = 1;
-        const data = await getRfidFromAdafruitService(limit);
-        if(data) {
-            if (first) {
+export const lightCalling = async () => {
+    const limit = 1;
+    const data = await getLightFromAdafruitService(limit);
+    if (data) {
+        data.forEach(async (element: any) => {
+            // to change timezone to GMT+7
+            const light = new Light(element.id, "lux" ,element.created_at, element.value)
+            await saveLightService(light);
+        });
+    }
+    else {
+        log.info("Error calling light");
+    }
+    setTimeout(() => {
+        lightCalling();
+    }, 12345);
+}
+
+export const rfidCalling = async (prevData : Array<any>, first = true) => {
+    prevData.forEach((element) => {
+        log.info(element.value)
+    })
+    const limit = 1;
+    const data = await getRfidFromAdafruitService(limit);
+    if(first) {
+        prevData.push(data[0]);
+        log.info("First time")
+    }
+    else {
+        if (data) {
+            const check = prevData.find((element) => element.id === data[0].id)
+            if (!check) {
                 prevData.push(data[0]);
-                first = false;
-            }
-            // check if data id is in prevData
-            const check = prevData.find((element : any) => element.id === data[0].id);
-            if(!check) {
-                prevData.push(data[0]);
-                console.log("RFID: ", data[0].value);
+                log.info(`Begin verify RFID tag : ${data[0].value}`)
                 const result = await verifyRfid(data[0].value);
+                log.info(`End verify RFID tag : ${data[0].value}`)
+            }
+            else {
+                log.info("No new RFID tag")
             }
         }
         else {
-            console.log("Error");
+            log.info("Error");
         }
-    },4000);
+    }
+    setTimeout(()=>{
+        rfidCalling(prevData, false);
+    }, 1000);
 }
