@@ -312,7 +312,7 @@ function predict(input: string) {
     })
     if(maxKey===-1){
         // console.log("I don't understand")
-           return {outputIndex:-1, answers:["I'm sorry, I did't understand"], outputIndexActionTable:tempArrayTags}
+           return {outputIndex:-1, answers:{tag:"AI not understand", answers:["I'm sorry, I did't understand"]}, outputIndexActionTable:tempArrayTags}
     }
     else
     // @ts-ignore
