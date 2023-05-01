@@ -54,9 +54,9 @@ app.use((err: ExpressError, req: Request, res: Response, next: NextFunction) => 
 export const io = configureSocket(server);
 server.listen(port, () => {
     log.info(`Server is running on port ${port}`)
-    // Promise.all([lightCalling(), temperatureCalling(),rfidCalling([])]).then(() => {
-    //     log.info("Adafruit API is running")
-    // }).catch((err) => {
-    //     log.error(err)
-    // })
+    Promise.all([lightCalling(), temperatureCalling(),rfidCalling([])]).then(() => {
+        log.info("Adafruit API is running")
+    }).catch((err) => {
+        log.error(err)
+    })
 });
