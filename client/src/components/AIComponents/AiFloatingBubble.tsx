@@ -1,5 +1,5 @@
-import { memo, useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { memo, useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { pageMotionTime } from '../../configs';
 import Draggable from 'react-draggable';
 import ai_bubble_image from "../../assets/AI/ai_bubble_image.png"
@@ -11,9 +11,10 @@ import AiSlice from '../../redux/slices/modals/AiSlice';
 
 function AiFloatingBubble() {
     const [state, setState] = useState({ activeDrags: 0 } as any);
+    const [positionSide, setPositionSide] = useState<"left" | "right">("right")
     const [dragging, setDragging] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 })
-    const AiIsOn = useSelector(AiStore).show
+    // const AiIsOn = useSelector(AiStore).show
 
     const onStart = (e: any, ui: any) => {
         setState({ activeDrags: ++state.activeDrags });
@@ -47,16 +48,31 @@ function AiFloatingBubble() {
 
         }
     }
-    const exitMotion = useCallback(() => {
-        console.log(position.x - 60, window.innerWidth / 2)
-        if (Math.abs(position.x - 60) >= window.innerWidth / 2)
-            return -(window.innerWidth / 2 - (window.innerWidth / 2 - Math.abs(position.x - 60))).toString() + "px"
-        else
-            return (window.innerWidth / 2 - (window.innerWidth / 2 - Math.abs(position.x - 60))).toString() + "px"
-    }, [AiIsOn, position, window.innerWidth])
+    // const exitMotion = 
+    // useCallback(
+    // () => {
+    //     if (Math.abs(position.x - 60) >= window.innerWidth / 2)
+    //     {
+    //         setPositionSide("left")
+    //         return -(window.innerWidth / 2 - (window.innerWidth / 2 - Math.abs(position.x - 60))).toString() + "px"
+    //     }
+    //     else
+    //     {
+    //         setPositionSide("right")
+    //         return (window.innerWidth / 2 - (window.innerWidth / 2 - Math.abs(position.x - 60))).toString() + "px"
+    //     }
+    // }
+    // , [window.innerWidth,position.x])
     useEffect(() => {
-        console.log(position.x, window.innerWidth / 2)
-    }, [AiIsOn])
+        if (Math.abs(position.x - 60) >= window.innerWidth / 2) {
+            setPositionSide("left")
+            // return -(window.innerWidth / 2 - (window.innerWidth / 2 - Math.abs(position.x - 60))).toString() + "px"
+        }
+        else {
+            setPositionSide("right")
+            // return (window.innerWidth / 2 - (window.innerWidth / 2 - Math.abs(position.x - 60))).toString() + "px"
+        }
+    }, [window.innerWidth, position.x])
     const dragHandlers = { onStart: onStart, onStop: onStop, onDrag: onDrag };
     const dispatch = useDispatch<any>()
     const chatRoomIsShow = useSelector(AiStore).chatRoomShow
@@ -72,28 +88,33 @@ function AiFloatingBubble() {
             }}
             exit={{
                 opacity: 0,
-                x: exitMotion()
+                x: positionSide === "left" ? "-50vw" : "50vw",
             }}
             transition={{
                 duration: pageMotionTime
             }}
             className="fixed top-[70px] right-[20px] z-20">
             <Draggable handle="strong" {...dragHandlers}>
-                <div className="w-fit h-fit flex space-x-4 flex-row">
-                        <strong onClick={() => {
-                            if (dragging)
+                <div className={("w-fit h-fit flex space-x-2 sm:space-x-4 flex-row relative"
+                )}>
+                    <strong onClick={() => {
+                        if (dragging)
                             return
-                            if (!chatRoomIsShow)
-                            dispatch(AiSlice.actions.handleChatRoomOpen({}))
-                            else
+                        if (!chatRoomIsShow)
+                            {
+                                dispatch(AiSlice.actions.handleChatRoomOpen({}))
+                            }
+                        else
                             dispatch(AiSlice.actions.handleChatRoomClose({}))
-                        }} className="box cursor-grabbing hover:bg-blue-100 duration-100 font-semibold rounded-full w-11 h-11 sm:w-14 sm:h-14 bg-white shadow-sm sm:shadow-md flex justify-center items-center">
+                    }} className="box cursor-grabbing hover:bg-blue-100 duration-100 font-semibold rounded-full w-11 h-11 sm:w-14 sm:h-14 bg-white shadow-sm sm:shadow-md flex justify-center items-center">
                         <img src={ai_bubble_image} draggable="false" className="box w-6 h-6 sm:w-8 sm:h-8" />
                     </strong>
+                    <AnimatePresence mode="wait">
                         {
-                        chatRoomIsShow &&
-                        <AiFloatingChatRoom />
-                    }
+                            chatRoomIsShow &&
+                            <AiFloatingChatRoom positionSide={positionSide} key="trivandeptrai" />
+                        }
+                    </AnimatePresence>
                 </div>
             </Draggable>
         </motion.div>

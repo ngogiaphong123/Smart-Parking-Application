@@ -1,5 +1,5 @@
 import { memo } from "react";
-import ai_image from '../../assets/HeaderLogo/ai_image.png'
+import ai_image from '../../assets/AI/ai_image.png'
 import clsx from "clsx";
 import { AiStore } from "../../redux/selectors";
 import { useSelector } from "react-redux";
@@ -11,7 +11,10 @@ function AiHeaderButton() {
     const dispatch = useDispatch<any>()
     return ( <>
         <div onClick={()=>{
-            if(AiIsOn) dispatch(AiSlice.actions.handleClose({}))
+            if(AiIsOn) {
+                dispatch(AiSlice.actions.handleClose({}))
+                dispatch(AiSlice.actions.handleChatRoomClose({}))
+            }
             else
             dispatch(AiSlice.actions.handleOpen({}))
         }} className={clsx("cursor-pointer  w-fit h-fit rounded-xl border-2 flex justify-between items-center p-1 sm:p-2 space-x-2 sm:space-x-4",

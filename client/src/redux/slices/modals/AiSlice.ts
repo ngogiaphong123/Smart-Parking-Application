@@ -5,7 +5,9 @@ const AiSlice = createSlice({
     initialState:{
         loading:false,
         show:false,
-        chatRoomShow:false
+        chatRoomShow:false,
+        currMess:"",
+        chats:[]
         // type:"",
         // content: ""
     },
@@ -24,6 +26,17 @@ const AiSlice = createSlice({
         },
         handleChatRoomClose: (state, action) => {
             state.chatRoomShow = false;
+        },
+        handleCurrMess: (state, action) => {
+            state.currMess = action.payload;
+        },
+        handleSendMess: (state, action) => {
+            // @ts-ignore
+            state.chats = [...state.chats, {
+                type: action.payload.type,
+                message: state.currMess
+            }]
+            state.currMess = "";
         },
     },
     extraReducers(builder) {

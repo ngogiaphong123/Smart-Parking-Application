@@ -36,6 +36,7 @@ function App() {
   const user = useSelector(UserStore).user
   const AiIsOn = useSelector(AiStore).show
   const smallNotificationIsShow = useSelector(SmallNotificationStore).show
+  console.log("re render")
   useEffect(() => {
     // change web name
     document.title = "Smart Parking Auto"
@@ -70,7 +71,7 @@ function App() {
     }
   }, [])
   return (
-    <div className="w-full bg-white h-fit flex flex-col overflow-x-hidden float-right">
+    <div className="w-full bg-white h-[100%] min-h-screen flex flex-col overflow-x-hidden">
       <AnimatePresence mode="wait">
         {
           smallNotificationIsShow &&

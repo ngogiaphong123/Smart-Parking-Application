@@ -100,7 +100,9 @@ function HomeAndParkingPage() {
                 <span className="text-md text-title-inPage font-semibold capitalize">
                     car parking
                 </span>
-                <button className="w-32 h-7 bg-blue-inPage hover:bg-blue-inPage-hover rounded-2xl flex justify-center items-center">
+                <button onClick={()=>{
+                    console.log(parkingSlots)
+                }} className="w-32 h-7 bg-blue-inPage hover:bg-blue-inPage-hover rounded-2xl flex justify-center items-center">
                     <span className="text-super-small font-semibold text-white uppercase">
                         + Parking Slot
                     </span>
