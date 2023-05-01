@@ -15,6 +15,7 @@ import ResponseBody from './utils/responseBody';
 import logRouter from './modules/log/log.route';
 import statisticRouter from './modules/statistic/statistic.route';
 import customerRouter from './modules/customer/customer.route';
+import aiRouter from './modules/ai/ai.route';
 
 if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -42,6 +43,7 @@ app.use('/parkingSlot', parkingSlotRouter)
 app.use('/customer',customerRouter)
 app.use('/log',logRouter)
 app.use('/statistic', statisticRouter)
+app.use('/aiservice', aiRouter)
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
     return next(new ExpressError('Not Found', StatusCodes.NOT_FOUND))
 })
@@ -52,7 +54,7 @@ app.use((err: ExpressError, req: Request, res: Response, next: NextFunction) => 
 export const io = configureSocket(server);
 server.listen(port, () => {
     log.info(`Server is running on port ${port}`)
-    Promise.all([lightCalling(), temperatureCalling(), rfidCalling([])]).then(() => {
+    Promise.all([lightCalling(), temperatureCalling(),rfidCalling([])]).then(() => {
         log.info("Adafruit API is running")
     }).catch((err) => {
         log.error(err)
