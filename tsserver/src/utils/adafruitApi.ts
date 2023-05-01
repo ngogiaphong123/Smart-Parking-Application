@@ -71,5 +71,5 @@ export const rfidCalling = async (prevData : Array<any>, first = true) => {
     }
     setTimeout(()=>{
         rfidCalling(prevData, false);
-    }, 1000);
+    }, 3000);
 }
