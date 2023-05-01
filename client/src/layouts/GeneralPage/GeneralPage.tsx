@@ -16,7 +16,7 @@ function GeneralPage() {
         <Header />
         {/* mt for Header 16 */}
         {/* Start coding body here */}
-        <div className="w-full h-full mt-16 bg-sky-100 flex items-start">
+        <div className="w-full min-h-screen mt-16 bg-sky-100 flex items-start">
             <div className="md:block hidden">
                 {
                     user.role === 'admin' ? <SidebarAdmin /> : <SidebarCustomer />

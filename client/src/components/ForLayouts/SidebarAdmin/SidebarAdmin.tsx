@@ -1,4 +1,4 @@
-import {memo} from 'react'
+import { memo } from 'react'
 import tagUser from '../../../assets/icon/tag-user.svg'
 import tagUserOff from '../../../assets/icon/tag-user-off.svg'
 import payment from '../../../assets/icon/payment.svg'
@@ -16,17 +16,17 @@ import settingsOff from '../../../assets/icon/settings-off.svg'
 import SidebarChild from '../SidebarChild/SidebarChild';
 
 function SidebarAdmin() {
-    return ( <>
+    return (<>
         <div className="w-72 mt-8 p-4 min-h-20 h-full rounded-xl bg-gradient-sidebar flex flex-col items-center">
-            <SidebarChild onNavigationTo={"/admin"} content="Car Parking" icon={tagUser} iconOff={tagUserOff}/>
-            <SidebarChild onNavigationTo={"/admin/dashboard"} content="Dashboard" icon={dashboard} iconOff={dashboardOff}/>
-            <SidebarChild onNavigationTo={"/admin/paymenthistory"} content="Payments History" icon={payment} iconOff={paymentOff}/>
-            <SidebarChild onNavigationTo={"/admin/customersandtransports"} content="Customers" icon={customer} iconOff={customerOff}/>
-            <SidebarChild onNavigationTo={"/admin/analytics"} content="Analytics" icon={analytic} iconOff={analyticOff}/>
-            {/* <SidebarChild onNavigationTo={""} content="AI Support" icon={chat} iconOff={chatOff}/>
-            <SidebarChild onNavigationTo={""} content="Settings" icon={settings} iconOff={settingsOff}/> */}
+            <SidebarChild onNavigationTo={"/admin"} content="Car Parking" icon={tagUser} iconOff={tagUserOff} />
+            <SidebarChild onNavigationTo={"/admin/dashboard"} content="Dashboard" icon={dashboard} iconOff={dashboardOff} />
+            <SidebarChild onNavigationTo={"/admin/paymenthistory"} content="Payments History" icon={payment} iconOff={paymentOff} />
+            <SidebarChild onNavigationTo={"/admin/customersandtransports"} content="Customers" icon={customer} iconOff={customerOff} />
+            <SidebarChild onNavigationTo={"/admin/analytics"} content="Analytics" icon={analytic} iconOff={analyticOff} />
+            {/* <SidebarChild onNavigationTo={""} content="AI Mode" icon={chat} iconOff={chatOff} /> */}
+            {/* <SidebarChild onNavigationTo={""} content="Settings" icon={settings} iconOff={settingsOff}/> */}
         </div>
-    </> );
+    </>);
 }
 
 export default memo(SidebarAdmin);
