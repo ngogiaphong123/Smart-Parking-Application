@@ -64,7 +64,7 @@ export const getTemperatureFromAdafruitService = async (limit : number) => {
         headers: {
             'X-AIO-Key': AIO_KEY,
             'Content-Type': 'application/json',
-            'timeout' : '1000'
+            timeout : 2000
         },
         params : {
             limit : limit
@@ -74,7 +74,6 @@ export const getTemperatureFromAdafruitService = async (limit : number) => {
         return data;
     }
     catch(err : any) {
-        log.info(AIO_USERNAME, AIO_KEY)
         log.error(err);
     }
 }
@@ -88,7 +87,7 @@ export const updateTemperatureToAdafruitService = async (value : number) => {
         headers: {
             'X-AIO-Key': AIO_KEY,
             'Content-Type': 'application/json',
-            'timeout' : '1000'
+            timeout : 2000
         }
     };
     try {
