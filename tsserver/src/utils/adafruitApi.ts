@@ -8,7 +8,6 @@ import { getTemperatureFromAdafruitService, saveTemperatureService } from "../mo
 import log from "./logger";
 
 export const temperatureCalling = async () => {
-    log.info("Calling temperature");
     const limit = 1;
     const data = await getTemperatureFromAdafruitService(limit);
     if (data) {
@@ -27,7 +26,6 @@ export const temperatureCalling = async () => {
 }
 
 export const lightCalling = async () => {
-    log.info("Calling light");
     const limit = 1;
     const data = await getLightFromAdafruitService(limit);
     if (data) {
@@ -69,7 +67,7 @@ export const rfidCalling = async (prevData : Array<any>, first = true) => {
             log.error("Error");
         }
     }
-    setTimeout(()=>{
-        rfidCalling(prevData, false);
-    }, 3000);
+    setTimeout(async()=>{
+        await rfidCalling(prevData, false);
+    }, 1000);
 }
