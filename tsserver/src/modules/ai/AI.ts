@@ -256,6 +256,20 @@ const bot_answer = {
     },
 }
 
+let tempArrayTags:any = []
+tempArrayTags.push({
+    outputIndex:-1,
+    tag:"AI didn't understand"
+})
+Object.keys(bot_answer).forEach((key: string) => {
+    tempArrayTags.push({
+        outputIndex:key,
+        // @ts-ignore
+        tag:bot_answer[key].tag
+    })
+})
+
+
 function trainingAI(times: number) {
     let newData: any = []
     data.forEach((smallData: any) => {
@@ -298,11 +312,11 @@ function predict(input: string) {
     })
     if(maxKey===-1){
         // console.log("I don't understand")
-           return {answers:["I'm sorry, I did't understand"]}
+           return {outputIndex:-1, answers:["I'm sorry, I did't understand"], outputIndexActionTable:tempArrayTags}
     }
     else
     // @ts-ignore
-    return bot_answer[maxKey]
+    return {outputIndex:maxKey, answers: bot_answer[maxKey], outputIndexActionTable:tempArrayTags}
 }
 
 export { trainingAI, loadModel, predict }
