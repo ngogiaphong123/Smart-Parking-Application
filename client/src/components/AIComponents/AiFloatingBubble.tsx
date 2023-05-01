@@ -14,7 +14,6 @@ function AiFloatingBubble() {
     const [positionSide, setPositionSide] = useState<"left" | "right">("right")
     const [dragging, setDragging] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 })
-    // const AiIsOn = useSelector(AiStore).show
 
     const onStart = (e: any, ui: any) => {
         setState({ activeDrags: ++state.activeDrags });
@@ -100,13 +99,12 @@ function AiFloatingBubble() {
                     <strong onClick={() => {
                         if (dragging)
                             return
-                        if (!chatRoomIsShow)
-                            {
-                                dispatch(AiSlice.actions.handleChatRoomOpen({}))
-                            }
+                        if (!chatRoomIsShow) {
+                            dispatch(AiSlice.actions.handleChatRoomOpen({}))
+                        }
                         else
                             dispatch(AiSlice.actions.handleChatRoomClose({}))
-                    }} className="box cursor-grabbing hover:bg-blue-100 duration-100 font-semibold rounded-full w-11 h-11 sm:w-14 sm:h-14 bg-white shadow-sm sm:shadow-md flex justify-center items-center">
+                    }} className="box cursor-grabbing hover:bg-blue-100 hover:border-2 hover:border-blue-300 duration-100 font-semibold rounded-full w-11 h-11 sm:w-14 sm:h-14 bg-white shadow-sm sm:shadow-md flex justify-center items-center">
                         <img src={ai_bubble_image} draggable="false" className="box w-6 h-6 sm:w-8 sm:h-8" />
                     </strong>
                     <AnimatePresence mode="wait">

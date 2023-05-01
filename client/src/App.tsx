@@ -4,11 +4,8 @@ import './index.css'
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import DashboardAdmin from './pages/DashboardAdminPage/DashboardAdminPage';
-import TestGraph from './components/TestGraph/TestGraph';
 import PaymentHistory from './pages/PaymentHistoryPage/PaymentHistoryPage';
 import CustomersAndTransports from './pages/CustomersAndTransportsPage/CustomersAndTransportsPage';
-import CustomerAnalytic from './components/ForAnalyticsPage/CustomerAnalytic/CustomerAnalytic';
-import CustomerVehicleCard from './components/ForHomeAndParkingPage/CustomerVehicleCard/CustomerVehicleCard';
 import OrderDetail from './components/OrderDetail/OrderDetail';
 import LoginBackground from './layouts/Background/LoginBackground';
 import LoginForm from './components/ForAuthenticationPage/LoginForm/LoginForm';
@@ -19,7 +16,7 @@ import ResponsiveSlice from './redux/slices/ResponsiveSlice';
 import AnalyticsPage from './pages/AnalyticsPage/AnalyticsPage';
 import OrderModal from './components/ForHomeAndParkingPage/OrderModal/OrderModal';
 import UserProfilePage from './pages/UserProfilePage/UserProfilePage';
-import { AiStore, SmallNotificationStore, UserStore } from './redux/selectors';
+import { SmallNotificationStore } from './redux/selectors';
 import Notification from './components/Notification/Notification';
 import CheckMe from './middlewares/CheckMe';
 import Loggedin from './middlewares/Loggedin';
@@ -27,14 +24,11 @@ import AdminOnly from './middlewares/AdminOnly';
 import CustomerOnly from './middlewares/CustomerOnly';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import SmallNotification from './components/SmallNotification/SmallNotification';
-import AiFloatingBubble from './components/AIComponents/AiFloatingBubble';
 // import useLittleAi from './littleAi/useLittleAi';
 
 function App() {
   const location = useLocation()
   const dispatch = useDispatch<any>()
-  const user = useSelector(UserStore).user
-  const AiIsOn = useSelector(AiStore).show
   const smallNotificationIsShow = useSelector(SmallNotificationStore).show
   console.log("re render")
   useEffect(() => {
@@ -76,10 +70,6 @@ function App() {
         {
           smallNotificationIsShow &&
           <SmallNotification />
-        }
-        {
-          user&& user.role==="admin"&&AiIsOn &&
-          <AiFloatingBubble />
         }
       </AnimatePresence>
       <AnimatePresence mode="wait">

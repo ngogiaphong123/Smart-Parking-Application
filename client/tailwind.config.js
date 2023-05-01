@@ -26,6 +26,7 @@ module.exports = {
       backgroundImage: {
         'gradient-sidebarChild':"linear-gradient(90deg, #087592 43.19%, #2393B0 100%, #2393B0 100%)",
         'gradient-sidebar':"linear-gradient(180deg, #FFFFFF 60.42%, rgba(255, 255, 255, 0) 100%)",
+        "gradient-chatroom":"linear-gradient(360deg, #FFFFFF 0%, rgba(224, 242, 254, 0.994792) 0.01%, rgba(255, 255, 255, 0) 134.37%, rgba(255, 255, 255, 0.530317) 134.37%)"
       }
       ,
       textColor:{

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import * as brain from 'brain.js'
 import lol from "./model.json"
 
 const useLittleAi = () => {
