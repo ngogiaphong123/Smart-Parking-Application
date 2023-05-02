@@ -15,9 +15,11 @@ function CheckMe() {
             dispatch(getMe())
                 .then((res: any) => {
                     if (res.payload.status === "Success") {
+                        console.log("get me successfully")
                     }
                     else {
-                        localStorage.removeItem("accesssToken")
+                        localStorage.removeItem("accessToken")
+                        localStorage.removeItem("refreshToken")
                         navigate('/')
                     }
                 })

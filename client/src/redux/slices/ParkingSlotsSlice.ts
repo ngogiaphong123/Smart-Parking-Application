@@ -12,7 +12,8 @@ const ParkingSlotsSlice = createSlice({
     },
     reducers:{
         handleSetParkingSlots(state, action){
-            state.parkingSlots = action.payload
+            // @ts-ignore
+            state.parkingSlots = [...action.payload]
         },
     },
     extraReducers(builder) {

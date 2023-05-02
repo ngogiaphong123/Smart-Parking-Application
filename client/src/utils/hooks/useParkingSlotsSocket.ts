@@ -13,11 +13,13 @@ const useParkingSlotsSocket = () => {
     const [receiveData, setReceiveData] = useState(false)
     useEffect(() => {
         socket.on(parkingSlotChannelLinkName, (res: any) => {
+            console.log("socket ne")
             console.log(parkingSlots.length, res)
             if (res.status === "Success") {
                 if (parkingSlots.length === 0) {
                     dispatch(ParkingSlotsSlice.actions.handleSetParkingSlots([...res.data]))
                     handleLoading(parkingSlotChannelLinkName, false)
+                    setReceiveData((prev) => !prev)
                     return [...res.data]
                 }
                 else {
@@ -30,10 +32,10 @@ const useParkingSlotsSocket = () => {
                     })
                     dispatch(ParkingSlotsSlice.actions.handleSetParkingSlots([...newArray]))
                     handleLoading(parkingSlotChannelLinkName, false)
+                    setReceiveData((prev) => !prev)
                     return [...newArray]
                 }
             }
-            setReceiveData((prev) => !prev)
         })
 
         return () => {
@@ -49,9 +51,9 @@ const useParkingSlotsSocket = () => {
         handleLoading(parkingSlotChannelLinkName, true)
     }, [])
 
-    const value = useMemo(()=>{
+    const value = useMemo(() => {
         return parkingSlots
-    },[parkingSlots])
+    }, [parkingSlots])
 
     return value
 }
