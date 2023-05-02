@@ -10,3 +10,4 @@ export const LogsStore = (state:any) => state.logs
 export const CustomersStore = (state:any) => state.customers
 export const ParkingSlotsStore = (state:any) => state.parkingSlots
 export const AiStore = (state:any) => state.ai
+export const StatisticsStore = (state:any) => state.statistics

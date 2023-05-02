@@ -15,7 +15,6 @@ import SmallNotificationSlice from '../../../redux/slices/modals/SmallNotificati
 function HeaderUser() {
     const user = useSelector(UserStore).user
     const userLoading = useSelector(UserStore).loading
-    const menuIsShow = useSelector(MenuStore).data
     const dispatch = useDispatch<any>() 
     const navigate = useNavigate()
     const [isAvatarClickedOutside, setIsAvatarClickedOutside] = useState(true)
@@ -25,7 +24,12 @@ function HeaderUser() {
             setIsAvatarClickedOutside(true);
         }
     };
-    const handleAvatarClickInside = () => setIsAvatarClickedOutside(false);
+    const handleAvatarClickInside = () => {
+        if(isAvatarClickedOutside)
+        setIsAvatarClickedOutside(false)
+        else
+        setIsAvatarClickedOutside(true)
+    };
     const handleLogout = () => {
         dispatch(logout())
         .then((res:any)=>{
@@ -73,7 +77,7 @@ function HeaderUser() {
                 </div>
             </div>
             <div className={clsx("transition duration-200 ease-in-out absolute bg-white top-full right-8 w-44 h-16 rounded-xl drop-shadow p-8 flex justify-center items-center", {
-                "opacity-0": isAvatarClickedOutside
+                "hidden": isAvatarClickedOutside
             })}>
                 <div className="z-0 bg-white w-4 h-4 absolute -top-2 right-4 rotate-45"></div>
                 <button onClick={handleLogout} className="z-2 transition duration-200 ease-in-out rounded-xl bg-red-400 hover:bg-red-500 p-4 w-36 h-2/3 flex justify-center items-center">

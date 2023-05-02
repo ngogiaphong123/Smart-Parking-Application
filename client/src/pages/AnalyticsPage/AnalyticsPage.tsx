@@ -1,9 +1,7 @@
-import { memo, useState } from 'react'
+import { memo, useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { pageMotionTime } from '../../configs';
 import CalendarForApp from '../../components/CalendarForApp/CalendarForApp';
-import arrowRight from '../../assets/icon/arrow-right.svg'
-import arrowRightOff from '../../assets/icon/arrow-right-off.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -11,12 +9,100 @@ import clsx from 'clsx';
 import PieChart from '../../components/ForAnalyticsPage/PieChart/PieChart';
 import BarChart from '../../components/ForAnalyticsPage/BarChart/BarChart';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import TransportAnalytic from '../../components/ForAnalyticsPage/TransportAnalytic/TransportAnalytic';
 import CustomerAnalytic from '../../components/ForAnalyticsPage/CustomerAnalytic/CustomerAnalytic';
+import { useDispatch } from 'react-redux';
+import { logsPerDay, logsPerDayCustomer, logsPerHour, logsPerHourCustomer, logsPerWeek, logsPerWeekCustomer, piechartDetailInDay, piechartDetailInMonth, piechartDetailInWeek, piechartGeneralInDay, piechartGeneralInMonth, piechartGeneralInWeek } from '../../redux/slices/StatisticsSlice';
+import { getCustomers } from '../../redux/slices/CustomersSlice';
+import { CustomersStore, StatisticsStore } from '../../redux/selectors';
+import { useSelector } from 'react-redux';
+import Spinner from '../../components/Spinner/Spinner';
 function AnalyticsPage() {
+    const [chosenCustomer, setChosenCustomer] = useState<any>(false)
+    const {totalIntake, totalTransactions, totalTimeParking} = useSelector(StatisticsStore)
+    const customers = useSelector(CustomersStore).customers
+    const customersLoading = useSelector(CustomersStore).loading
     const [timeMode, setTimeMode] = useState<'today' | 'thismonth' | 'thisweek'>('today');
-    const [pageMode, setPageMode] = useState<'general' | 'detail'>('detail');
-    const [searchType, setSearchType] = useState<'customer' | 'transport'>('customer');
+    const [pageMode, setPageMode] = useState<'general' | 'detail'>('general');
+    const [date, setDate] = useState<any>(() => {
+        const date = new Date();
+        const startOfDay = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0)); // set time to 00:00:00.000Z
+        return {
+            start: startOfDay.toISOString(),
+        }
+    })
+    const dispatch = useDispatch<any>()
+    useEffect(() => {
+        if(!chosenCustomer)
+        {if (timeMode === "today") {
+            dispatch(logsPerHour({
+                start: date.start
+            }))
+            dispatch(
+            piechartGeneralInDay
+            ({
+                start: date.start
+            }))
+        }
+        else if (timeMode === "thisweek") {
+            dispatch(logsPerDay({
+                start: date.start
+            }))
+            dispatch(
+                piechartGeneralInWeek
+                ({
+                    start: date.start
+                }))
+        }
+        else if (timeMode === "thismonth") {
+            dispatch(logsPerWeek({
+                start: date.start
+            }))
+            dispatch(
+                piechartGeneralInMonth
+                ({
+                    start: date.start
+                }))
+        }}
+        else
+        {if (timeMode === "today") {
+            dispatch(logsPerHourCustomer({
+                start: date.start,
+                accountId: chosenCustomer.accountId
+            }))
+            dispatch(piechartDetailInDay({
+                start: date.start,
+                accountId: chosenCustomer.accountId
+            }))
+        }
+        else if (timeMode === "thisweek") {
+            dispatch(logsPerDayCustomer({
+                start: date.start,
+                accountId: chosenCustomer.accountId
+            }))
+            dispatch(piechartDetailInWeek({
+                start: date.start,
+                accountId: chosenCustomer.accountId
+            }))
+        }
+        else if (timeMode === "thismonth") {
+            dispatch(logsPerWeekCustomer({
+                start: date.start,
+                accountId: chosenCustomer.accountId
+            }))
+            dispatch(piechartDetailInMonth({
+                start: date.start,
+                accountId: chosenCustomer.accountId
+            }))
+        }}
+
+    }, [timeMode, date, chosenCustomer])
+
+    useEffect(()=>{
+        dispatch(getCustomers({
+            "page": 0,
+            "limit": 6
+        }))
+    },[])
     return (<>
         <motion.div
             initial={{
@@ -87,9 +173,8 @@ function AnalyticsPage() {
                                 exit={{
                                     x: "-100%", y: 0
                                 }}
-                            >
-                                <div
-                                    className="w-full h-fit flex justify-between items-center">
+                            className="space-y-4">
+                                <div className="w-full h-fit flex justify-between items-center">
                                     <span className="text-sm font-semibold capitalize">Analytics</span>
                                     <div className="w-fit h-fit inline-flex items-center">
                                         <span onClick={() => {
@@ -112,11 +197,28 @@ function AnalyticsPage() {
                                         })}> This month</span>
                                     </div>
                                 </div>
-                                <PieChart />
-                                <div className="w-full h-fit flex justify-between items-center">
-                                    <span className="text-sm font-semibold capitalize">Monthly Revenue</span>
+                                    {
+                                        chosenCustomer &&
+                                        <div className="w-full h-fit text-center font-semibold">
+                                            In detail with <span className="text-title-inPage">{chosenCustomer.firstName+" "+chosenCustomer.lastName}</span>, 
+                                            <span onClick={()=>{
+                                                setPageMode('detail')
+                                            }} className="text-gray-300 hover:text-title-inPage cursor-pointer"> choose another?</span>
+                                            <span onClick={()=>{
+                                                setChosenCustomer(false)
+                                            }} className="text-gray-300 hover:text-title-inPage cursor-pointer"> or see general detail?</span>
+                                        </div>
+                                    }
+                                <div className="w-full h-fit">
+                                    <PieChart chosenCustomer={chosenCustomer} date={date} timeMode={timeMode}/>    
                                 </div>
-                                <BarChart />
+
+                                <div className="w-full h-fit flex justify-between items-center">
+                                    <span className="text-sm font-semibold capitalize">Logs Statistics</span>
+                                </div>
+                                <div className="w-full h-fit max-h-96">
+                                    <BarChart timeMode={timeMode} date={date} />
+                                </div>
                             </motion.div>
                             :
                             <motion.div
@@ -132,30 +234,23 @@ function AnalyticsPage() {
                                     className="w-full h-fit p-2 flex flex-col items-center space-y-6">
                                     <SearchBar />
                                     <div className="w-full h-8 flex justify-start items-center capitalize">
-                                        <span onClick={() => { setSearchType("customer") }} className={clsx("cursor-pointer text-md capitalize", {
-                                            "text-title-inPage font-normal": searchType === "customer",
-                                            "text-gray-400 font-thin": searchType === "transport"
-                                        })}>customer</span>/
-                                        <span onClick={() => { setSearchType("transport") }} className={clsx("pl-1 cursor-pointer text-md capitalize", {
-                                            "text-title-inPage font-normal": searchType === "transport",
-                                            "text-gray-400 font-thin": searchType === "customer"
-                                        })}>transport</span>
+                                        <span className={clsx("cursor-pointer text-md capitalize text-title-inPage font-normal")}>customer</span>
                                     </div>
                                     <div className="w-full h-fit space-y-4 flex-flex-col items-center">
-                                        {
-                                            searchType === "customer" ?
-                                                <>
-                                                    <CustomerAnalytic />
-                                                    <CustomerAnalytic />
-                                                    <CustomerAnalytic />
-                                                </>
-                                                :
-                                                <>
-                                                    <TransportAnalytic />
-                                                    <TransportAnalytic />
-                                                    <TransportAnalytic />
-                                                </>
-                                        }
+                                        <>
+                                            {
+                                                customersLoading ?
+                                                    <div className="w-full h-full flex justify-center items-center">
+                                                        <Spinner/>
+                                                    </div>
+                                                    :
+                                                    <>
+                                                        {customers&&customers.map((customer:any, index:number)=>{
+                                                            return <CustomerAnalytic data={customer} key={index} setChosenCustomer={setChosenCustomer} chosenCustomer={chosenCustomer} setPageMode={setPageMode}/>
+                                                        })}
+                                                    </>
+                                            }
+                                        </>
                                     </div>
                                 </div>
                             </motion.div>
@@ -165,41 +260,33 @@ function AnalyticsPage() {
             <div
                 className="h-full min-w-[370px] px-4 mb-4 drop-shadow-xl flex overflow-hidden justify-center flex-col space-y-4 items-center"
             >
-                <CalendarForApp />
+                <CalendarForApp setDate={setDate} />
                 <div className="w-full h-fit p-6 rounded-xl shadow-ml bg-white space-y-2">
                     <span className="w-full h-fit text-base font-semibold capitailize">
-                        Monthly
+                        {timeMode==="today"?"Daily":timeMode==="thisweek"?"Weekly":"Monthly"}
                     </span>
                     <div className="w-full flex justify-between items-center h-fit">
                         <span className="text-sm font-semibold capitailize">
                             Total Intake
                         </span>
                         <span className="text-sm font-normal capitailize">
-                            1500k
+                            {totalIntake}$
                         </span>
                     </div>
                     <div className="w-full flex justify-between items-center h-fit">
                         <span className="text-sm font-semibold capitailize">
-                            New Customers
+                            Total Transactions
                         </span>
                         <span className="text-sm font-normal capitailize">
-                            1500k
+                            {totalTransactions}
                         </span>
                     </div>
                     <div className="w-full flex justify-between items-center h-fit">
                         <span className="text-sm font-semibold capitailize">
-                            Repeat Customers
+                            Total time parking
                         </span>
                         <span className="text-sm font-normal capitailize">
-                            1500k
-                        </span>
-                    </div>
-                    <div className="w-full flex justify-between items-center h-fit">
-                        <span className="text-sm font-semibold capitailize">
-                            Total Revenue
-                        </span>
-                        <span className="text-sm font-normal capitailize">
-                            1500k
+                            {totalTimeParking}
                         </span>
                     </div>
                 </div>

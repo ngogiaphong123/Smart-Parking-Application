@@ -22,7 +22,7 @@ function CustomersAndTransportsPage() {
     useEffect(() => {
         dispatch(getCustomers({
             "page": 0,
-            "limit": 5
+            "limit": 6
         }))
     }, [])
     return (<>

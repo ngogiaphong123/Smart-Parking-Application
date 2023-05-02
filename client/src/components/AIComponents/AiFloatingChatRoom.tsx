@@ -6,11 +6,75 @@ import { AiStore } from "../../redux/selectors";
 import { useDispatch } from "react-redux";
 import AiSlice, { AiAnswerHandle } from "../../redux/slices/modals/AiSlice";
 import AiChattingMess from "./AiChattingMess";
+import { useNavigate } from "react-router-dom";
+import socket from "../../utils/socket";
+import { fanSocketControl } from "../../redux/slices/FanDeviceSlice";
+import { logout } from "../../redux/slices/UserSlice";
 
 const AiFloatingChatRoom = ({ positionSide }: { positionSide: string }) => {
     const { currMess, chats } = useSelector(AiStore)
     const dispatch = useDispatch<any>()
     const chatRoomRef = useRef<any>(null)
+    const navigate = useNavigate()
+    function handleAiAnswer() {
+        dispatch(AiAnswerHandle(currMess))
+            .then((res: any) => {
+                console.log(res)
+                if (res.payload.outputIndex === 3) {
+                    // turn on the fan
+                    socket.emit(fanSocketControl, { value: "1" })
+                }
+                else if (res.payload.outputIndex === 4) {
+                    // turn off the fan
+                    socket.emit(fanSocketControl, { value: "0" })
+                }
+                else if (res.payload.outputIndex === 1) {
+                    // log out
+                    setTimeout(() => {
+                        dispatch(logout())
+                        dispatch(AiSlice.actions.handleClose({}))
+                    }, 3000)
+                }
+                else if (res.payload.outputIndex === 2) {
+                    // log in
+                }
+                else if (res.payload.outputIndex === 6) {
+                    // turn off ai mode
+                    setTimeout(() => {
+                        dispatch(AiSlice.actions.handleClose({}))
+                        dispatch(AiSlice.actions.handleChatRoomClose({}))
+                    }, 3000)
+                }
+                else if (res.payload.outputIndex === 7) {
+                    // "move to page home and parking
+                    setTimeout(() => {
+                        navigate("/admin")
+                        dispatch(AiSlice.actions.handleChatRoomClose({}))
+                    }, 3000)
+                }
+                else if (res.payload.outputIndex === 8) {
+                    // "move to page dashboard
+                    setTimeout(() => {
+                        navigate("/admin/dashboard")
+                        dispatch(AiSlice.actions.handleChatRoomClose({}))
+                    }, 3000)
+                }
+                else if (res.payload.outputIndex === 9) {
+                    // "move to payment history page
+                    setTimeout(() => {
+                        navigate("/admin/paymenthistory")
+                        dispatch(AiSlice.actions.handleChatRoomClose({}))
+                    }, 3000)
+                }
+                else if (res.payload.outputIndex === 10) {
+                    // "move to customers page
+                    setTimeout(() => {
+                        navigate("/admin/customersandtransports")
+                        dispatch(AiSlice.actions.handleChatRoomClose({}))
+                    }, 3000)
+                }
+            })
+    }
     useEffect(() => {
         // scroll to bottom
         chatRoomRef.current.scrollTop = chatRoomRef.current.scrollHeight
@@ -41,10 +105,7 @@ const AiFloatingChatRoom = ({ positionSide }: { positionSide: string }) => {
                 dispatch(AiSlice.actions.handleSendMess({
                     type: "left"
                 }))
-                dispatch(AiAnswerHandle(currMess))
-                    .then((res: any) => {
-                        console.log(res)
-                    })
+                handleAiAnswer()
             }} className={clsx("shadow-lg absolute bg-gradient-chatroom w-64 sm:w-96 h-96 max-w-96 max-h-96 flex flex-col items-center justify-between", {
                 "bottom-0 left-[50px]": positionSide === "left",
                 "bottom-0 right-[70px]": positionSide === "right"
@@ -67,10 +128,7 @@ const AiFloatingChatRoom = ({ positionSide }: { positionSide: string }) => {
                         dispatch(AiSlice.actions.handleSendMess({
                             type: "right"
                         }))
-                        dispatch(AiAnswerHandle(currMess))
-                            .then((res: any) => {
-                                console.log(res)
-                            })
+                        handleAiAnswer()
                     }} type="submit" className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
                         <svg aria-hidden="true" className="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
                         <span className="sr-only">Send message</span>

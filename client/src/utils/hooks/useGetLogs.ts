@@ -16,7 +16,17 @@ const useGetLogs = ({paidState, currPage, date, setTotalPage, vehicle}:{paidStat
                     "paidState": "unpaid"
                 }))
                     .then((res: any) => {
-                        setTotalPage(Math.ceil(res.payload.data.totalRecords / 8))
+                        setTotalPage(Math.ceil(res.payload.data.logsCount / 8))
+                    })
+            }
+            else if(paidState==="nodate"){
+                dispatch(getLogs({
+                    "page": currPage - 1,
+                    "limit": 8,
+                    "paidState":false
+                }))
+                    .then((res: any) => {
+                        setTotalPage(Math.ceil(res.payload.data.logsCount / 8))
                     })
             }
             else if (paidState !== "all")
@@ -28,7 +38,7 @@ const useGetLogs = ({paidState, currPage, date, setTotalPage, vehicle}:{paidStat
                     "paidState": paidState
                 }))
                     .then((res: any) => {
-                        setTotalPage(Math.ceil(res.payload.data.totalRecords / 8))
+                        setTotalPage(Math.ceil(res.payload.data.logsCount / 8))
                     })
             else {
                 dispatch(getLogs({
@@ -36,7 +46,7 @@ const useGetLogs = ({paidState, currPage, date, setTotalPage, vehicle}:{paidStat
                     "limit": 8,
                 }))
                     .then((res: any) => {
-                        setTotalPage(Math.ceil(res.payload.data.totalRecords / 8))
+                        setTotalPage(Math.ceil(res.payload.data.logsCount / 8))
                     })
                 }
         else {
@@ -48,7 +58,7 @@ const useGetLogs = ({paidState, currPage, date, setTotalPage, vehicle}:{paidStat
                 "paidState": paidState
             }))
                 .then((res: any) => {
-                    setTotalPage(Math.ceil(res.payload.data.totalRecords / 8))
+                    setTotalPage(Math.ceil(res.payload.data.logsCount / 8))
                 })
             else
             dispatch(customerGetLogs({
@@ -57,7 +67,7 @@ const useGetLogs = ({paidState, currPage, date, setTotalPage, vehicle}:{paidStat
                 "paidState": paidState
             }))
                 .then((res: any) => {
-                    setTotalPage(Math.ceil(res.payload.data.totalRecords / 8))
+                    setTotalPage(Math.ceil(res.payload.data.logsCount / 8))
                 })
         }
     }, [currPage, paidState, date, vehicle])
