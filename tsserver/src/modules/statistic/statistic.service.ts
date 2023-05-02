@@ -17,7 +17,50 @@ export const slotPieChartService = async () => {
     });
     return slotPieChart;
 }
-
+export const customerPercentageService = async () => {
+    const users = await prisma.user.findMany({
+        where : {
+            role : "customer"
+        },
+        select : {
+            firstName : true,
+            lastName : true,
+            email : true,
+            phone : true,
+            accountId : true
+        }
+    })
+    const logs = await prisma.logs.findMany({});
+    const fullLogsPrice = logs.map((log) => log.price);
+    let totalPrice = 0;
+    for (let i = 0; i < fullLogsPrice.length; i++) {
+        if(fullLogsPrice[i]) {
+            totalPrice += parseInt(fullLogsPrice[i] as string);
+        }
+    }
+    const result = [];
+    for (let i = 0; i < users.length; i++) {
+        const userLogs = await prisma.logs.findMany({
+            where : {
+                vehicle : {
+                    ownerId : users[i].accountId
+                }
+            }
+        });
+        const userLogsPrice = userLogs.map((log) => log.price);
+        let userTotalPrice = 0;
+        for (let j = 0; j < userLogsPrice.length; j++) {
+            if(userLogsPrice[j]) {
+                userTotalPrice += parseInt(userLogsPrice[j] as string);
+            }
+        }
+        const percentage = (userTotalPrice / totalPrice) * 100;
+        result.push({user : users[i], percentage , totalPay : userTotalPrice, logsCount : userLogs.length});
+    }
+    // sort by percentage
+    result.sort((a, b) => b.percentage - a.percentage);
+    return result;
+}
 export const numLogsInDayService = async ({start} : {start : Date}, accountId : string) => {
     const numLogsPerHour = [];
     for (let i = 0; i < 24; i++) {
@@ -47,7 +90,7 @@ export const numLogsInDayService = async ({start} : {start : Date}, accountId : 
                 }
             });
         }
-        numLogsPerHour.push({totalRecords : numLogs.length , from : startHour, to : endHour, clockHour : i + 1});
+        numLogsPerHour.push({logsCount : numLogs.length , from : startHour, to : endHour, clockHour : i + 1});
     }
     return numLogsPerHour;
 }
@@ -82,7 +125,7 @@ export const numLogsInWeekService = async ({start} : {start : Date}, accountId :
                 }
             });
         }
-        numLogsPerDay.push({totalRecords : numLogs.length , from : startDay, to : endDay, day : i + 1});
+        numLogsPerDay.push({logsCount : numLogs.length , from : startDay, to : endDay, day : i + 1});
     }
     return numLogsPerDay;
 }
@@ -117,7 +160,7 @@ export const numLogsInMonthService = async ({start} : {start : Date}, accountId 
                 }
             });
         }
-        numLogsPerWeek.push({totalRecords : numLogs.length , from : startWeek, to : endWeek, week : i + 1});
+        numLogsPerWeek.push({logsCount : numLogs.length , from : startWeek, to : endWeek, week : i + 1});
     }
     return numLogsPerWeek;
 };
