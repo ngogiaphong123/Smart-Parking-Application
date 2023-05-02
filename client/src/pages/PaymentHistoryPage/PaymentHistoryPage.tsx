@@ -4,13 +4,12 @@ import { pageMotionTime } from '../../configs';
 import clsx from 'clsx';
 import CustomerVehicleCard from '../../components/ForHomeAndParkingPage/CustomerVehicleCard/CustomerVehicleCard';
 import CalendarForApp from '../../components/CalendarForApp/CalendarForApp';
-import { LogsStore, UserStore } from '../../redux/selectors';
+import { LogsStore, ParkingSlotsStore, UserStore } from '../../redux/selectors';
 import { useSelector } from 'react-redux';
 import Spinner from '../../components/Spinner/Spinner';
 import Pagination from '../../components/Pagination/Pagination';
 import useGetLogs from '../../utils/hooks/useGetLogs';
 import TransportCard from '../../components/ForCustomersAndTransportsPage/TransportCard/TransportCard';
-import useParkingSlotsSocket from '../../utils/hooks/useParkingSlotsSocket';
 import handleFindSlotNumFromVehicleId from '../../utils/handleFindSlotNumFromVehicleId';
 
 function PaymentHistoryPage() {
@@ -32,8 +31,9 @@ function PaymentHistoryPage() {
     const logs = useSelector(LogsStore).logs
     useGetLogs({
         paidState, currPage, setTotalPage, date, vehicle:transport
-    })
-    const parkingSlots = useParkingSlotsSocket()
+    })    
+    const parkingSlots = useSelector(ParkingSlotsStore).parkingSlots
+
     return (<motion.div
         initial={{
             opacity: 0,

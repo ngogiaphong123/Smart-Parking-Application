@@ -20,12 +20,10 @@ const useParkingSlotsSocket = () => {
                     dispatch(ParkingSlotsSlice.actions.handleSetParkingSlots([...res.data]))
                     handleLoading(parkingSlotChannelLinkName, false)
                     setReceiveData((prev) => !prev)
-                    return [...res.data]
                 }
                 else {
                     const updateParkingSlot = res.data[0]
                     let newArray = parkingSlots.map((item: any, index: number) => {
-                        console.log(updateParkingSlot.parkingSlotId === item.parkingSlotId)
                         if (updateParkingSlot.parkingSlotId === item.parkingSlotId)
                             return updateParkingSlot
                         else return item
@@ -33,7 +31,6 @@ const useParkingSlotsSocket = () => {
                     dispatch(ParkingSlotsSlice.actions.handleSetParkingSlots([...newArray]))
                     handleLoading(parkingSlotChannelLinkName, false)
                     setReceiveData((prev) => !prev)
-                    return [...newArray]
                 }
             }
         })

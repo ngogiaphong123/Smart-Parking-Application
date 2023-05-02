@@ -24,6 +24,7 @@ import AdminOnly from './middlewares/AdminOnly';
 import CustomerOnly from './middlewares/CustomerOnly';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import SmallNotification from './components/SmallNotification/SmallNotification';
+import useParkingSlotsSocket from './utils/hooks/useParkingSlotsSocket';
 // import useLittleAi from './littleAi/useLittleAi';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
   const dispatch = useDispatch<any>()
   const smallNotificationIsShow = useSelector(SmallNotificationStore).show
   console.log("re render")
+  useParkingSlotsSocket()
   useEffect(() => {
     // change web name
     document.title = "Smart Parking Auto"
