@@ -18,7 +18,8 @@ function CheckMe() {
                         console.log("get me successfully")
                     }
                     else {
-                        localStorage.removeItem("accesssToken")
+                        localStorage.removeItem("accessToken")
+                        localStorage.removeItem("refreshToken")
                         navigate('/')
                     }
                 })
