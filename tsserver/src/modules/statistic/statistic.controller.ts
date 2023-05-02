@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { numLogsInDayService, numLogsInMonthService, numLogsInWeekService, slotPieChartService } from "./statistic.service";
+import { logVehicleService, numLogsInDayService, numLogsInMonthService, numLogsInWeekService, slotPieChartService } from "./statistic.service";
 import { HttpStatusCode } from "axios";
 import ResponseBody from "../../utils/responseBody";
-import { StartDateInput } from "./statistic.schema";
+import { LogVehicleInput, StartDateInput } from "./statistic.schema";
 
 export const slotPieChartController = async (req : Request, res : Response) => {
     const slotPieChart = await slotPieChartService();
@@ -62,4 +62,32 @@ export const numLogsInMonthController = async (req : Request<{},{},StartDateInpu
         const result = await numLogsInMonthService(input,"");
         res.status(HttpStatusCode.Ok).send(new ResponseBody("Success", "Get number of logs in month successfully", result))
     }
+}
+
+export const logVehicleInDayController = async (req : Request<{},{},LogVehicleInput>, res : Response) => {
+    const startInput = req.body.start;
+    const input = {
+        start : new Date(startInput),
+    }
+    console.log(req.body.accountId, input)
+    const result = await logVehicleService(input, req.body.accountId, "day");
+    res.status(HttpStatusCode.Ok).send(new ResponseBody("Success", "Get pie chart of custom vehicle logs in 1 day successfully", result))
+}
+
+export const logVehicleInWeekController = async (req : Request<{},{},LogVehicleInput>, res : Response) => {
+    const startInput = req.body.start;
+    const input = {
+        start : new Date(startInput),
+    }
+    const result = await logVehicleService(input, req.body.accountId, "week");
+    res.status(HttpStatusCode.Ok).send(new ResponseBody("Success", "Get pie chart of custom vehicle logs in 1 week successfully", result))
+}
+
+export const logVehicleInMonthController = async (req : Request<{},{},LogVehicleInput>, res : Response) => {
+    const startInput = req.body.start;
+    const input = {
+        start : new Date(startInput),
+    }
+    const result = await logVehicleService(input, req.body.accountId, "month");
+    res.status(HttpStatusCode.Ok).send(new ResponseBody("Success", "Get pie chart of custom vehicle logs in 1 month successfully", result))
 }

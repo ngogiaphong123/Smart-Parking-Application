@@ -121,3 +121,102 @@ export const numLogsInMonthService = async ({start} : {start : Date}, accountId 
     }
     return numLogsPerWeek;
 };
+  
+export const logVehicleService = async ({start} : {start : Date}, accountId : string, type : string) => {
+    let startDate = new Date(start);
+    let endDate = new Date(start);
+    if(type == "day") {
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(23, 59, 59, 999);
+    }
+    else if(type == "week") {
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setDate(endDate.getDate() + 6);
+        endDate.setHours(23, 59, 59, 999);
+    }
+    else if(type == "month") {
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setDate(endDate.getDate() + 30);
+        endDate.setHours(23, 59, 59, 999);
+    }
+    const result = await prisma.logs.groupBy({
+        by: ['vehicleId'],
+        _count: {
+            vehicleId: true
+        },
+        where: {
+            timeIn: {
+                gte: startDate,
+                lte: endDate
+            },
+            vehicle: {
+                ownerId: accountId
+            }
+        },
+        orderBy : {
+            _count : {
+                vehicleId : "desc"
+            }
+        }
+    })
+    const logVehicle = [];
+    for (let i = 0; i < result.length; i++) {
+        if(result[i]._count.vehicleId != 0) {
+            const vehicle = await prisma.vehicle.findUnique({
+                where : {
+                    vehicleId : result[i].vehicleId,
+                },
+                select : {
+                    vehicleId : true,
+                    model : true,
+                    numberPlate : true,
+                    genre : true,
+                }
+            })
+            const logs = await prisma.logs.findMany({
+                where : {
+                    vehicleId : result[i].vehicleId,
+                    timeIn: {
+                        gte: startDate,
+                        lte: endDate
+                    },
+                },
+                select : {
+                    timeIn : true,
+                    timeOut : true,
+                    price : true,
+                }
+            });
+            const prices = logs.map(log => log.price);
+            let totalPay = 0;
+            let totalTimes = 0;
+            for(let j = 0; j < prices.length; j++) {
+                if(prices[j]) {
+                    totalPay += parseInt(prices[j] as string);
+                }
+                if(logs[j].timeOut) {
+                    // @ts-ignore
+                    totalTimes += (logs[j].timeOut.getTime() - logs[j].timeIn.getTime());
+                }
+            }
+            totalTimes = Math.round(totalTimes / 1000);
+            let hours = Math.floor(totalTimes / 3600);
+            let minutes = Math.floor((totalTimes % 3600) / 60);
+            let remainingSeconds = totalTimes % 60;
+            const times = `${hours}h ${minutes}m ${remainingSeconds}s`;
+            logVehicle.push({vehicle, totalPay, times, logsCount : result[i]._count.vehicleId});
+        }
+    }
+    // calculate percentage of total pay
+    const totalPay = logVehicle.reduce((total : number, item : any) => {
+        return total + item.totalPay;
+    }, 0);
+    logVehicle.forEach((item : any) => {
+        item.percentage = (item.totalPay / totalPay) * 100;
+    });
+    // sort by total pay
+    logVehicle.sort((a : any, b : any) => {
+        return b.totalPay - a.totalPay;
+    });
+    return logVehicle;
+}
