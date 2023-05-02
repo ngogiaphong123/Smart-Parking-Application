@@ -1,3 +1,4 @@
+import { now } from "moment-timezone";
 import log from "../../utils/logger";
 import prisma from "../../utils/prisma"
 
@@ -17,7 +18,27 @@ export const slotPieChartService = async () => {
     });
     return slotPieChart;
 }
-export const customerPercentageService = async () => {
+export const customerPercentageService = async ({start} : {start : Date}, type : string) => {
+    let startDate = new Date(start);
+    let endDate = new Date(start);
+    if(type == "day") {
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(23, 59, 59, 999);
+    }
+    else if(type == "week") {
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setDate(endDate.getDate() + 6);
+        endDate.setHours(23, 59, 59, 999);
+    }
+    else if(type == "month") {
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setDate(endDate.getDate() + 30);
+        endDate.setHours(23, 59, 59, 999);
+    }
+    else if(type = "total") {
+        startDate = new Date(0);
+        endDate = new Date();
+    }
     const users = await prisma.user.findMany({
         where : {
             role : "customer"
@@ -30,7 +51,14 @@ export const customerPercentageService = async () => {
             accountId : true
         }
     })
-    const logs = await prisma.logs.findMany({});
+    const logs = await prisma.logs.findMany({
+        where : {
+            timeIn : {
+                gte : startDate,
+                lte : endDate
+            }
+        }
+    });
     const fullLogsPrice = logs.map((log) => log.price);
     let totalPrice = 0;
     for (let i = 0; i < fullLogsPrice.length; i++) {
@@ -44,6 +72,10 @@ export const customerPercentageService = async () => {
             where : {
                 vehicle : {
                     ownerId : users[i].accountId
+                },
+                timeIn : {
+                    gte : startDate,
+                    lte : endDate
                 }
             },
             select : {
@@ -52,15 +84,16 @@ export const customerPercentageService = async () => {
                 timeOut : true
             }
         });
+        if(userLogs.length === 0) continue;
         let userTotalPrice = 0;
         let totalTimes = 0;
         for(let j = 0; j < userLogs.length; j++) {
             if(userLogs[j].price) {
                 userTotalPrice += parseInt(userLogs[j].price as string);
             }
-            if(userLogs[j].timeOut) {
+            if(userLogs[j].timeOut != null) {
                 // @ts-ignore
-                totalTimes += (logs[j].timeOut.getTime() - logs[j].timeIn.getTime());
+                totalTimes += (userLogs[j].timeOut.getTime() - userLogs[j].timeIn.getTime());
             }
         }
         totalTimes = Math.round(totalTimes / 1000);
@@ -195,6 +228,10 @@ export const logVehicleService = async ({start} : {start : Date}, accountId : st
         startDate.setHours(0, 0, 0, 0);
         endDate.setDate(endDate.getDate() + 30);
         endDate.setHours(23, 59, 59, 999);
+    }
+    else if(type == "total") {
+        startDate = new Date(0);
+        endDate = new Date();
     }
     const result = await prisma.logs.groupBy({
         by: ['vehicleId'],
