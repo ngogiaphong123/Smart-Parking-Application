@@ -11,7 +11,7 @@ import BarChart from '../../components/ForAnalyticsPage/BarChart/BarChart';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import CustomerAnalytic from '../../components/ForAnalyticsPage/CustomerAnalytic/CustomerAnalytic';
 import { useDispatch } from 'react-redux';
-import { logsPerDay, logsPerDayCustomer, logsPerHour, logsPerHourCustomer, logsPerWeek, logsPerWeekCustomer } from '../../redux/slices/StatisticsSlice';
+import { logsPerDay, logsPerDayCustomer, logsPerHour, logsPerHourCustomer, logsPerWeek, logsPerWeekCustomer, piechartDetailInDay, piechartDetailInMonth, piechartDetailInWeek } from '../../redux/slices/StatisticsSlice';
 import { getCustomers } from '../../redux/slices/CustomersSlice';
 import { CustomersStore } from '../../redux/selectors';
 import { useSelector } from 'react-redux';
@@ -54,15 +54,27 @@ function AnalyticsPage() {
                 start: date.start,
                 accountId: chosenCustomer.accountId
             }))
+            dispatch(piechartDetailInDay({
+                start: date.start,
+                accountId: chosenCustomer.accountId
+            }))
         }
         else if (timeMode === "thisweek") {
             dispatch(logsPerDayCustomer({
                 start: date.start,
                 accountId: chosenCustomer.accountId
             }))
+            dispatch(piechartDetailInWeek({
+                start: date.start,
+                accountId: chosenCustomer.accountId
+            }))
         }
         else if (timeMode === "thismonth") {
             dispatch(logsPerWeekCustomer({
+                start: date.start,
+                accountId: chosenCustomer.accountId
+            }))
+            dispatch(piechartDetailInMonth({
                 start: date.start,
                 accountId: chosenCustomer.accountId
             }))
@@ -182,7 +194,10 @@ function AnalyticsPage() {
                                             }} className="text-gray-300 hover:text-title-inPage cursor-pointer"> or see general detail?</span>
                                         </div>
                                     }
-                                <PieChart />
+                                <div className="w-full h-fit">
+                                    <PieChart date={date} />    
+                                </div>
+
                                 <div className="w-full h-fit flex justify-between items-center">
                                     <span className="text-sm font-semibold capitalize">Logs Statistics</span>
                                 </div>

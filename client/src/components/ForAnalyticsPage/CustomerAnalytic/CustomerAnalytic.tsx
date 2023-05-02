@@ -13,7 +13,7 @@ function CustomerAnalytic({ data, setChosenCustomer, chosenCustomer, setPageMode
                 setChosenCustomer(data)
             }
             if (setPageMode) {
-                setTimeout(() => { setPageMode("general") }, 1000)
+                setTimeout(() => { setPageMode("general") }, 500)
             }
         }} className={clsx("w-full cursor-pointer bg-white hover:bg-gray transition duration-200 ease-in-out rounded-xl p-4  flex items-center drop-shadow-md", {
             "border-2 border-blue-500": chosenCustomer && chosenCustomer.accountId === data.accountId

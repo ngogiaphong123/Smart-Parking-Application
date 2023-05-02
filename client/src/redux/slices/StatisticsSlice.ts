@@ -77,6 +77,36 @@ const StatisticsSlice = createSlice({
                 state.logs = action.payload.data
             }
         })
+        .addCase(piechartDetailInDay.pending, (state,action) => {
+            state.piechartLoading = true
+        })
+        .addCase(piechartDetailInDay.fulfilled, (state,action) => {
+            state.piechartLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.piechart = action.payload.data
+            }
+        })
+        .addCase(piechartDetailInWeek.pending, (state,action) => {
+            state.piechartLoading = true
+        })
+        .addCase(piechartDetailInWeek.fulfilled, (state,action) => {
+            state.piechartLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.piechart = action.payload.data
+            }
+        })
+        .addCase(piechartDetailInMonth.pending, (state,action) => {
+            state.piechartLoading = true
+        })
+        .addCase(piechartDetailInMonth.fulfilled, (state,action) => {
+            state.piechartLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.piechart = action.payload.data
+            }
+        })
     }
 })
 
@@ -185,11 +215,12 @@ export const logsPerWeekCustomer = createAsyncThunk('logsPerWeekCustomer', async
     }
 })
 
-export const GeneralPiechart = createAsyncThunk('GeneralPiechart', async (input:{
+export const piechartDetailInDay = createAsyncThunk('piechartDetailInDay', async (input:{
     start:string
+    ,accountId:string
 }) => {
     try {
-        const {data} = await axios.post(`${serverUrl}/statistic/customer/percentage`,input);
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/logVehicleDay`,input);
         if(data.status === 'Success'){
             return {status:"Success", "message":data.message, data:data.data};
         }
@@ -201,5 +232,42 @@ export const GeneralPiechart = createAsyncThunk('GeneralPiechart', async (input:
         return handleAxiosError(error)
     }
 })
+
+export const piechartDetailInWeek = createAsyncThunk('piechartDetailInWeek', async (input:{
+    start:string
+    ,accountId:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/logVehicleWeek`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+export const piechartDetailInMonth = createAsyncThunk('piechartDetailInMonth', async (input:{
+    start:string
+    ,accountId:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/logVehicleMonth`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
 
 export default StatisticsSlice

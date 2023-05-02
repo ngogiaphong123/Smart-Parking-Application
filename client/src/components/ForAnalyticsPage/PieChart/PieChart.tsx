@@ -1,11 +1,19 @@
-import { memo } from 'react'
-import { Doughnut, Pie } from 'react-chartjs-2';
+import { memo, useMemo } from 'react'
+import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { useSelector } from 'react-redux';
+import { StatisticsStore } from '../../../redux/selectors';
+import Spinner from '../../Spinner/Spinner';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-function PieChart() {
-    const data = {
+function PieChart({ date }: { date: any }) {
+  const pieChartData = useSelector(StatisticsStore).piechart
+  const pieChartLoading = useSelector(StatisticsStore).piechartLoading
+  console.log(pieChartData)
+  const data = useMemo(() => {
+    if (pieChartData) {
+      return ({
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [
           {
@@ -30,12 +38,31 @@ function PieChart() {
             borderWidth: 1,
           },
         ],
-      };
-    return (<>
-        <div>
-            <Doughnut data={data} />
-        </div>
-    </>);
+      })
+    }
+    else
+      return null
+  }, [pieChartData])
+  return (<>
+    <div>
+      {
+        pieChartData &&
+          pieChartLoading ?
+          <div className="w-full h-full flex justify-center items-center">
+            <Spinner />
+          </div>
+          :
+          <div className="w-full h-fit flex justify-center">
+            {/* @ts-ignore */}
+            {
+              data &&
+              <Doughnut data={data} />
+            }
+          </div>
+
+      }
+    </div>
+  </>);
 }
 
 export default memo(PieChart);
