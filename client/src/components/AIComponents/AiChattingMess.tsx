@@ -1,13 +1,28 @@
 import clsx from "clsx";
-import { memo } from "react";
+import { memo, useState, useEffect } from "react";
 import { AiStore, UserStore } from "../../redux/selectors";
 import { useSelector } from "react-redux";
 import ai_image from '../../assets/AI/ai_image.png'
 import Spinner from "../Spinner/Spinner";
 
-function AiChattingMess({ type, message}: { type: "left" | "right", message?: string}) {
+function AiChattingMess({ type, message }: { type: "left" | "right", message?: string }) {
+    const [displayText, setDisplayText] = useState("")
     const user = useSelector(UserStore).user
     const AiLoading = useSelector(AiStore).AiLoading
+    useEffect(() => {
+        if (type === "left") {
+            if(message==="loading")
+            {
+
+            }
+            else {
+                if(displayText!==message)
+                setTimeout(()=>{
+                    setDisplayText(prev=>prev+message![prev.length])
+                },100)
+            }
+        }
+    }, [message, displayText])
     return (<>
         <div className={clsx("w-full h-fit flex p-2 space-x-2", {
             "justify-start": type === "left",
@@ -22,10 +37,10 @@ function AiChattingMess({ type, message}: { type: "left" | "right", message?: st
                 "rounded-tl-xl": type === "right",
             })}>
                 {
-                    AiLoading && type==="left" && message==="loading" ?
+                    AiLoading && type === "left" && message === "loading" ?
                         <Spinner />
                         :
-                        <div className="text-sm text-gray-700">{message}</div>
+                        <div className="text-sm text-gray-700">{type === "right" ? message : displayText}</div>
                 }
             </div>
             {

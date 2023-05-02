@@ -77,6 +77,9 @@ function TemperatureChart({ overHeating, setOverHeating, index }: { overHeating:
             dispatch(SmallNotificationSlice.actions.handleOpen({ type: "error", content: "Temperature is too high" }))
             setOverHeating(true)
         }
+        else {
+            setOverHeating(false)
+        }
     }, [temperatureData[temperatureData.length - 1]])
     return (
         <Draggable key={index} draggableId={uuidv4()} index={index} >

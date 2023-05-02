@@ -11,16 +11,6 @@ const AiFloatingChatRoom = ({ positionSide }: { positionSide: string }) => {
     const { currMess, chats } = useSelector(AiStore)
     const dispatch = useDispatch<any>()
     const chatRoomRef = useRef<any>(null)
-    const outsideClickRef = useRef<any>(null)
-    const handleAvatarClickOutside = (e: any) => {
-        if (!chatRoomRef.current.contains(e.target)) {
-            dispatch(AiSlice.actions.handleChatRoomClose(false))
-        }
-    };
-    useEffect(() => {
-        document.addEventListener('mousedown', handleAvatarClickOutside);
-        return () => document.removeEventListener('mousedown', handleAvatarClickOutside);
-    });
     useEffect(() => {
         // scroll to bottom
         chatRoomRef.current.scrollTop = chatRoomRef.current.scrollHeight
@@ -35,7 +25,7 @@ const AiFloatingChatRoom = ({ positionSide }: { positionSide: string }) => {
             }}
             animate={{
                 opacity: 1,
-                x: "0",
+                x: 0,
                 scale: 1,
                 transformOrigin: positionSide === "left" ? "bottom left" : "bottom right"
             }}
@@ -55,7 +45,7 @@ const AiFloatingChatRoom = ({ positionSide }: { positionSide: string }) => {
                     .then((res: any) => {
                         console.log(res)
                     })
-            }} ref={outsideClickRef} className={clsx("shadow-lg absolute bg-gradient-chatroom w-64 sm:w-96 h-96 max-w-96 max-h-96 flex flex-col items-center justify-between", {
+            }} className={clsx("shadow-lg absolute bg-gradient-chatroom w-64 sm:w-96 h-96 max-w-96 max-h-96 flex flex-col items-center justify-between", {
                 "bottom-0 left-[50px]": positionSide === "left",
                 "bottom-0 right-[70px]": positionSide === "right"
             })}>
@@ -69,9 +59,9 @@ const AiFloatingChatRoom = ({ positionSide }: { positionSide: string }) => {
             <div className={clsx("w-full h-fit bg-white z-10 overflow-hidden")}>
                 <label htmlFor="chat" className="sr-only">Your message</label>
                 <div className="flex items-center px-3 py-2 rounded-lg bg-transparent">
-                    <textarea onChange={(e) => {
+                    <input onChange={(e) => {
                         dispatch(AiSlice.actions.handleCurrMess(e.target.value))
-                    }} value={currMess} id="chat" rows={1} className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
+                    }} value={currMess} id="chat" className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></input>
                     <button onClick={() => {
                         if (currMess === "") return
                         dispatch(AiSlice.actions.handleSendMess({
