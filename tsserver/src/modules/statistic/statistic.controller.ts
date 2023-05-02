@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { logVehicleService, numLogsInDayService, numLogsInMonthService, numLogsInWeekService, slotPieChartService } from "./statistic.service";
+import { customerPercentageService, logVehicleService, numLogsInDayService, numLogsInMonthService, numLogsInWeekService, slotPieChartService } from "./statistic.service";
 import { HttpStatusCode } from "axios";
 import ResponseBody from "../../utils/responseBody";
 import { LogVehicleInput, StartDateInput } from "./statistic.schema";
@@ -7,6 +7,11 @@ import { LogVehicleInput, StartDateInput } from "./statistic.schema";
 export const slotPieChartController = async (req : Request, res : Response) => {
     const slotPieChart = await slotPieChartService();
     res.status(HttpStatusCode.Ok).send(new ResponseBody("Success", "Get slot pie chart successfully", slotPieChart))
+}
+
+export const customerPercentageController = async (req : Request, res : Response) => {
+    const customerPercentage = await customerPercentageService();
+    res.status(HttpStatusCode.Ok).send(new ResponseBody("Success", "Get customer percentage successfully", customerPercentage))
 }
 export const numLogsInDayController = async (req : Request<{},{},StartDateInput>, res : Response) => {
     if (req.body.accountId) {

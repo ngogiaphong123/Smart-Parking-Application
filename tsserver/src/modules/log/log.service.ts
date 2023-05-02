@@ -62,13 +62,13 @@ export const getLogsService = async (input: GetLogsInput) => {
             price: true,
         }
     });
-    let revenue = 0;
+    let totalPay = 0;
     for (let i = 0; i < count.length; i++) {
         if(count[i].price) {
-            revenue += parseInt(count[i].price as string);
+            totalPay += parseInt(count[i].price as string);
         }
     }
-    return {totalRecords : count.length, revenue,logs}; 
+    return {logsCount : count.length, totalPay,logs}; 
 }
 
 export const getMyLogService = async (accountId : string, page : number, limit : number) => {
@@ -131,13 +131,13 @@ export const getMyLogService = async (accountId : string, page : number, limit :
             price: true,
         }
     })
-    let revenue = 0;
+    let totalPay = 0;
     for (let i = 0; i < count.length; i++) {
         if(count[i].price) {
-            revenue += parseInt(count[i].price as string);
+            totalPay += parseInt(count[i].price as string);
         }
     }
-    return {totalRecords : count.length, revenue,logs};
+    return {logsCount : count.length, totalPay,logs};
 }
 
 export const getLogsDateService = async ({start,end,page,limit} : {
@@ -208,18 +208,18 @@ export const getLogsDateService = async ({start,end,page,limit} : {
             timeIn : "desc"
         }
     })
-    const totalRecords = logsFull.length;
+    const logsCount = logsFull.length;
     // get prices of logs
     const prices = logsFull.map(log => log.price);
     // calculate total price
-    let revenue = 0;
+    let totalPay = 0;
     for(let i = 0; i < prices.length; i++) {
         if(prices[i]) {
-            revenue += parseInt(prices[i] as string);
+            totalPay += parseInt(prices[i] as string);
         }
     }
     const newCustomerCount = await getNewCustomerCountService({start,end});
-    return {totalRecords, revenue, newCustomerCount , logs};
+    return {logsCount, totalPay, newCustomerCount , logs};
 }
 
 export const getLogsCustomerDateService = async ({accountId,start,end,page,limit} : {
@@ -300,17 +300,17 @@ export const getLogsCustomerDateService = async ({accountId,start,end,page,limit
             timeIn : "desc"
         }
     })
-    const totalRecords = logsFull.length;
+    const logsCount = logsFull.length;
     // get prices of logs
     const prices = logsFull.map(log => log.price);
     // calculate total price
-    let revenue = 0;
+    let totalPay = 0;
     for(let i = 0; i < prices.length; i++) {
         if(prices[i]) {
-            revenue += parseInt(prices[i] as string);
+            totalPay += parseInt(prices[i] as string);
         }
     }
-    return {totalRecords, revenue, logs};
+    return {logsCount, totalPay, logs};
 }
 
 export const getLogsByVehicleService = async ({vehicleId,accountId,page,limit} : {
@@ -384,15 +384,15 @@ export const getLogsByVehicleService = async ({vehicleId,accountId,page,limit} :
             timeIn : "desc"
         }
     })
-    const totalRecords = logsFull.length;
+    const logsCount = logsFull.length;
     // get prices of logs
     const prices = logsFull.map(log => log.price);
     // calculate total price
-    let revenue = 0;
+    let totalPay = 0;
     for(let i = 0; i < prices.length; i++) {
         if(prices[i]) {
-            revenue += parseInt(prices[i] as string);
+            totalPay += parseInt(prices[i] as string);
         }
     }
-    return {totalRecords, revenue, logs};
+    return {logsCount, totalPay, logs};
 }
