@@ -11,14 +11,14 @@ import BarChart from '../../components/ForAnalyticsPage/BarChart/BarChart';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import CustomerAnalytic from '../../components/ForAnalyticsPage/CustomerAnalytic/CustomerAnalytic';
 import { useDispatch } from 'react-redux';
-import { logsPerDay, logsPerDayCustomer, logsPerHour, logsPerHourCustomer, logsPerWeek, logsPerWeekCustomer, piechartDetailInDay, piechartDetailInMonth, piechartDetailInWeek } from '../../redux/slices/StatisticsSlice';
+import { logsPerDay, logsPerDayCustomer, logsPerHour, logsPerHourCustomer, logsPerWeek, logsPerWeekCustomer, piechartDetailInDay, piechartDetailInMonth, piechartDetailInWeek, piechartGeneralInDay, piechartGeneralInMonth, piechartGeneralInWeek } from '../../redux/slices/StatisticsSlice';
 import { getCustomers } from '../../redux/slices/CustomersSlice';
-import { CustomersStore } from '../../redux/selectors';
+import { CustomersStore, StatisticsStore } from '../../redux/selectors';
 import { useSelector } from 'react-redux';
 import Spinner from '../../components/Spinner/Spinner';
 function AnalyticsPage() {
     const [chosenCustomer, setChosenCustomer] = useState<any>(false)
-    console.log(chosenCustomer)
+    const {totalIntake, totalTransactions, totalTimeParking} = useSelector(StatisticsStore)
     const customers = useSelector(CustomersStore).customers
     const customersLoading = useSelector(CustomersStore).loading
     const [timeMode, setTimeMode] = useState<'today' | 'thismonth' | 'thisweek'>('today');
@@ -37,16 +37,31 @@ function AnalyticsPage() {
             dispatch(logsPerHour({
                 start: date.start
             }))
+            dispatch(
+            piechartGeneralInDay
+            ({
+                start: date.start
+            }))
         }
         else if (timeMode === "thisweek") {
             dispatch(logsPerDay({
                 start: date.start
             }))
+            dispatch(
+                piechartGeneralInWeek
+                ({
+                    start: date.start
+                }))
         }
         else if (timeMode === "thismonth") {
             dispatch(logsPerWeek({
                 start: date.start
             }))
+            dispatch(
+                piechartGeneralInMonth
+                ({
+                    start: date.start
+                }))
         }}
         else
         {if (timeMode === "today") {
@@ -195,7 +210,7 @@ function AnalyticsPage() {
                                         </div>
                                     }
                                 <div className="w-full h-fit">
-                                    <PieChart date={date} />    
+                                    <PieChart chosenCustomer={chosenCustomer} date={date} timeMode={timeMode}/>    
                                 </div>
 
                                 <div className="w-full h-fit flex justify-between items-center">
@@ -248,38 +263,30 @@ function AnalyticsPage() {
                 <CalendarForApp setDate={setDate} />
                 <div className="w-full h-fit p-6 rounded-xl shadow-ml bg-white space-y-2">
                     <span className="w-full h-fit text-base font-semibold capitailize">
-                        Monthly
+                        {timeMode==="today"?"Daily":timeMode==="thisweek"?"Weekly":"Monthly"}
                     </span>
                     <div className="w-full flex justify-between items-center h-fit">
                         <span className="text-sm font-semibold capitailize">
                             Total Intake
                         </span>
                         <span className="text-sm font-normal capitailize">
-                            1500k
+                            {totalIntake}$
                         </span>
                     </div>
                     <div className="w-full flex justify-between items-center h-fit">
                         <span className="text-sm font-semibold capitailize">
-                            New Customers
+                            Total Transactions
                         </span>
                         <span className="text-sm font-normal capitailize">
-                            1500k
+                            {totalTransactions}
                         </span>
                     </div>
                     <div className="w-full flex justify-between items-center h-fit">
                         <span className="text-sm font-semibold capitailize">
-                            Repeat Customers
+                            Total time parking
                         </span>
                         <span className="text-sm font-normal capitailize">
-                            1500k
-                        </span>
-                    </div>
-                    <div className="w-full flex justify-between items-center h-fit">
-                        <span className="text-sm font-semibold capitailize">
-                            Total Revenue
-                        </span>
-                        <span className="text-sm font-normal capitailize">
-                            1500k
+                            {totalTimeParking}
                         </span>
                     </div>
                 </div>

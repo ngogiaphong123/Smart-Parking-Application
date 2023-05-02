@@ -25,9 +25,9 @@ const LogsSlice = createSlice({
                     // @ts-ignore
                     state.logs = action.payload.data.logs
                     // @ts-ignore
-                    state.revenue = action.payload.data.revenue
+                    state.revenue = action.payload.data.totalPay
                     // @ts-ignore
-                    state.totalRecords = action.payload.data.totalRecords
+                    state.totalRecords = action.payload.data.logsCount
                 }
             })
             .addCase(getLogsDate.pending, (state, action) => {
@@ -40,9 +40,9 @@ const LogsSlice = createSlice({
                     // @ts-ignore
                     state.logs = action.payload.data.logs
                     // @ts-ignore
-                    state.revenue = action.payload.data.revenue
+                    state.revenue = action.payload.data.totalPay
                     // @ts-ignore
-                    state.totalRecords = action.payload.data.totalRecords
+                    state.totalRecords = action.payload.data.logsCount
                 }
             })
             .addCase(customerGetLogs.pending, (state, action) => {
@@ -54,9 +54,9 @@ const LogsSlice = createSlice({
                     // @ts-ignore
                     state.logs = action.payload.data.logs
                     // @ts-ignore
-                    state.revenue = action.payload.data.revenue
+                    state.revenue = action.payload.data.totalPay
                     // @ts-ignore
-                    state.totalRecords = action.payload.data.totalRecords
+                    state.totalRecords = action.payload.data.logsCount
                 }
             })
             .addCase(customerGetLogsByVehicle.pending, (state, action) => {
@@ -69,9 +69,9 @@ const LogsSlice = createSlice({
                     // @ts-ignore
                     state.logs = action.payload.data.logs
                     // @ts-ignore
-                    state.revenue = action.payload.data.revenue
+                    state.revenue = action.payload.data.totalPay
                     // @ts-ignore
-                    state.totalRecords = action.payload.data.totalRecords
+                    state.totalRecords = action.payload.data.logsCount
                 }
             })
     }
@@ -91,7 +91,7 @@ export const getLogs = createAsyncThunk('getLogs', async (input: any) => {
                     if ((log.timeOut && input.paidState === "paid") || (!log.timeOut && input.paidState === "unpaid"))
                         return log
                 })
-                data.data.totalRecords = data.data.logs.length
+                data.data.logsCount = data.data.logs.length
                 data.data.revenue = data.data.logs.reduce((item:any)=>{
                     return item.price + item.price
                 },0)
@@ -121,7 +121,7 @@ export const getLogsDate = createAsyncThunk('getLogsDate', async (input: any) =>
                     if ((log.timeOut && input.paidState === "paid") || (!log.timeOut && input.paidState === "unpaid"))
                         return log
                 })
-                data.data.totalRecords = data.data.logs.length
+                data.data.logsCount = data.data.logs.length
                 data.data.revenue = data.data.logs.reduce((item:any)=>{
                     return item.price + item.price
                 },0)
@@ -151,7 +151,7 @@ export const customerGetLogs = createAsyncThunk('customerGetLogs', async (input:
                     if ((log.timeOut && input.paidState === "paid") || (!log.timeOut && input.paidState === "unpaid"))
                         return log
                 })
-                data.data.totalRecords = data.data.logs.length
+                data.data.logsCount = data.data.logs.length
                 data.data.revenue = data.data.logs.reduce((item:any)=>{
                     return item.price + item.price
                 },0)
@@ -181,7 +181,7 @@ export const customerGetLogsByVehicle = createAsyncThunk('customerGetLogsByVehic
                     if ((log.timeOut && input.paidState === "paid") || (!log.timeOut && input.paidState === "unpaid"))
                         return log
                 })
-                data.data.totalRecords = data.data.logs.length
+                data.data.logsCount = data.data.logs.length
                 data.data.revenue = data.data.logs.reduce((item:any)=>{
                     return item.price + item.price
                 },0)

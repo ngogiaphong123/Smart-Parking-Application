@@ -10,7 +10,10 @@ const StatisticsSlice = createSlice({
         logsLoading:false,
         logs:false,
         piechartLoading:false,
-        piechart:false
+        piechart:false,
+        totalIntake:false,
+        totalTransactions:false,
+        totalTimeParking:false
     },
     reducers:{
     },
@@ -85,6 +88,12 @@ const StatisticsSlice = createSlice({
             if(action.payload.status === 'Success'){
                 // @ts-ignore
                 state.piechart = action.payload.data
+                // @ts-ignore
+                state.totalIntake = handleTotalIntake(action.payload.data)
+                // @ts-ignore
+                state.totalTransactions = handleTotalTransactions(action.payload.data)
+                // @ts-ignore
+                state.totalTimeParking = handleTotalTimeParking(action.payload.data)
             }
         })
         .addCase(piechartDetailInWeek.pending, (state,action) => {
@@ -95,6 +104,12 @@ const StatisticsSlice = createSlice({
             if(action.payload.status === 'Success'){
                 // @ts-ignore
                 state.piechart = action.payload.data
+                // @ts-ignore
+                state.totalIntake = handleTotalIntake(action.payload.data)
+                // @ts-ignore
+                state.totalTransactions = handleTotalTransactions(action.payload.data)
+                // @ts-ignore
+                state.totalTimeParking = handleTotalTimeParking(action.payload.data)
             }
         })
         .addCase(piechartDetailInMonth.pending, (state,action) => {
@@ -105,6 +120,60 @@ const StatisticsSlice = createSlice({
             if(action.payload.status === 'Success'){
                 // @ts-ignore
                 state.piechart = action.payload.data
+                // @ts-ignore
+                state.totalIntake = handleTotalIntake(action.payload.data)
+                // @ts-ignore
+                state.totalTransactions = handleTotalTransactions(action.payload.data)
+                // @ts-ignore
+                state.totalTimeParking = handleTotalTimeParking(action.payload.data)
+            }
+        })
+        .addCase(piechartGeneralInDay.pending, (state,action) => {
+            state.piechartLoading = true
+        })
+        .addCase(piechartGeneralInDay.fulfilled, (state,action) => {
+            state.piechartLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.piechart = action.payload.data
+                // @ts-ignore
+                state.totalIntake = handleTotalIntake(action.payload.data)
+                // @ts-ignore
+                state.totalTransactions = handleTotalTransactions(action.payload.data)
+                // @ts-ignore
+                state.totalTimeParking = handleTotalTimeParking(action.payload.data)
+            }
+        })
+        .addCase(piechartGeneralInWeek.pending, (state,action) => {
+            state.piechartLoading = true
+        })
+        .addCase(piechartGeneralInWeek.fulfilled, (state,action) => {
+            state.piechartLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.piechart = action.payload.data
+                // @ts-ignore
+                state.totalIntake = handleTotalIntake(action.payload.data)
+                // @ts-ignore
+                state.totalTransactions = handleTotalTransactions(action.payload.data)
+                // @ts-ignore
+                state.totalTimeParking = handleTotalTimeParking(action.payload.data)
+            }
+        })
+        .addCase(piechartGeneralInMonth.pending, (state,action) => {
+            state.piechartLoading = true
+        })
+        .addCase(piechartGeneralInMonth.fulfilled, (state,action) => {
+            state.piechartLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.piechart = action.payload.data
+                // @ts-ignore
+                state.totalIntake = handleTotalIntake(action.payload.data)
+                // @ts-ignore
+                state.totalTransactions = handleTotalTransactions(action.payload.data)
+                // @ts-ignore
+                state.totalTimeParking = handleTotalTimeParking(action.payload.data)
             }
         })
     }
@@ -268,6 +337,98 @@ export const piechartDetailInMonth = createAsyncThunk('piechartDetailInMonth', a
         return handleAxiosError(error)
     }
 })
+
+export const piechartGeneralInDay = createAsyncThunk('piechartGeneralInDay', async (input:{
+    start:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/percentageDay`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+export const piechartGeneralInWeek = createAsyncThunk('piechartGeneralInWeek', async (input:{
+    start:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/percentageWeek`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+export const piechartGeneralInMonth = createAsyncThunk('piechartGeneralInMonth', async (input:{
+    start:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/percentageMonth`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+
+export const handleTotalIntake = (pieChartData:any) => {
+    let result = 0;
+    pieChartData.forEach((element:any) => {
+        result += element.totalPay;
+    });
+    return result;
+} 
+
+export const handleTotalTransactions = (pieChartData:any) => {
+    let result = 0;
+    pieChartData.forEach((element:any) => {
+        result += element.logsCount;
+    });
+    return result;
+}
+
+export const handleTotalTimeParking = (pieChartData:any) => {
+    let totalTimeInSeconds = 0;
+    pieChartData.forEach((item:any) => {
+    const timeArray = item.times.split(" ");
+    let timeInSeconds = 0;
+    timeArray.forEach((timeUnit:any) => {
+      if (timeUnit.includes("h")) {
+        timeInSeconds += parseInt(timeUnit) * 60 * 60;
+      } else if (timeUnit.includes("m")) {
+        timeInSeconds += parseInt(timeUnit) * 60;
+      } else if (timeUnit.includes("s")) {
+        timeInSeconds += parseInt(timeUnit);
+      }
+    });
+    totalTimeInSeconds += timeInSeconds;
+  });
+//   turn to form 1h 50m 19s
+    const hours = Math.floor(totalTimeInSeconds / 3600);
+    const minutes = Math.floor((totalTimeInSeconds % 3600) / 60);
+    const seconds = Math.floor((totalTimeInSeconds % 3600) % 60);
+    return `${hours}h ${minutes}m ${seconds}s`;
+
+}
 
 
 export default StatisticsSlice
