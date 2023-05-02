@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react'
 import OrderModalSlice from '../../redux/slices/modals/OrderModalSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { OrderModalStore, UserStore } from '../../redux/selectors';
+import { OrderModalStore, ParkingSlotsStore, UserStore } from '../../redux/selectors';
 import TransportCard from '../ForCustomersAndTransportsPage/TransportCard/TransportCard';
 import handleFindSlotNumFromVehicleId from '../../utils/handleFindSlotNumFromVehicleId';
 import useParkingSlotsSocket from '../../utils/hooks/useParkingSlotsSocket';
@@ -14,8 +14,8 @@ import useLoadingForSocket from '../../utils/hooks/useLoadingForSocket';
 import Spinner from '../Spinner/Spinner';
 function OrderDetail() {
     // const [minutes, setMinutes] = useState(180)
-    const dispatch = useDispatch<any>()
-    const parkingSlots = useParkingSlotsSocket()
+    const dispatch = useDispatch<any>()    
+    const parkingSlots = useSelector(ParkingSlotsStore).parkingSlots
     const parkingSlotData = useSelector(OrderModalStore).parkingSlotData
     const parkingSlotIndex = useSelector(OrderModalStore).parkingSlotIndex
     const [transport, setTransport] = useState<any>(false)

@@ -7,18 +7,18 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import TransportCard from "../../components/ForCustomersAndTransportsPage/TransportCard/TransportCard";
 import { getCustomers } from "../../redux/slices/CustomersSlice";
 import { useDispatch } from "react-redux";
-import { CustomersStore } from "../../redux/selectors";
+import { CustomersStore, ParkingSlotsStore } from "../../redux/selectors";
 import { useSelector } from "react-redux";
 import Spinner from "../../components/Spinner/Spinner";
-import useParkingSlotsSocket from "../../utils/hooks/useParkingSlotsSocket";
 import handleFindSlotNumFromVehicleId from "../../utils/handleFindSlotNumFromVehicleId";
 
 function CustomersAndTransportsPage() {
     const dispatch = useDispatch<any>()
     const customers = useSelector(CustomersStore).customers
     const customer = useSelector(CustomersStore).customer
-    const customersLoading = useSelector(CustomersStore).loading
-    const parkingSlots = useParkingSlotsSocket()
+    const customersLoading = useSelector(CustomersStore).loading    
+    const parkingSlots = useSelector(ParkingSlotsStore).parkingSlots
+
     useEffect(() => {
         dispatch(getCustomers({
             "page": 0,

@@ -4,15 +4,14 @@ import { motion } from 'framer-motion'
 import CustomerDetail from "../../components/ForCustomersAndTransportsPage/CustomerDetail/CustomerDetail";
 import TransportDetail from "../../components/TransportDetail/TransportDetail";
 import TransportCard from "../../components/ForCustomersAndTransportsPage/TransportCard/TransportCard";
-import { UserStore } from "../../redux/selectors";
+import { ParkingSlotsStore, UserStore } from "../../redux/selectors";
 import { useSelector } from "react-redux";
 import handleFindSlotNumFromVehicleId from "../../utils/handleFindSlotNumFromVehicleId";
-import useParkingSlotsSocket from "../../utils/hooks/useParkingSlotsSocket";
 
 function UserProfilePage() {
     const viewScrollRef = useRef<any>(null)
-    const user = useSelector(UserStore).user    
-    const parkingSlots = useParkingSlotsSocket()
+    const user = useSelector(UserStore).user
+    const parkingSlots = useSelector(ParkingSlotsStore).parkingSlots
     const [transport, setTransport] = useState<any>(null)
     return (<>
         <motion.div

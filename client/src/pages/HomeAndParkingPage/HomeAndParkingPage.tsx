@@ -10,16 +10,15 @@ import CustomerVehicleCard from '../../components/ForHomeAndParkingPage/Customer
 import { motion } from 'framer-motion'
 import { pageMotionTime } from '../../configs'
 import { useSelector } from 'react-redux';
-import { LogsStore, UserStore } from '../../redux/selectors';
-import useParkingSlotsSocket from '../../utils/hooks/useParkingSlotsSocket';
+import { LogsStore, ParkingSlotsStore, UserStore } from '../../redux/selectors';
 import useGetLogs from '../../utils/hooks/useGetLogs';
 import useLoadingForSocket from '../../utils/hooks/useLoadingForSocket';
 import Spinner from '../../components/Spinner/Spinner';
 function HomeAndParkingPage() {
     const user = useSelector(UserStore).user
     const swiperRef = useRef<any>(null)
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const parkingSlots = useParkingSlotsSocket()
+    const [currentIndex, setCurrentIndex] = useState(0);    
+    const parkingSlots = useSelector(ParkingSlotsStore).parkingSlots
     const {parkingSlotsLoading} = useLoadingForSocket()
     const [currPage, setCurrPage] = useState(1)
     const [totalPage, setTotalPage] = useState<boolean | number>(false)

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState } from "react"
 import socket from "../socket"
 import ParkingSlotsSlice, { parkingSlotChannelLinkName } from "../../redux/slices/ParkingSlotsSlice"
 import { useSelector } from "react-redux"
@@ -13,19 +13,15 @@ const useParkingSlotsSocket = () => {
     const [receiveData, setReceiveData] = useState(false)
     useEffect(() => {
         socket.on(parkingSlotChannelLinkName, (res: any) => {
-            console.log("socket ne")
-            console.log(parkingSlots.length, res)
             if (res.status === "Success") {
                 if (parkingSlots.length === 0) {
                     dispatch(ParkingSlotsSlice.actions.handleSetParkingSlots([...res.data]))
                     handleLoading(parkingSlotChannelLinkName, false)
                     setReceiveData((prev) => !prev)
-                    return [...res.data]
                 }
                 else {
                     const updateParkingSlot = res.data[0]
                     let newArray = parkingSlots.map((item: any, index: number) => {
-                        console.log(updateParkingSlot.parkingSlotId === item.parkingSlotId)
                         if (updateParkingSlot.parkingSlotId === item.parkingSlotId)
                             return updateParkingSlot
                         else return item
@@ -33,7 +29,6 @@ const useParkingSlotsSocket = () => {
                     dispatch(ParkingSlotsSlice.actions.handleSetParkingSlots([...newArray]))
                     handleLoading(parkingSlotChannelLinkName, false)
                     setReceiveData((prev) => !prev)
-                    return [...newArray]
                 }
             }
         })
@@ -50,12 +45,6 @@ const useParkingSlotsSocket = () => {
         })
         handleLoading(parkingSlotChannelLinkName, true)
     }, [])
-
-    const value = useMemo(() => {
-        return parkingSlots
-    }, [parkingSlots])
-
-    return value
 }
 
 export default useParkingSlotsSocket
