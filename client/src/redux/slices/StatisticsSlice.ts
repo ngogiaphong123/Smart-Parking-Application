@@ -9,6 +9,8 @@ const StatisticsSlice = createSlice({
     initialState:{
         logsLoading:false,
         logs:false,
+        piechartLoading:false,
+        piechart:false
     },
     reducers:{
     },
@@ -39,6 +41,36 @@ const StatisticsSlice = createSlice({
             state.logsLoading = true
         })
         .addCase(logsPerWeek.fulfilled, (state,action) => {
+            state.logsLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.logs = action.payload.data
+            }
+        })
+        .addCase(logsPerHourCustomer.pending, (state,action) => {
+            state.logsLoading = true
+        })
+        .addCase(logsPerHourCustomer.fulfilled, (state,action) => {
+            state.logsLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.logs = action.payload.data
+            }
+        })
+        .addCase(logsPerDayCustomer.pending, (state,action) => {
+            state.logsLoading = true
+        })
+        .addCase(logsPerDayCustomer.fulfilled, (state,action) => {
+            state.logsLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.logs = action.payload.data
+            }
+        })
+        .addCase(logsPerWeekCustomer.pending, (state,action) => {
+            state.logsLoading = true
+        })
+        .addCase(logsPerWeekCustomer.fulfilled, (state,action) => {
             state.logsLoading = false
             if(action.payload.status === 'Success'){
                 // @ts-ignore
@@ -87,6 +119,77 @@ export const logsPerWeek = createAsyncThunk('logsPerWeek', async (input:{
 }) => {
     try {
         const {data} = await axios.post(`${serverUrl}/statistic/logPerWeek`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+export const logsPerHourCustomer = createAsyncThunk('logsPerHourCustomer', async (input:{
+    start:string
+    ,accountId:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/logPerHour`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+export const logsPerDayCustomer = createAsyncThunk('logsPerDayCustomer', async (input:{
+    start:string
+    ,accountId:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/logPerDay`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+export const logsPerWeekCustomer = createAsyncThunk('logsPerWeekCustomer', async (input:{
+    start:string
+    ,accountId:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/logPerWeek`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+export const GeneralPiechart = createAsyncThunk('GeneralPiechart', async (input:{
+    start:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/percentage`,input);
         if(data.status === 'Success'){
             return {status:"Success", "message":data.message, data:data.data};
         }

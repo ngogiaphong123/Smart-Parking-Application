@@ -68,7 +68,7 @@ function BarChart({timeMode, date}:{timeMode:'today' | 'thismonth' | 'thisweek',
                     {
                         label: 'Logs count',
                         data: labels.map((label: any, index: number) => {
-                            return logsStatistics[index].totalRecords
+                            return logsStatistics[index].logsCount
                         }),
                         backgroundColor: '#007aff',
                     },
