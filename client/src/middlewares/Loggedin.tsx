@@ -17,6 +17,9 @@ function Loggedin() {
                 }
             })
         }
+        else {
+            navigate("/")
+        }
     },[])
     return ( <>
         {

@@ -19,7 +19,7 @@ function AiChattingMess({ type, message }: { type: "left" | "right", message?: s
                 if(displayText!==message)
                 setTimeout(()=>{
                     setDisplayText(prev=>prev+message![prev.length])
-                },100)
+                },50)
             }
         }
     }, [message, displayText])
