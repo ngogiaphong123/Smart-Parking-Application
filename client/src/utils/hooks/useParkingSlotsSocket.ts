@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState } from "react"
 import socket from "../socket"
 import ParkingSlotsSlice, { parkingSlotChannelLinkName } from "../../redux/slices/ParkingSlotsSlice"
 import { useSelector } from "react-redux"
@@ -13,8 +13,6 @@ const useParkingSlotsSocket = () => {
     const [receiveData, setReceiveData] = useState(false)
     useEffect(() => {
         socket.on(parkingSlotChannelLinkName, (res: any) => {
-            console.log("socket ne")
-            console.log(parkingSlots.length, res)
             if (res.status === "Success") {
                 if (parkingSlots.length === 0) {
                     dispatch(ParkingSlotsSlice.actions.handleSetParkingSlots([...res.data]))
@@ -47,12 +45,6 @@ const useParkingSlotsSocket = () => {
         })
         handleLoading(parkingSlotChannelLinkName, true)
     }, [])
-
-    const value = useMemo(() => {
-        return parkingSlots
-    }, [parkingSlots])
-
-    return value
 }
 
 export default useParkingSlotsSocket
