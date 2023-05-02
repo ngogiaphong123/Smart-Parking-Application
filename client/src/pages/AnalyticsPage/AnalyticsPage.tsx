@@ -1,9 +1,7 @@
-import { memo, useState } from 'react'
+import { memo, useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { pageMotionTime } from '../../configs';
 import CalendarForApp from '../../components/CalendarForApp/CalendarForApp';
-import arrowRight from '../../assets/icon/arrow-right.svg'
-import arrowRightOff from '../../assets/icon/arrow-right-off.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -13,10 +11,41 @@ import BarChart from '../../components/ForAnalyticsPage/BarChart/BarChart';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import TransportAnalytic from '../../components/ForAnalyticsPage/TransportAnalytic/TransportAnalytic';
 import CustomerAnalytic from '../../components/ForAnalyticsPage/CustomerAnalytic/CustomerAnalytic';
+import { useDispatch } from 'react-redux';
+import { logsPerDay, logsPerHour, logsPerWeek } from '../../redux/slices/StatisticsSlice';
 function AnalyticsPage() {
     const [timeMode, setTimeMode] = useState<'today' | 'thismonth' | 'thisweek'>('today');
-    const [pageMode, setPageMode] = useState<'general' | 'detail'>('detail');
+    const [pageMode, setPageMode] = useState<'general' | 'detail'>('general');
     const [searchType, setSearchType] = useState<'customer' | 'transport'>('customer');
+    const [date, setDate] = useState<any>(() => {
+        const date = new Date();
+        const startOfDay = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0)); // set time to 00:00:00.000Z
+        return {
+            start: startOfDay.toISOString(),
+        }
+    })
+    const dispatch = useDispatch<any>()
+    useEffect(()=>{
+        if(timeMode==="today")
+        {
+            dispatch(logsPerHour({
+                start:date.start
+            }))
+        }
+        else if(timeMode==="thisweek")
+        {
+            dispatch(logsPerDay({
+                start:date.start
+            }))
+        }
+        else if(timeMode==="thismonth")
+        {
+            dispatch(logsPerWeek({
+                start:date.start
+            }))
+        }
+
+    },[timeMode, date])
     return (<>
         <motion.div
             initial={{
@@ -114,9 +143,11 @@ function AnalyticsPage() {
                                 </div>
                                 <PieChart />
                                 <div className="w-full h-fit flex justify-between items-center">
-                                    <span className="text-sm font-semibold capitalize">Monthly Revenue</span>
+                                    <span className="text-sm font-semibold capitalize">Logs Statistics</span>
                                 </div>
-                                <BarChart />
+                                <div className="w-full h-fit max-h-96">
+                                    <BarChart timeMode={timeMode} date={date}/>
+                                </div>
                             </motion.div>
                             :
                             <motion.div
@@ -165,7 +196,7 @@ function AnalyticsPage() {
             <div
                 className="h-full min-w-[370px] px-4 mb-4 drop-shadow-xl flex overflow-hidden justify-center flex-col space-y-4 items-center"
             >
-                <CalendarForApp />
+                <CalendarForApp setDate={setDate}/>
                 <div className="w-full h-fit p-6 rounded-xl shadow-ml bg-white space-y-2">
                     <span className="w-full h-fit text-base font-semibold capitailize">
                         Monthly

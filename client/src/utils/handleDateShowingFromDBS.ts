@@ -4,7 +4,8 @@ function handleDateShowingFromDBS(time: string) {
 
     // create an array of weekday names
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
+    const monthsOfYear = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const monthName = monthsOfYear[originalDate.getMonth()];
     const dayOfWeek = daysOfWeek[originalDate.getDay()];
     const dayOfMonth = originalDate.getDate();
     // const year = originalDate.getFullYear();
@@ -14,7 +15,7 @@ function handleDateShowingFromDBS(time: string) {
     hour = hour ? hour : 12;
     const minutes = originalDate.getMinutes();
 
-    const formattedDate = `${dayOfMonth} ${dayOfWeek} ${hour}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+    const formattedDate = `${dayOfMonth} ${monthName} ${dayOfWeek} ${hour}:${minutes.toString().padStart(2, '0')} ${ampm}`;
 
     return (formattedDate); // "4/27 Thursday"
 }

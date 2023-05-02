@@ -12,6 +12,7 @@ import LogsSlice from './slices/LogsSlice';
 import CustomersSlice from './slices/CustomersSlice';
 import ParkingSlotsSlice from './slices/ParkingSlotsSlice';
 import AiSlice from './slices/modals/AiSlice';
+import StatisticsSlice from './slices/StatisticsSlice';
 
 
 const store = configureStore({
@@ -27,7 +28,8 @@ const store = configureStore({
         logs: LogsSlice.reducer,
         customers: CustomersSlice.reducer,
         parkingSlots: ParkingSlotsSlice.reducer,
-        ai: AiSlice.reducer
+        ai: AiSlice.reducer,
+        statistics: StatisticsSlice.reducer,
     }
 })
 
