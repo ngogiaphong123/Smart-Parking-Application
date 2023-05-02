@@ -45,17 +45,31 @@ export const customerPercentageService = async () => {
                 vehicle : {
                     ownerId : users[i].accountId
                 }
+            },
+            select : {
+                price : true,
+                timeIn : true,
+                timeOut : true
             }
         });
-        const userLogsPrice = userLogs.map((log) => log.price);
         let userTotalPrice = 0;
-        for (let j = 0; j < userLogsPrice.length; j++) {
-            if(userLogsPrice[j]) {
-                userTotalPrice += parseInt(userLogsPrice[j] as string);
+        let totalTimes = 0;
+        for(let j = 0; j < userLogs.length; j++) {
+            if(userLogs[j].price) {
+                userTotalPrice += parseInt(userLogs[j].price as string);
+            }
+            if(userLogs[j].timeOut) {
+                // @ts-ignore
+                totalTimes += (logs[j].timeOut.getTime() - logs[j].timeIn.getTime());
             }
         }
+        totalTimes = Math.round(totalTimes / 1000);
+        let hours = Math.floor(totalTimes / 3600);
+        let minutes = Math.floor((totalTimes % 3600) / 60);
+        let remainingSeconds = totalTimes % 60;
+        const times = `${hours}h ${minutes}m ${remainingSeconds}s`;
         const percentage = (userTotalPrice / totalPrice) * 100;
-        result.push({user : users[i], percentage , totalPay : userTotalPrice, logsCount : userLogs.length});
+        result.push({user : users[i], percentage , times ,totalPay : userTotalPrice, logsCount : userLogs.length});
     }
     // sort by percentage
     result.sort((a, b) => b.percentage - a.percentage);
