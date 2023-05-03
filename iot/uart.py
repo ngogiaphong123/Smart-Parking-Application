@@ -69,6 +69,7 @@ def readSerial(client):
             mess =  ser.read(bytesToRead).decode("UTF-8")
             serial_parser(mess,client)
     except:
+        isMicrobitconnected=False
         if(not isMicrobitconnected):
             get_microbit_serial()
     try:
@@ -78,6 +79,7 @@ def readSerial(client):
             rfidmess = rfid.read(rfidbytesToRead).decode("UTF-8")
             serial_parser(rfidmess,client)
     except:
+        rfidconnected=False
         if(not rfidconnected):
             get_RFID_serial()
 
