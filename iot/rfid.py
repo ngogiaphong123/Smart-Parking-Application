@@ -25,12 +25,12 @@ def  message(client , feed_id , payload):
     print("!"+feed_id+ ":" + str(payload) + "#")
 
 client = MQTTClient(AIO_USERNAME , AIO_KEY)
+client.loop_background()
 client.on_connect = connected
 client.on_disconnect = disconnected
 client.on_message = message
 client.on_subscribe = subscribe
 client.connect()
-client.loop_background()
 
 def getPort():
     ports = serial.tools.list_ports.comports()
@@ -43,9 +43,14 @@ def getPort():
             splitPort = strPort.split(" ")
             commPort = (splitPort[0])
     return commPort
-
-ser = serial.Serial(getPort(),9600)
-
+ser=""
+def getserial():
+    try:
+        global ser
+        ser = serial.Serial(getPort(),9600)
+        print("Serial been connected")
+    except:
+        print("RFID not found")
 mess = ""
 def processData(data):
     data = data.replace("!", "")
@@ -56,19 +61,21 @@ def processData(data):
         client.publish("thongbao", splitData[1])
 mess = ""
 def readSerial():
-    bytesToRead = ser.inWaiting()
-    if (bytesToRead > 0):
-        global mess
-        mess = mess + ser.read(bytesToRead).decode("UTF-8")
-        while ("#" in mess) and ("!" in mess):
-            start = mess.find("!")
-            end = mess.find("#")
-            processData(mess[start:end + 1])
-            if (end == len(mess)):
-                mess = ""
-            else:
-                mess = mess[end+1:]
-
+    try:
+        bytesToRead = ser.inWaiting()
+        if (bytesToRead > 0):
+            global mess
+            mess = mess + ser.read(bytesToRead).decode("UTF-8")
+            while ("#" in mess) and ("!" in mess):
+                start = mess.find("!")
+                end = mess.find("#")
+                processData(mess[start:end + 1])
+                if (end == len(mess)):
+                    mess = ""
+                else:
+                    mess = mess[end+1:]
+    except:
+        getserial()
 while True:
     readSerial()
     time.sleep(1)
