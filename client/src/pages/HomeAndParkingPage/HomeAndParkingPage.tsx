@@ -14,6 +14,8 @@ import { LogsStore, ParkingSlotsStore, UserStore } from '../../redux/selectors';
 import useGetLogs from '../../utils/hooks/useGetLogs';
 import useLoadingForSocket from '../../utils/hooks/useLoadingForSocket';
 import Spinner from '../../components/Spinner/Spinner';
+import serverUrl from '../../redux/urls/urls';
+import axios from 'axios';
 function HomeAndParkingPage() {
     const user = useSelector(UserStore).user
     const swiperRef = useRef<any>(null)
@@ -157,11 +159,15 @@ function HomeAndParkingPage() {
                     </div>
                     <div className="w-full lg:w-1/2 min-h-0 flex flex-col gap-2 max-h-[400px] overflow-auto p-4">
                         {
-                            logs&&logs.map((log: any, index: number) => {
+                            logs&&logs.length>0?logs.map((log: any, index: number) => {
                                 return (
                                     <CustomerVehicleCard key={index} data={log} type={log.timeOut?"paid":"unpaid"} />
                                 )
                             })
+                            :
+                            <div className="w-full h-full flex justify-center items-center">
+                                <h1 className="text-2xl text-gray-500">No data to show</h1>
+                            </div>
                         }
                     </div>
                 </>

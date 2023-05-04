@@ -79,12 +79,15 @@ const LogsSlice = createSlice({
 
 export const getLogs = createAsyncThunk('getLogs', async (input: any) => {
     try {
-        let { data } = await axios.post(`${serverUrl}/log`, input, {
+        let { data } = await axios.post(`${serverUrl}/log`, {
+            "page": input.page,
+            "limit": input.limit,
+        }, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                 "x-refresh": localStorage.getItem('refreshToken')
             }
-        },);
+        });
         if (data.status === 'Success') {
             if (input.paidState) {
                 data.data.logs = data.data.logs.filter((log: any) => {
@@ -92,9 +95,11 @@ export const getLogs = createAsyncThunk('getLogs', async (input: any) => {
                         return log
                 })
                 data.data.logsCount = data.data.logs.length
-                data.data.revenue = data.data.logs.reduce((item:any)=>{
-                    return item.price + item.price
-                },0)
+                let newTotalPay = 0;
+                data.data.logs.forEach((log: any) => {
+                    newTotalPay += parseInt(log.price)
+                })
+                data.data.totalPay = newTotalPay
             }
             return { status: "Success", "message": data.message, data: data.data };
         }
@@ -122,9 +127,11 @@ export const getLogsDate = createAsyncThunk('getLogsDate', async (input: any) =>
                         return log
                 })
                 data.data.logsCount = data.data.logs.length
-                data.data.revenue = data.data.logs.reduce((item:any)=>{
-                    return item.price + item.price
-                },0)
+                let newTotalPay = 0;
+                data.data.logs.forEach((log: any) => {
+                    newTotalPay += parseInt(log.price)
+                })
+                data.data.totalPay = newTotalPay
             }
             return { status: "Success", "message": data.message, data: data.data };
         }
@@ -152,9 +159,11 @@ export const customerGetLogs = createAsyncThunk('customerGetLogs', async (input:
                         return log
                 })
                 data.data.logsCount = data.data.logs.length
-                data.data.revenue = data.data.logs.reduce((item:any)=>{
-                    return item.price + item.price
-                },0)
+                let newTotalPay = 0;
+                data.data.logs.forEach((log: any) => {
+                    newTotalPay += parseInt(log.price)
+                })
+                data.data.totalPay = newTotalPay
             }
             return { status: "Success", "message": data.message, data: data.data };
         }
@@ -182,9 +191,11 @@ export const customerGetLogsByVehicle = createAsyncThunk('customerGetLogsByVehic
                         return log
                 })
                 data.data.logsCount = data.data.logs.length
-                data.data.revenue = data.data.logs.reduce((item:any)=>{
-                    return item.price + item.price
-                },0)
+                let newTotalPay = 0;
+                data.data.logs.forEach((log: any) => {
+                    newTotalPay += parseInt(log.price)
+                })
+                data.data.totalPay = newTotalPay
             }
             return { status: "Success", "message": data.message, data: data.data };
         }

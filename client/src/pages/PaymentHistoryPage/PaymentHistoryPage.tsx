@@ -28,7 +28,7 @@ function PaymentHistoryPage() {
     })
     const logsLoading = useSelector(LogsStore).loading
     const user = useSelector(UserStore).user
-    const {logs, revenue} = useSelector(LogsStore)
+    const {logs, revenue, totalRecords} = useSelector(LogsStore)
     useGetLogs({
         paidState, currPage, setTotalPage, date, vehicle:transport
     })    
@@ -63,26 +63,25 @@ function PaymentHistoryPage() {
                 <span onClick={() => { setPaidState("paid"); setCurrPage(1); setTotalPage(1) }} className={clsx("cursor-pointer text-md capitalize", {
                     "text-title-inPage font-normal": paidState === "paid",
                     "text-gray-400 font-thin": paidState === "unpaid" || paidState === "all" || paidState==="nodate"
-                })}>Paid</span>/
+                })}>Paid With Date</span>/
                 <span onClick={() => { setPaidState("unpaid"); setCurrPage(1); setTotalPage(1) }} className={clsx("pl-1 cursor-pointer text-md capitalize", {
                     "text-title-inPage font-normal": paidState === "unpaid",
                     "text-gray-400 font-thin": paidState === "paid" || paidState === "all" || paidState==="nodate"
-                })}> unpaid</span>/
+                })}>unpaid With Date</span>/
                 <span onClick={() => { setPaidState("all"); setCurrPage(1); setTotalPage(1) }} className={clsx("pl-1 cursor-pointer text-md capitalize", {
                     "text-title-inPage font-normal": paidState === "all",
                     "text-gray-400 font-thin": paidState === "paid" || paidState === "unpaid" || paidState==="nodate"
-                })}> all</span>/
-                <span onClick={() => { setPaidState("nodate"); setCurrPage(1); setTotalPage(1) }} className={clsx("pl-1 cursor-pointer text-md capitalize", {
-                    "text-title-inPage font-normal": paidState === "nodate",
-                    "text-gray-400 font-thin": paidState === "paid" || paidState === "unpaid" || paidState==="all"
-                })}> No date</span>
+                })}> all</span>
             </div>
             <div className="w-full h-fit flex justify-start items-center">
-                <span className="font-bold text-super-small">Results: {logs.length}</span>
+                <span className="font-bold text-super-small">Results: {totalRecords}</span>
             </div>
-            <div className="w-full h-fit flex justify-start items-center">
-                <span className="font-bold text-super-small">Money: {revenue}$</span>
-            </div>
+            {
+                revenue>0 &&
+                <div className="w-full h-fit flex justify-start items-center">
+                    <span className="font-bold text-super-small">Money: {revenue}$</span>
+                </div>
+            }
             <div className="w-full min-h-0 flex flex-col gap-2 max-h-[600px] overflow-auto p-4">
                 {
                     logsLoading ?
