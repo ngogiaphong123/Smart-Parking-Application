@@ -27,7 +27,7 @@ function TransportCard({noAdjustSignal=false, slot, data, setTransport, scrollTo
                     slot==="none"?
                     <span className="font-semibold text-super-small uppercase"> NONE</span>
                     :
-                    <span className="font-normal text-super-small text-[#81D0DF] uppercase"> {slot?slot+1:"None"}</span>
+                    <span className="font-normal text-super-small text-[#81D0DF] uppercase"> {slot?parseInt(slot)+1:"None"}</span>
                 }
                 </p>
             </div>
