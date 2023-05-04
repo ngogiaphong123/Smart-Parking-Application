@@ -68,7 +68,7 @@ function HeaderUser() {
                         <p style={{ fontSize: 12, color: "#bdbdbd" }}>ID: {user.accountId.substring(0, 5) + "..."}</p>
                     </div>
                     {
-                        <div ref={myRef} className={"pl-4"}>
+                        <div className={"pl-4"}>
                             <FontAwesomeIcon icon={faChevronDown as IconProp} className={clsx("text-gray-500 ", {
                                 "text-sky-300": !isAvatarClickedOutside
                             })} />
@@ -76,7 +76,7 @@ function HeaderUser() {
                     }
                 </div>
             </div>
-            <div className={clsx("transition duration-200 ease-in-out absolute bg-white top-full right-8 w-44 h-16 rounded-xl drop-shadow p-8 flex justify-center items-center", {
+            <div ref={myRef} className={clsx("transition duration-200 ease-in-out absolute bg-white top-full right-8 w-44 h-16 rounded-xl drop-shadow p-8 flex justify-center items-center", {
                 "hidden": isAvatarClickedOutside
             })}>
                 <div className="z-0 bg-white w-4 h-4 absolute -top-2 right-4 rotate-45"></div>
