@@ -176,6 +176,38 @@ const StatisticsSlice = createSlice({
                 state.totalTimeParking = handleTotalTimeParking(action.payload.data)
             }
         })
+        .addCase(piechartGeneralAll.pending, (state,action) => {
+            state.piechartLoading = true
+        })
+        .addCase(piechartGeneralAll.fulfilled, (state,action) => {
+            state.piechartLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.piechart = action.payload.data
+                // @ts-ignore
+                state.totalIntake = handleTotalIntake(action.payload.data)
+                // @ts-ignore
+                state.totalTransactions = handleTotalTransactions(action.payload.data)
+                // @ts-ignore
+                state.totalTimeParking = handleTotalTimeParking(action.payload.data)
+            }
+        })
+        .addCase(piechartDetailAll.pending, (state,action) => {
+            state.piechartLoading = true
+        })
+        .addCase(piechartDetailAll.fulfilled, (state,action) => {
+            state.piechartLoading = false
+            if(action.payload.status === 'Success'){
+                // @ts-ignore
+                state.piechart = action.payload.data
+                // @ts-ignore
+                state.totalIntake = handleTotalIntake(action.payload.data)
+                // @ts-ignore
+                state.totalTransactions = handleTotalTransactions(action.payload.data)
+                // @ts-ignore
+                state.totalTimeParking = handleTotalTimeParking(action.payload.data)
+            }
+        })
     }
 })
 
@@ -338,6 +370,24 @@ export const piechartDetailInMonth = createAsyncThunk('piechartDetailInMonth', a
     }
 })
 
+export const piechartDetailAll = createAsyncThunk('piechartDetailAll', async (input:{
+    start:string
+    ,accountId:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/logVehicleTotal`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
 export const piechartGeneralInDay = createAsyncThunk('piechartGeneralInDay', async (input:{
     start:string
 }) => {
@@ -377,6 +427,23 @@ export const piechartGeneralInMonth = createAsyncThunk('piechartGeneralInMonth',
 }) => {
     try {
         const {data} = await axios.post(`${serverUrl}/statistic/customer/percentageMonth`,input);
+        if(data.status === 'Success'){
+            return {status:"Success", "message":data.message, data:data.data};
+        }
+        else {
+            return {status:"Error", "message":data.message};
+        }
+    }
+    catch (error : any) {
+        return handleAxiosError(error)
+    }
+})
+
+export const piechartGeneralAll = createAsyncThunk('piechartGeneralAll', async (input:{
+    start:string
+}) => {
+    try {
+        const {data} = await axios.post(`${serverUrl}/statistic/customer/percentageTotal`,input);
         if(data.status === 'Success'){
             return {status:"Success", "message":data.message, data:data.data};
         }
