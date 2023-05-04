@@ -11,17 +11,18 @@ import BarChart from '../../components/ForAnalyticsPage/BarChart/BarChart';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import CustomerAnalytic from '../../components/ForAnalyticsPage/CustomerAnalytic/CustomerAnalytic';
 import { useDispatch } from 'react-redux';
-import { logsPerDay, logsPerDayCustomer, logsPerHour, logsPerHourCustomer, logsPerWeek, logsPerWeekCustomer, piechartDetailInDay, piechartDetailInMonth, piechartDetailInWeek, piechartGeneralInDay, piechartGeneralInMonth, piechartGeneralInWeek } from '../../redux/slices/StatisticsSlice';
+import { logsPerDay, logsPerDayCustomer, logsPerHour, logsPerHourCustomer, logsPerWeek, logsPerWeekCustomer, piechartDetailAll, piechartDetailInDay, piechartDetailInMonth, piechartDetailInWeek, piechartGeneralAll, piechartGeneralInDay, piechartGeneralInMonth, piechartGeneralInWeek } from '../../redux/slices/StatisticsSlice';
 import { getCustomers } from '../../redux/slices/CustomersSlice';
 import { CustomersStore, StatisticsStore } from '../../redux/selectors';
 import { useSelector } from 'react-redux';
 import Spinner from '../../components/Spinner/Spinner';
 function AnalyticsPage() {
     const [chosenCustomer, setChosenCustomer] = useState<any>(false)
-    const {totalIntake, totalTransactions, totalTimeParking} = useSelector(StatisticsStore)
+    const { totalIntake, totalTransactions, totalTimeParking } = useSelector(StatisticsStore)
     const customers = useSelector(CustomersStore).customers
     const customersLoading = useSelector(CustomersStore).loading
     const [timeMode, setTimeMode] = useState<'today' | 'thismonth' | 'thisweek'>('today');
+    const [allMode, setAllMode] = useState(false)
     const [pageMode, setPageMode] = useState<'general' | 'detail'>('general');
     const [date, setDate] = useState<any>(() => {
         const date = new Date();
@@ -32,77 +33,118 @@ function AnalyticsPage() {
     })
     const dispatch = useDispatch<any>()
     useEffect(() => {
-        if(!chosenCustomer)
-        {if (timeMode === "today") {
-            dispatch(logsPerHour({
-                start: date.start
-            }))
-            dispatch(
-            piechartGeneralInDay
-            ({
-                start: date.start
-            }))
-        }
-        else if (timeMode === "thisweek") {
-            dispatch(logsPerDay({
-                start: date.start
-            }))
-            dispatch(
-                piechartGeneralInWeek
-                ({
+        if (!chosenCustomer) {
+            if (timeMode === "today") {
+                dispatch(logsPerHour({
                     start: date.start
                 }))
-        }
-        else if (timeMode === "thismonth") {
-            dispatch(logsPerWeek({
-                start: date.start
-            }))
-            dispatch(
-                piechartGeneralInMonth
-                ({
+                if (!allMode)
+                    dispatch(
+                        piechartGeneralInDay
+                            ({
+                                start: date.start
+                            }))
+                else {
+                    dispatch(piechartGeneralAll({
+                        start: date.start,
+                    }))
+                }
+            }
+            else if (timeMode === "thisweek") {
+                dispatch(logsPerDay({
                     start: date.start
                 }))
-        }}
-        else
-        {if (timeMode === "today") {
-            dispatch(logsPerHourCustomer({
-                start: date.start,
-                accountId: chosenCustomer.accountId
-            }))
-            dispatch(piechartDetailInDay({
-                start: date.start,
-                accountId: chosenCustomer.accountId
-            }))
+                if (!allMode)
+                    dispatch(
+                        piechartGeneralInWeek
+                            ({
+                                start: date.start
+                            }))
+                else {
+                    dispatch(piechartGeneralAll({
+                        start: date.start,
+                    }))
+                }
+            }
+            else if (timeMode === "thismonth") {
+                dispatch(logsPerWeek({
+                    start: date.start
+                }))
+                if (!allMode)
+                    dispatch(
+                        piechartGeneralInMonth
+                            ({
+                                start: date.start
+                            }))
+                else {
+                    dispatch(piechartGeneralAll({
+                        start: date.start,
+                    }))
+                }
+            }
         }
-        else if (timeMode === "thisweek") {
-            dispatch(logsPerDayCustomer({
-                start: date.start,
-                accountId: chosenCustomer.accountId
-            }))
-            dispatch(piechartDetailInWeek({
-                start: date.start,
-                accountId: chosenCustomer.accountId
-            }))
+        else {
+            if (timeMode === "today") {
+                dispatch(logsPerHourCustomer({
+                    start: date.start,
+                    accountId: chosenCustomer.accountId
+                }))
+                if (!allMode)
+                    dispatch(piechartDetailInDay({
+                        start: date.start,
+                        accountId: chosenCustomer.accountId
+                    }))
+                else {
+                    dispatch(piechartDetailAll({
+                        start: date.start,
+                        accountId: chosenCustomer.accountId
+                    }))
+                }
+            }
+            else if (timeMode === "thisweek") {
+                dispatch(logsPerDayCustomer({
+                    start: date.start,
+                    accountId: chosenCustomer.accountId
+                }))
+                if (!allMode)
+                    dispatch(piechartDetailInWeek({
+                        start: date.start,
+                        accountId: chosenCustomer.accountId
+                    }))
+                else {
+                    dispatch(piechartDetailAll({
+                        start: date.start,
+                        accountId: chosenCustomer.accountId
+                    }))
+                }
+            }
+            else if (timeMode === "thismonth") {
+                dispatch(logsPerWeekCustomer({
+                    start: date.start,
+                    accountId: chosenCustomer.accountId
+                }))
+                if (!allMode)
+                    dispatch(piechartDetailInMonth({
+                        start: date.start,
+                        accountId: chosenCustomer.accountId
+                    }))
+                else {
+                    dispatch(piechartDetailAll({
+                        start: date.start,
+                        accountId: chosenCustomer.accountId
+                    }))
+                }
+            }
         }
-        else if (timeMode === "thismonth") {
-            dispatch(logsPerWeekCustomer({
-                start: date.start,
-                accountId: chosenCustomer.accountId
-            }))
-            dispatch(piechartDetailInMonth({
-                start: date.start,
-                accountId: chosenCustomer.accountId
-            }))
-        }}
 
-    }, [timeMode, date, chosenCustomer])
+    }, [timeMode, date, chosenCustomer, allMode])
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getCustomers({
             "page": 0,
             "limit": 6
         }))
-    },[])
+    }, [])
     return (<>
         <motion.div
             initial={{
@@ -173,10 +215,16 @@ function AnalyticsPage() {
                                 exit={{
                                     x: "-100%", y: 0
                                 }}
-                            className="space-y-4">
+                                className="space-y-4">
                                 <div className="w-full h-fit flex justify-between items-center">
                                     <span className="text-sm font-semibold capitalize">Analytics</span>
                                     <div className="w-fit h-fit inline-flex items-center">
+                                        <span onClick={() => {
+                                            setAllMode(prev => !prev)
+                                        }} className={clsx("hover:text-gray-500 text-sm font-semibold capitalize cursor-pointer ", {
+                                            'text-black': allMode,
+                                            'text-gray-300': !allMode
+                                        })}>All For Piechart</span>/
                                         <span onClick={() => {
                                             setTimeMode('today')
                                         }} className={clsx("text-sm font-semibold capitalize cursor-pointer  hover:text-black", {
@@ -197,20 +245,20 @@ function AnalyticsPage() {
                                         })}> This month</span>
                                     </div>
                                 </div>
-                                    {
-                                        chosenCustomer &&
-                                        <div className="w-full h-fit text-center font-semibold">
-                                            In detail with <span className="text-title-inPage">{chosenCustomer.firstName+" "+chosenCustomer.lastName}</span>, 
-                                            <span onClick={()=>{
-                                                setPageMode('detail')
-                                            }} className="text-gray-300 hover:text-title-inPage cursor-pointer"> choose another?</span>
-                                            <span onClick={()=>{
-                                                setChosenCustomer(false)
-                                            }} className="text-gray-300 hover:text-title-inPage cursor-pointer"> or see general detail?</span>
-                                        </div>
-                                    }
+                                {
+                                    chosenCustomer &&
+                                    <div className="w-full h-fit text-center font-semibold">
+                                        In detail with <span className="text-title-inPage">{chosenCustomer.firstName + " " + chosenCustomer.lastName}</span>,
+                                        <span onClick={() => {
+                                            setPageMode('detail')
+                                        }} className="text-gray-300 hover:text-title-inPage cursor-pointer"> choose another?</span>
+                                        <span onClick={() => {
+                                            setChosenCustomer(false)
+                                        }} className="text-gray-300 hover:text-title-inPage cursor-pointer"> or see general detail?</span>
+                                    </div>
+                                }
                                 <div className="w-full h-fit">
-                                    <PieChart chosenCustomer={chosenCustomer} date={date} timeMode={timeMode}/>    
+                                    <PieChart chosenCustomer={chosenCustomer} date={date} timeMode={timeMode} allMode={allMode} />
                                 </div>
 
                                 <div className="w-full h-fit flex justify-between items-center">
@@ -241,12 +289,12 @@ function AnalyticsPage() {
                                             {
                                                 customersLoading ?
                                                     <div className="w-full h-full flex justify-center items-center">
-                                                        <Spinner/>
+                                                        <Spinner />
                                                     </div>
                                                     :
                                                     <>
-                                                        {customers&&customers.map((customer:any, index:number)=>{
-                                                            return <CustomerAnalytic data={customer} key={index} setChosenCustomer={setChosenCustomer} chosenCustomer={chosenCustomer} setPageMode={setPageMode}/>
+                                                        {customers && customers.map((customer: any, index: number) => {
+                                                            return <CustomerAnalytic data={customer} key={index} setChosenCustomer={setChosenCustomer} chosenCustomer={chosenCustomer} setPageMode={setPageMode} />
                                                         })}
                                                     </>
                                             }
@@ -263,7 +311,7 @@ function AnalyticsPage() {
                 <CalendarForApp setDate={setDate} />
                 <div className="w-full h-fit p-6 rounded-xl shadow-ml bg-white space-y-2">
                     <span className="w-full h-fit text-base font-semibold capitailize">
-                        {timeMode==="today"?"Daily":timeMode==="thisweek"?"Weekly":"Monthly"}
+                        {timeMode === "today" ? "Daily" : timeMode === "thisweek" ? "Weekly" : "Monthly"}
                     </span>
                     <div className="w-full flex justify-between items-center h-fit">
                         <span className="text-sm font-semibold capitailize">

@@ -9,7 +9,7 @@ import handleTimeModeDateRange from '../../../utils/handleTimeModeDateRange';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-function PieChart({ date, timeMode, chosenCustomer }: { chosenCustomer:any, date: any, timeMode:'today' | 'thismonth' | 'thisweek' }) {
+function PieChart({ date, timeMode, chosenCustomer, allMode }: { allMode:boolean, chosenCustomer:any, date: any, timeMode:'today' | 'thismonth' | 'thisweek' }) {
   const pieChartData = useSelector(StatisticsStore).piechart
   const pieChartLoading = useSelector(StatisticsStore).piechartLoading
   const data = useMemo(() => {
@@ -47,7 +47,7 @@ function PieChart({ date, timeMode, chosenCustomer }: { chosenCustomer:any, date
   }, [pieChartData])
 
   return (<>
-    <div className="w-full h-fit text-sm font-semibold text-center my-4">{!chosenCustomer?"Customers statistics from ":`Customer ${chosenCustomer.firstName+" "+chosenCustomer.lastName} vehicles detail `}{handleDateShowingFromDBS(date.start)+" to "+handleDateShowingFromDBS(handleTimeModeDateRange(timeMode==="today"?"nextDayDate":timeMode==="thisweek"?"nextWeekDate":"nextMonthDate",date.start))}</div>
+    <div className="w-full h-fit text-sm font-semibold text-center my-4">{allMode?"All of ":""}{!chosenCustomer?"Customers statistics from ":`Customer ${chosenCustomer.firstName+" "+chosenCustomer.lastName} vehicles detail from`}{!allMode?(handleDateShowingFromDBS(date.start)+" to "+handleDateShowingFromDBS(handleTimeModeDateRange(timeMode==="today"?"nextDayDate":timeMode==="thisweek"?"nextWeekDate":"nextMonthDate",date.start))):" all time"}</div>
     <div>
       {
         pieChartData && pieChartData.length > 0 ?
