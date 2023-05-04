@@ -3,13 +3,19 @@ import trashbin from '../../../assets/icon/trashbin.svg'
 import cancel from '../../../assets/icon/cancel.svg'
 import { useDispatch } from 'react-redux';
 import CustomersSlice from '../../../redux/slices/CustomersSlice';
+import { useSelector } from 'react-redux';
+import { CustomersStore } from '../../../redux/selectors';
+import clsx from 'clsx';
 
 function CustomerCard({data}:{data:any}) {
+    const customer = useSelector(CustomersStore).customer
     const dispatch = useDispatch<any>()
     return (<>
         <div onClick={()=>{
             dispatch(CustomersSlice.actions.handleChooseCustomer(data))
-        }} className="w-full cursor-pointer bg-white hover:bg-gray ease-in-out rounded-xl p-4  flex items-center drop-shadow-md">
+        }} className={clsx("w-full cursor-pointer bg-white hover:bg-gray ease-in-out rounded-xl p-4  flex items-center drop-shadow-md", {
+            "border-2 border-blue-500": customer && customer.accountId === data.accountId
+        })}>
             <div className="flex flex-1">
                 <div className="flex justify-center items-center ">
                     <img src={data.avatarUrl} alt="" className="w-16 h-16 p-2  rounded-full" />

@@ -83,7 +83,6 @@ function CustomersAndTransportsPage() {
                             <div className="w-full h-fit p-2 max-h-[600px] overflow-y-auto space-y-2">
                                 {
                                     customer.vehicles ? customer.vehicles.map((vehicle: any, index: number) => {
-                                        console.log(handleFindSlotNumFromVehicleId(vehicle.vehicleId, parkingSlots))
                                         return <TransportCard slot={handleFindSlotNumFromVehicleId(vehicle.vehicleId, parkingSlots)} data={vehicle} key={index} />
                                     })
                                     :
